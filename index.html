@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +17,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Courier New', monospace; /* tekno-mistik hava için */
+            font-family: 'Courier New', monospace;
             background-color: var(--bg-color);
             color: var(--text-color);
             height: 100vh;
@@ -25,7 +25,7 @@
             overflow: hidden;
         }
 
-        /* sol panel: gemini gm asistanı */
+        /* LEFT PANEL: GEMINI ASSISTANT */
         .chat-panel {
             flex: 1;
             display: flex;
@@ -79,7 +79,7 @@
         }
         button:hover { box-shadow: 0 0 15px var(--accent-purple); }
 
-        /* sağ panel: senin zar kodların */
+        /* RIGHT PANEL: DICE / TOOLS */
         .tools-panel {
             flex: 1;
             padding: 20px;
@@ -93,33 +93,35 @@
 <body>
 
     <div class="chat-panel">
-        <h2>GM FOCUS (Gemini)</h2>
+        <h2>MAGICK FOCUS (Gemini)</h2>
         
         <div style="margin-bottom: 10px;">
-            <input type="password" id="api-key" placeholder="Gemini API Key Buraya">
+            <input type="password" id="api-key" placeholder="Enter Gemini API Key here">
         </div>
 
         <div class="chat-history" id="chat-history">
-            <div class="message bot-msg">Arete sistemleri çevrimiçi. Nasıl yardımcı olabilirim?</div>
+            <div class="message bot-msg">Arete systems online. Awaiting protocol...</div>
         </div>
 
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Paradoksu sorgula..." onkeypress="handleEnter(event)">
-            <button onclick="sendMessage()">GÖNDER</button>
+            <input type="text" id="user-input" placeholder="Query the Consensus..." onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()">INITIATE</button>
         </div>
     </div>
 
     <div class="tools-panel">
-        <h2>ENTROPY ENGINE (Zarlar)</h2>
+        <h2>ENTROPY ENGINE (Dice & Rituals)</h2>
         
         <div id="dice-container">
-            <p style="color: gray;">(Senin zar atma html kodların buraya gelecek...)</p>
-            <button>Örnek Zar At</button> 
+            <p style="color: gray; font-style: italic;">
+                (Your dice rolling HTML codes will appear here...)
+            </p>
+            <button>Roll Test Die</button> 
         </div>
         </div>
 
     <script>
-        // Gemini API Entegrasyonu
+        // Gemini API Integration
         async function sendMessage() {
             const inputField = document.getElementById('user-input');
             const apiKeyField = document.getElementById('api-key');
@@ -130,28 +132,28 @@
 
             if (!prompt) return;
             if (!apiKey) {
-                alert("Lütfen Gemini API anahtarını gir.");
+                alert("Alert: API Key Missing. Please authorize access.");
                 return;
             }
 
-            // Kullanıcı mesajını ekle
+            // Add user message
             chatHistory.innerHTML += `<div class="message user-msg">> ${prompt}</div>`;
             inputField.value = '';
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
-            // Yükleniyor mesajı
+            // Loading message
             const loadingId = 'loading-' + Date.now();
-            chatHistory.innerHTML += `<div class="message bot-msg" id="${loadingId}">küreler hizalanıyor...</div>`;
+            chatHistory.innerHTML += `<div class="message bot-msg" id="${loadingId}">aligning spheres...</div>`;
 
             try {
-                // Gemini API Çağrısı (Model: gemini-1.5-flash hızlı yanıt için)
+                // Gemini API Call (gemini-1.5-flash)
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: [{
                             parts: [{ 
-                                text: "Sen Mage: The Ascension oyununda uzman bir GM asistanısın. Kısa, öz ve oyunun kurallarına/atmosferine uygun cevap ver. Soru: " + prompt 
+                                text: "You are an expert GM assistant for Mage: The Ascension. Provide concise, objective, and atmospheric responses suitable for the game setting. Question: " + prompt 
                             }]
                         }]
                     })
@@ -160,12 +162,12 @@
                 const data = await response.json();
                 const botReply = data.candidates[0].content.parts[0].text;
 
-                // Yükleniyor mesajını kaldır ve cevabı yaz
+                // Remove loading and show reply
                 document.getElementById(loadingId).remove();
                 chatHistory.innerHTML += `<div class="message bot-msg">${formatText(botReply)}</div>`;
                 
             } catch (error) {
-                document.getElementById(loadingId).innerText = "Hata: Paradoks patlaması (API hatası).";
+                document.getElementById(loadingId).innerText = "Error: Paradox Backlash detected (API Failure).";
                 console.error(error);
             }
             
@@ -176,7 +178,7 @@
             if (e.key === 'Enter') sendMessage();
         }
 
-        // Basit metin formatlama (bold vs için)
+        // Basic formatting
         function formatText(text) {
             return text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
         }
