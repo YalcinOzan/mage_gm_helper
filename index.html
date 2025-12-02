@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* GLOBAL THEME VARIABLES */
+            /* GLOBAL THEME */
             --bg: #0e0e10;
-            --surface: #18181b;
+            --surface: #18181b; /* Biraz daha solid bir renk */
             --surface-light: #27272a;
             --primary: #a78bfa; 
             --primary-dim: rgba(167, 139, 250, 0.1);
@@ -24,12 +24,11 @@
             --border: rgba(255, 255, 255, 0.08);
             --radius: 12px;
             
-            /* Typography */
+            /* TYPOGRAPHY */
             --fs-xs: 0.7rem;
             --fs-sm: 0.85rem;
             --fs-md: 1rem;
-            --fs-lg: 1.25rem;
-            --fs-xl: 3.2rem;
+            --fs-xl: 2rem;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -40,7 +39,7 @@
             height: 100vh; display: flex; overflow: hidden;
         }
 
-        /* GRAIN BACKGROUND (Global) */
+        /* GRAIN EFFECT */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: -1; opacity: 0.05;
@@ -48,400 +47,559 @@
             background-size: 150px 150px; 
         }
 
-        /* --- LAYOUT SPLIT --- */
-        .split-container {
-            display: flex; width: 100%; height: 100%;
+        /* --- LAYOUT: SPLIT SCREEN --- */
+        .container { display: flex; width: 100%; height: 100%; }
+        
+        /* LEFT PANEL: GM REFERENCE (Scrollable) */
+        .left-panel {
+            flex: 1.2; /* Biraz daha geniş */
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            background: rgba(0,0,0,0.2);
+            min-width: 320px;
         }
-        .left-panel, .right-panel {
-            flex: 1; overflow-y: auto; padding: 20px;
-            display: flex; flex-direction: column; gap: 20px;
-        }
-        .left-panel { border-right: 1px solid var(--border); background: rgba(0,0,0,0.2); }
-        .right-panel { background: transparent; }
 
-        /* SCROLLBARS */
+        /* RIGHT PANEL: RITUALMATIC (Fixed) */
+        .right-panel {
+            flex: 1;
+            display: flex; flex-direction: column;
+            background: transparent;
+            min-width: 350px;
+        }
+
+        /* SCROLL AREAS */
+        .scroll-y { overflow-y: auto; flex: 1; padding: 20px; }
+        
+        /* CUSTOM SCROLLBAR */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; border: 2px solid var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; border: 1px solid var(--bg); }
 
-        /* --- SHARED STYLES --- */
+        /* --- UI COMPONENTS --- */
         h1 { 
-            margin: 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; 
+            margin: 0; font-size: 1.2rem; font-weight: 900; letter-spacing: -0.5px; 
             background: linear-gradient(to right, #fff, #a78bfa); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-transform: uppercase;
         }
-        
-        .panel {
-            background: var(--surface); border-radius: var(--radius); 
-            border: 1px solid var(--border); display: flex; flex-direction: column;
-            backdrop-filter: blur(10px);
-        }
-        .panel-head {
-            padding: 15px 20px; border-bottom: 1px solid var(--border);
-            font-size: 0.85rem; font-weight: 800; color: var(--accent); 
-            text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.2);
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;
-        }
-        .panel-head:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .panel-body { padding: 0; display: block; }
-        .panel-body.closed { display: none; }
 
-        /* --- LEFT SIDE SPECIFIC (GM SCREEN) --- */
-        .search-wrapper { position: relative; width: 100%; margin-bottom: 10px; }
+        .header-bar {
+            padding: 15px 20px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(5px);
+        }
+
+        /* SEARCH BAR (GM Screen) */
+        .search-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
         .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
         .search-input {
-            width: 100%; padding: 12px 40px; border-radius: 30px; background: var(--surface-light); 
-            border: 1px solid var(--border); color: #fff; font-family: inherit; font-weight: 600; font-size: 0.9rem; outline: none;
+            width: 100%; padding: 12px 40px; border-radius: 30px; 
+            background: var(--surface-light); border: 1px solid var(--border); 
+            color: #fff; font-family: inherit; font-weight: 600; font-size: 0.85rem; outline: none;
+            transition: 0.2s;
         }
         .search-input:focus { border-color: var(--primary); background: rgba(40,40,50,0.8); }
         .search-clear { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: none; }
         .search-input:not(:placeholder-shown) + .search-clear { display: block; }
 
-        /* Accordions & Lists (GM Screen) */
-        .acc-item { border-bottom: 1px solid var(--border); }
-        .acc-head { padding: 12px 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; color: var(--text); }
-        .acc-head:hover { color: var(--primary); background: rgba(255,255,255,0.03); }
-        .acc-body { display: none; padding: 15px 20px; background: rgba(0,0,0,0.2); font-size: 0.8rem; line-height: 1.5; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); }
-        .acc-item.open .acc-body { display: block; }
-        .acc-item.open .acc-head { color: var(--accent); }
+        /* ACCORDIONS & SECTIONS */
+        .section-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            margin-bottom: 15px; overflow: hidden;
+        }
+        .section-head {
+            padding: 12px 15px; font-size: 0.8rem; font-weight: 800; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 1px; background: rgba(255,255,255,0.03);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+        }
+        .section-head:hover { background: rgba(255,255,255,0.06); }
+        .section-body { display: none; border-top: 1px solid var(--border); }
+        .section-body.open { display: block; }
 
-        .sphere-list { list-style: none; padding: 0; margin: 0; }
-        .sphere-list li { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); display: flex; align-items: baseline; }
-        .rank-num { color: var(--primary); font-weight: 800; margin-right: 8px; }
+        /* INNER ACCORDIONS (Spheres etc) */
+        .sub-acc-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sub-acc-head {
+            padding: 10px 15px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+            display: flex; justify-content: space-between; color: var(--text);
+        }
+        .sub-acc-head:hover { color: var(--primary); }
+        .sub-acc-body { display: none; padding: 10px 15px; background: rgba(0,0,0,0.2); font-size: 0.8rem; color: var(--text-muted); }
+        .sub-acc-item.active .sub-acc-body { display: block; }
+        .sub-acc-item.active .sub-acc-head { color: var(--accent); }
 
-        .combo-cat { color: var(--warning); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; margin-top: 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
-        .combo-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); cursor: help; }
-        .combo-item:hover { color: var(--accent); }
-        .combo-req { font-family: monospace; font-size: 0.7rem; color: var(--text-muted); }
+        /* LISTS & DATA PRESERVATION */
+        .data-list { list-style: none; padding: 0; margin: 0; }
+        .data-list li { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); display: flex; align-items: baseline; }
+        .rank { color: var(--primary); font-weight: 800; margin-right: 8px; min-width: 20px;}
+        
+        .combo-cat { 
+            color: var(--warning); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; 
+            margin-top: 15px; padding-bottom: 5px; border-bottom: 1px solid var(--border); 
+        }
+        .combo-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); cursor: help; }
+        .combo-item:hover { color: #fff; }
+        .combo-name { font-weight: 600; font-size: 0.85rem; transition: 0.2s; }
+        .combo-req { font-family: monospace; font-size: 0.7rem; color: var(--text-muted); text-align: right; }
 
-        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-        th { text-align: left; border-bottom: 1px solid var(--border); padding: 4px; color: var(--text); opacity: 0.7; }
-        td { padding: 4px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-        .col-hl { color: var(--primary); font-weight: 700; }
+        /* TABLES */
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 5px; }
+        th { text-align: left; border-bottom: 1px solid var(--border); padding: 6px; color: var(--text); opacity: 0.7; }
+        td { padding: 6px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .hl { color: var(--primary); font-weight: 700; }
 
-        .gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .gen-card { background: var(--surface-light); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
-        .gen-label { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 4px; }
-        .gen-val { font-size: 0.8rem; font-weight: 700; color: var(--accent); min-height: 18px; }
-        .btn-gen { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; width: 100%; padding: 6px; font-size: 0.65rem; font-weight: 700; cursor: pointer; margin-top: 5px; border-radius: 4px; }
-        .btn-gen:hover { border-color: var(--accent); }
+        /* GM TOOLS (Mini Roller etc) */
+        .mini-tool-box { background: rgba(0,0,0,0.2); padding: 15px; display: grid; gap: 10px; }
+        .mini-roller { display: flex; gap: 5px; }
+        .mini-inp { flex: 1; background: var(--bg); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 6px; text-align: center; }
+        .mini-btn { flex: 2; background: var(--primary-dim); border: 1px solid var(--primary); color: var(--primary); border-radius: 6px; font-weight: 800; cursor: pointer; }
+        .mini-res { text-align: center; font-weight: 800; color: var(--success); height: 20px; font-size: 0.9rem; }
+        
+        .gen-btn { width: 100%; padding: 8px; background: var(--surface-light); border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-top: 5px;}
+        .gen-btn:hover { border-color: var(--accent); color: #fff; }
+        .gen-res { font-size: 0.8rem; font-weight: 700; color: var(--accent); min-height: 18px; text-align: center; margin-top: 4px; }
 
-        /* --- RIGHT SIDE SPECIFIC (RITUALMATIC) --- */
-        .rit-header { display: flex; justify-content: space-between; align-items: center; }
-        .btn-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 14px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; cursor: pointer; }
-        .btn-reset:active { background: var(--danger); color: #fff; }
-
-        .mode-switch { display: flex; background: var(--surface-light); padding: 4px; border-radius: 12px; }
-        .seg-btn { flex: 1; text-align: center; padding: 10px; font-size: var(--fs-sm); font-weight: 700; border-radius: 8px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
+        /* --- RITUALMATIC UI (Right Panel) --- */
+        .btn-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; cursor: pointer; }
+        
+        .mode-switch { display: flex; background: var(--surface-light); padding: 4px; border-radius: 8px; margin-bottom: 15px; }
+        .seg-btn { flex: 1; text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 700; border-radius: 6px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
         .seg-btn.active { background: var(--primary); color: #fff; }
 
-        .hud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .hud-card { background: var(--surface); border-radius: 16px; padding: 15px; text-align: center; border: 1px solid var(--border); }
-        .hud-label { font-size: var(--fs-xs); color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 5px; }
-        .hud-input { background: transparent; border: none; text-align: center; width: 100%; font-family: inherit; font-size: 2.5rem; font-weight: 900; color: var(--text); outline: none; }
-        .val-diff { color: #c4b5fd; } .val-goal { color: #6ee7b7; } .modified { color: var(--warning); }
+        .hud { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .hud-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; }
+        .hud-lbl { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 5px; }
+        .hud-val { background: transparent; border: none; text-align: center; width: 100%; font-family: inherit; font-size: 2rem; font-weight: 900; color: #fff; outline: none; }
+        .val-diff { color: #c4b5fd; } .val-goal { color: #6ee7b7; }
 
-        .input-group { margin-bottom: 12px; }
-        label { font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; }
-        select { width: 100%; background: var(--surface-light); color: #fff; border: 1px solid transparent; padding: 12px; border-radius: 10px; font-family: inherit; font-weight: 600; outline: none; }
-        select:focus { border-color: var(--primary); }
+        .param-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        
+        .c-row { display: flex; justify-content: space-between; align-items: center; }
+        .c-btn { width: 32px; height: 32px; background: var(--surface-light); border: none; color: #fff; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .c-val { font-size: 1.2rem; font-weight: 800; width: 40px; text-align: center; }
 
-        .counter { display: flex; background: var(--surface-light); border-radius: 10px; overflow: hidden; height: 44px; }
-        .btn-cnt { width: 44px; border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 1.2rem; cursor: pointer; }
-        .cnt-display { flex: 1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; }
+        select { width: 100%; background: var(--surface-light); color: #fff; border: 1px solid transparent; padding: 10px; border-radius: 8px; outline: none; font-weight: 600; font-family: inherit; }
+        
+        .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .t-btn { background: var(--surface-light); padding: 10px; border-radius: 6px; text-align: center; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border: 1px solid transparent; }
+        .t-btn.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
+        .t-btn.neg.active { border-color: var(--danger); color: var(--danger); background: rgba(239, 68, 68, 0.15); }
 
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .btn-tool { background: var(--surface-light); padding: 12px; border-radius: 8px; text-align: center; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border: 1px solid transparent; }
-        .btn-tool.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
-        .btn-tool.neg.active { border-color: var(--danger); color: var(--danger); background: rgba(239, 68, 68, 0.15); }
-
-        .btn-cast { width: 100%; padding: 20px; border: none; border-radius: 12px; font-family: inherit; font-size: 1.1rem; font-weight: 900; color: #fff; cursor: pointer; margin-top: 10px; }
+        .cast-btn { width: 100%; padding: 18px; border: none; border-radius: 10px; font-family: inherit; font-size: 1.1rem; font-weight: 900; color: #fff; cursor: pointer; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .style-inst { background: linear-gradient(135deg, #f97316, #ea580c); }
         .style-rit { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-        .style-pause { background: var(--hb); color:#000; animation: pulse 2s infinite; }
+        .style-pause { background: var(--hb); color: #000; animation: pulse 2s infinite; }
 
-        #log-container { display: none; background: var(--surface); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid var(--border); }
-        .log-scroll { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-        .entry { background: var(--surface-light); padding: 10px; border-radius: 8px; border-left: 4px solid #444; font-size: 0.85rem; display: flex; justify-content: space-between; }
-        .entry.success { border-color: var(--success); } .entry.fail { border-color: var(--warning); } .entry.botch { border-color: var(--danger); }
-        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        #logs { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .log-entry { background: var(--surface-light); padding: 10px; border-radius: 6px; border-left: 3px solid #555; font-size: 0.8rem; display: flex; justify-content: space-between; }
+        .log-entry.success { border-color: var(--success); }
+        .log-entry.fail { border-color: var(--warning); }
+        .log-entry.botch { border-color: var(--danger); }
+
         /* TOOLTIP */
-        #tooltip { position: fixed; display: none; pointer-events: none; z-index: 9999; background: rgba(24, 24, 27, 0.98); border: 1px solid var(--primary); border-radius: 8px; padding: 12px; max-width: 280px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); }
-        .tt-title { color: var(--accent); font-size: 0.7rem; font-weight: 800; display: block; margin-bottom: 4px; }
-        .tt-desc { color: #eee; font-size: 0.75rem; }
-        .tt-ref { color: var(--text-muted); font-size: 0.65rem; font-style: italic; margin-top: 8px; display: block; border-top: 1px solid #444; padding-top: 4px;}
+        #tooltip { position: fixed; display: none; pointer-events: none; z-index: 10000; background: rgba(30,30,35, 0.98); border: 1px solid var(--primary); border-radius: 8px; padding: 12px; max-width: 280px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .tt-t { color: var(--accent); font-size: 0.7rem; font-weight: 800; display: block; margin-bottom: 4px; text-transform: uppercase; }
+        .tt-d { color: #ddd; font-size: 0.75rem; line-height: 1.4; }
+        .tt-r { color: var(--text-muted); font-size: 0.65rem; font-style: italic; margin-top: 6px; display: block; border-top: 1px solid #444; padding-top: 4px; }
 
-        /* MOBILE FIX */
-        @media (max-width: 900px) { .split-container { flex-direction: column; } .left-panel { border-right: none; border-bottom: 1px solid var(--border); height: 50%; } }
+        @media (max-width: 900px) { .container { flex-direction: column; overflow-y: auto; } .left-panel, .right-panel { flex: none; height: auto; border-right: none; overflow: visible; } .scroll-y { overflow: visible; } }
     </style>
 </head>
 <body>
 
-<div id="tooltip"><span class="tt-title"></span><span class="tt-desc"></span><span class="tt-ref"></span></div>
+<div id="tooltip"><span class="tt-t"></span><span class="tt-d"></span><span class="tt-r"></span></div>
 
-<div class="split-container">
+<div class="container">
     
     <div class="left-panel">
-        <header style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="header-bar">
             <h1>GM Screen</h1>
-            <div style="font-size:0.7rem; color:var(--text-muted);">M20 Database</div>
-        </header>
-
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchBox" class="search-input" placeholder="Search Spheres, Rotes, Rules..." onkeyup="filterContent()">
-            <button class="search-clear" onclick="clearSearch()">✕</button>
+            <div style="font-size:0.7rem; color:var(--text-muted);">v3.0 Offline Node</div>
         </div>
 
-        <div class="panel">
-            <div class="panel-head" onclick="togglePanel(this)">Spheres <span>-</span></div>
-            <div class="panel-body">
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🌐 Correspondence</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Perception</li><li><span class="rank-num">2</span> Sense/Touch</li><li><span class="rank-num">3</span> Pierce Space</li><li><span class="rank-num">4</span> Rend Space</li><li><span class="rank-num">5</span> Mutate Space</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">✨ Prime</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Prime</li><li><span class="rank-num">2</span> Fuel Pattern</li><li><span class="rank-num">3</span> Channel</li><li><span class="rank-num">4</span> Expel Energy</li><li><span class="rank-num">5</span> Mastery</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">⏳ Time</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Time Sense</li><li><span class="rank-num">2</span> Post/Precognition</li><li><span class="rank-num">3</span> Time Control</li><li><span class="rank-num">4</span> Time Bubble</li><li><span class="rank-num">5</span> Time Travel</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🔥 Forces</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Perceive</li><li><span class="rank-num">2</span> Control Minor</li><li><span class="rank-num">3</span> Transmute Minor</li><li><span class="rank-num">4</span> Control Major</li><li><span class="rank-num">5</span> Transmute Major</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🧬 Life</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Life</li><li><span class="rank-num">2</span> Alter Simple</li><li><span class="rank-num">3</span> Alter Self/Complex</li><li><span class="rank-num">4</span> Alter Complex</li><li><span class="rank-num">5</span> Create Life</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🧱 Matter</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Analysis</li><li><span class="rank-num">2</span> Transmute Basic</li><li><span class="rank-num">3</span> Alter Form</li><li><span class="rank-num">4</span> Complex</li><li><span class="rank-num">5</span> Create Matter</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🧠 Mind</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Thought</li><li><span class="rank-num">2</span> Read Surface</li><li><span class="rank-num">3</span> Mental Link</li><li><span class="rank-num">4</span> Control Mind</li><li><span class="rank-num">5</span> Create Mind</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">👻 Spirit</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Spirit Sight</li><li><span class="rank-num">2</span> Touch Spirit</li><li><span class="rank-num">3</span> Step Sideways</li><li><span class="rank-num">4</span> Bind Spirit</li><li><span class="rank-num">5</span> Forge Spirit</li></ul></div></div>
-                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🎲 Entropy</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Fate</li><li><span class="rank-num">2</span> Probability</li><li><span class="rank-num">3</span> Affect Matter</li><li><span class="rank-num">4</span> Affect Life</li><li><span class="rank-num">5</span> Affect Thought</li></ul></div></div>
+        <div class="scroll-y">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchBox" class="search-input" placeholder="Search Rotes, Rules, Spheres..." onkeyup="filterContent()">
+                <button class="search-clear" onclick="clearSearch()">✕</button>
             </div>
-        </div>
 
-        <div class="panel">
-            <div class="panel-head" onclick="togglePanel(this)" style="color:var(--warning)">Common Rotes <span>-</span></div>
-            <div class="panel-body" style="padding:10px;">
-                <div class="combo-cat">Combat</div>
-                <div class="combo-item" data-title="Aggravated Wound" data-desc="Burns internal organs." data-ref="HDYDT p.33"><span>Internal Burn (Agg)</span> <span class="combo-req">Life 3 + Forces 2</span></div>
-                <div class="combo-item" data-title="Sunlight" data-desc="True sunlight vs Vampires." data-ref="HDYDT p.32"><span>Artificial Sunlight</span> <span class="combo-req">Forces 3 + Prime 2</span></div>
-                <div class="combo-item" data-title="Chain Lightning" data-desc="Arcing electrical blast." data-ref="HDYDT p.37"><span>Chain Lightning</span> <span class="combo-req">Forces 3 + Prime 2</span></div>
-                <div class="combo-item" data-title="Kinetic Punch" data-desc="Increase velocity." data-ref="HDYDT p.30"><span>Kinetic Strike</span> <span class="combo-req">Forces 2</span></div>
-                <div class="combo-cat">Defense</div>
-                <div class="combo-item" data-title="Iron Skin" data-desc="Soak Aggravated damage." data-ref="HDYDT p.67"><span>Iron Skin</span> <span class="combo-req">Life 3 + Matter 3</span></div>
-                <div class="combo-item" data-title="Counter-Magic" data-desc="General anti-magic field." data-ref="M20 p.545"><span>Null Zone</span> <span class="combo-req">Prime 2</span></div>
-                <div class="combo-item" data-title="Invisibility" data-desc="Bends light around self." data-ref="HDYDT p.34"><span>Invisibility</span> <span class="combo-req">Forces 2</span></div>
-                <div class="combo-cat">Utility</div>
-                <div class="combo-item" data-title="Teleport" data-desc="Instant travel self." data-ref="M20 p.512"><span>Teleport Self</span> <span class="combo-req">Corr 3</span></div>
-                <div class="combo-item" data-title="Step Sideways" data-desc="Enter Penumbra." data-ref="HDYDT p.524"><span>Umbral Step</span> <span class="combo-req">Spirit 3</span></div>
-                <div class="combo-item" data-title="Mind Read" data-desc="Deep probe." data-ref="HDYDT p.115"><span>Mind Read</span> <span class="combo-req">Mind 3</span></div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-head" onclick="togglePanel(this)">Rules & Tables <span>-</span></div>
-            <div class="panel-body">
-                 <div class="acc-item">
-                    <div class="acc-head" onclick="toggleAcc(this)">Paradox Backlash <span>+</span></div>
-                    <div class="acc-body">
-                        <table>
-                            <tr><th>Suc</th><th>Effect</th></tr>
-                            <tr><td>1-5</td><td>1 pt/suc. Bashing or Trivial.</td></tr>
-                            <tr><td>6-10</td><td>1 pt/suc. Burn (Bash) or Minor.</td></tr>
-                            <tr><td>11-15</td><td>Lethal Burn + Sig Flaw.</td></tr>
-                            <tr><td>16+</td><td>Agg Burn + Perm Paradox.</td></tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="acc-item">
-                     <div class="acc-head" onclick="toggleAcc(this)">Damage & Healing <span>+</span></div>
-                     <div class="acc-body">
-                        <table>
-                            <tr><th>Type</th><th>Recovery</th><th>Heal</th></tr>
-                            <tr><td style="color:var(--primary)">Bashing</td><td>1 / Hour</td><td>Life 2</td></tr>
-                            <tr><td style="color:var(--warning)">Lethal</td><td>1 / Day(s)</td><td>Life 3</td></tr>
-                            <tr><td style="color:var(--danger)">Aggravated</td><td>1 / Week</td><td>L3 + Quint</td></tr>
-                        </table>
-                     </div>
+            <div class="section-card">
+                <div class="section-head" onclick="toggleSection(this)">Spheres <span>▼</span></div>
+                <div class="section-body open">
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">🌐 Correspondence</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Perception</li><li><span class="rank">2</span> Sense/Touch</li><li><span class="rank">3</span> Pierce Space</li><li><span class="rank">4</span> Rend Space</li><li><span class="rank">5</span> Mutate Space</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">🎲 Entropy</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Sense Fate</li><li><span class="rank">2</span> Probability</li><li><span class="rank">3</span> Affect Matter</li><li><span class="rank">4</span> Affect Life</li><li><span class="rank">5</span> Affect Thought</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">⚡ Forces</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Perceive</li><li><span class="rank">2</span> Control Minor</li><li><span class="rank">3</span> Transmute Minor</li><li><span class="rank">4</span> Control Major</li><li><span class="rank">5</span> Transmute Major</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">🧬 Life</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Sense Life</li><li><span class="rank">2</span> Alter Simple</li><li><span class="rank">3</span> Alter Self/Complex</li><li><span class="rank">4</span> Alter Complex</li><li><span class="rank">5</span> Create Life</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">🧱 Matter</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Analysis</li><li><span class="rank">2</span> Transmute Basic</li><li><span class="rank">3</span> Alter Form</li><li><span class="rank">4</span> Complex</li><li><span class="rank">5</span> Create Matter</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">🧠 Mind</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Sense Thought</li><li><span class="rank">2</span> Read Surface</li><li><span class="rank">3</span> Mental Link</li><li><span class="rank">4</span> Control Mind</li><li><span class="rank">5</span> Create Mind</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">✨ Prime</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Sense Prime</li><li><span class="rank">2</span> Fuel Pattern</li><li><span class="rank">3</span> Channel</li><li><span class="rank">4</span> Expel Energy</li><li><span class="rank">5</span> Mastery</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">👻 Spirit</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Spirit Sight</li><li><span class="rank">2</span> Touch Spirit</li><li><span class="rank">3</span> Step Sideways</li><li><span class="rank">4</span> Bind Spirit</li><li><span class="rank">5</span> Forge Spirit</li></ul></div></div>
+                    <div class="sub-acc-item"><div class="sub-acc-head" onclick="toggleSub(this)">⏳ Time</div><div class="sub-acc-body"><ul class="data-list"><li><span class="rank">1</span> Time Sense</li><li><span class="rank">2</span> Post/Precognition</li><li><span class="rank">3</span> Time Control</li><li><span class="rank">4</span> Time Bubble</li><li><span class="rank">5</span> Time Travel</li></ul></div></div>
                 </div>
             </div>
-        </div>
 
-        <div class="panel">
-            <div class="panel-head" onclick="togglePanel(this)">Generators <span>-</span></div>
-            <div class="panel-body" style="padding:15px;">
-                <div class="gen-grid">
-                    <div class="gen-card">
-                        <span class="gen-label">INSTANT NPC</span>
-                        <div class="gen-val" id="res-npc">...</div>
-                        <button class="btn-gen" onclick="genNPC()">GENERATE</button>
+            <div class="section-card">
+                <div class="section-head" onclick="toggleSection(this)" style="color:var(--warning)">Rotes Database <span>▼</span></div>
+                <div class="section-body" style="padding:10px;">
+                    <div class="combo-cat">Combat: Attack</div>
+                    <div class="combo-item" data-title="Aggravated Wound" data-desc="Burns internal organs." data-ref="HDYDT p.33"><span class="combo-name">Internal Burn (Agg)</span> <span class="combo-req">Life 3 + Forces 2</span></div>
+                    <div class="combo-item" data-title="Sunlight" data-desc="True sunlight vs Vampires." data-ref="HDYDT p.32"><span class="combo-name">Artificial Sunlight</span> <span class="combo-req">Forces 3 + Prime 2</span></div>
+                    <div class="combo-item" data-title="Chain Lightning" data-desc="Arcing electrical blast." data-ref="HDYDT p.37"><span class="combo-name">Chain Lightning</span> <span class="combo-req">Forces 3 + Prime 2</span></div>
+                    <div class="combo-item" data-title="Chi-Fire Punch" data-desc="Aggravated damage strike." data-ref="HDYDT p.65"><span class="combo-name">Chi-Fire Punch</span> <span class="combo-req">Prime 2 + Brawl</span></div>
+                    <div class="combo-item" data-title="Kinetic Punch" data-desc="Increase velocity." data-ref="HDYDT p.30"><span class="combo-name">Kinetic Strike</span> <span class="combo-req">Forces 2</span></div>
+                    <div class="combo-item" data-title="Psychic Blast" data-desc="Direct mental bashing." data-ref="HDYDT p.122"><span class="combo-name">Psychic Blast</span> <span class="combo-req">Mind 3</span></div>
+                    <div class="combo-item" data-title="Psychic Shatter" data-desc="Mind-flaying Agg damage." data-ref="HDYDT p.122"><span class="combo-name">Psychic Shatter</span> <span class="combo-req">Mind 3 + Life 3</span></div>
+                    <div class="combo-item" data-title="Necrotic Rot" data-desc="Rapid flesh decay." data-ref="HDYDT p.89"><span class="combo-name">Necrotic Rot</span> <span class="combo-req">Entropy 4 + Life 3</span></div>
+                    <div class="combo-item" data-title="Sniper Shot" data-desc="Curve bullet path." data-ref="HDYDT p.34"><span class="combo-name">Curve Bullet</span> <span class="combo-req">Forces 2 + Corr 1</span></div>
+                    <div class="combo-item" data-title="Living Bomb" data-desc="Delayed explosion in body." data-ref="HDYDT p.47"><span class="combo-name">Living Bomb</span> <span class="combo-req">Life 4 + Time 4 + Forces 3</span></div>
+                    <div class="combo-item" data-title="Chi-Vampire" data-desc="Drain Quint on hit." data-ref="HDYDT p.66"><span class="combo-name">Chi-Vampire Strike</span> <span class="combo-req">Prime 3 + Brawl</span></div>
+                    <div class="combo-item" data-title="Spirit Strike" data-desc="Punch across Gauntlet." data-ref="HDYDT p.65"><span class="combo-name">Spirit Strike</span> <span class="combo-req">Spirit 2 + Prime 2</span></div>
+                    <div class="combo-item" data-title="Disrupt Body" data-desc="Stop heart/organ." data-ref="HDYDT p.33"><span class="combo-name">Disrupt Body</span> <span class="combo-req">Life 3 + Matter 2</span></div>
+                    <div class="combo-item" data-title="Rub Bones" data-desc="Painful internal friction." data-ref="HDYDT p.48"><span class="combo-name">Rubbing Bones</span> <span class="combo-req">Prime 2</span></div>
+
+                    <div class="combo-cat">Combat: Defense</div>
+                    <div class="combo-item" data-title="Iron Skin" data-desc="Soak Aggravated damage." data-ref="HDYDT p.67"><span class="combo-name">Iron Skin</span> <span class="combo-req">Life 3 + Matter 3</span></div>
+                    <div class="combo-item" data-title="Storm Cocoon" data-desc="Shields from env/debris." data-ref="HDYDT p.39"><span class="combo-name">Storm Cocoon</span> <span class="combo-req">Forces 3 + Entropy 2</span></div>
+                    <div class="combo-item" data-title="Invisibility" data-desc="Bends light around self." data-ref="HDYDT p.34"><span class="combo-name">Invisibility</span> <span class="combo-req">Forces 2 (+ Matter 4)</span></div>
+                    <div class="combo-item" data-title="Silence Field" data-desc="Dampens sound waves." data-ref="HDYDT p.34"><span class="combo-name">Silence Field</span> <span class="combo-req">Forces 2</span></div>
+                    <div class="combo-item" data-title="Mind Shield" data-desc="Block telepathy." data-ref="M20 Core"><span class="combo-name">Mind Shield</span> <span class="combo-req">Mind 1 + Prime 1</span></div>
+                    <div class="combo-item" data-title="Bullet Catch" data-desc="Stop kinetic objects." data-ref="HDYDT p.67"><span class="combo-name">The Neo</span> <span class="combo-req">Forces 2</span></div>
+                    <div class="combo-item" data-title="Pain Shrug" data-desc="Ignore wound penalties." data-ref="HDYDT p.67"><span class="combo-name">Pain Shrug</span> <span class="combo-req">Mind 3 / Life 3</span></div>
+                    <div class="combo-item" data-title="Luck Shield" data-desc="Deflect bad luck." data-ref="HDYDT p.100"><span class="combo-name">Luck Shield</span> <span class="combo-req">Entropy 2</span></div>
+                    <div class="combo-item" data-title="Counter-Magic" data-desc="General anti-magic field." data-ref="M20 p.545"><span class="combo-name">Null Zone</span> <span class="combo-req">Prime 2</span></div>
+                    <div class="combo-item" data-title="Blur" data-desc="Vibrate to dodge." data-ref="HDYDT p.67"><span class="combo-name">Slipstream</span> <span class="combo-req">Time 1 + Corr 1</span></div>
+
+                    <div class="combo-cat">Alteration & Creation</div>
+                    <div class="combo-item" data-title="Conjure Object" data-desc="Create simple matter." data-ref="HDYDT p.18"><span class="combo-name">Conjure Object</span> <span class="combo-req">Matter 3 + Prime 2</span></div>
+                    <div class="combo-item" data-title="Zombie" data-desc="Reanimate corpse." data-ref="HDYDT p.88"><span class="combo-name">Create Zombie</span> <span class="combo-req">Life 2 + Spirit 2 + Prime 2</span></div>
+                    <div class="combo-item" data-title="Petrify" data-desc="Turn flesh to stone." data-ref="HDYDT p.18"><span class="combo-name">Petrify</span> <span class="combo-req">Life 4 + Matter 2</span></div>
+                    <div class="combo-item" data-title="Shapeshift" data-desc="Transform self." data-ref="HDYDT p.19"><span class="combo-name">Shapechange (Self)</span> <span class="combo-req">Life 4</span></div>
+                    <div class="combo-item" data-title="Shapeshift Other" data-desc="Transform target." data-ref="HDYDT p.19"><span class="combo-name">Shapechange (Other)</span> <span class="combo-req">Life 5</span></div>
+                    <div class="combo-item" data-title="Cybernetics" data-desc="Fuse flesh and machine." data-ref="HDYDT p.23"><span class="combo-name">Install Cybernetics</span> <span class="combo-req">Life 4 + Matter 4</span></div>
+                    <div class="combo-item" data-title="Chemicals" data-desc="Synthesize drugs/poison." data-ref="HDYDT p.31"><span class="combo-name">Chemical Synthesis</span> <span class="combo-req">Matter 2</span></div>
+                    <div class="combo-item" data-title="Temperature" data-desc="Heat up/Cool down." data-ref="HDYDT p.35"><span class="combo-name">Control Temp</span> <span class="combo-req">Forces 2</span></div>
+                    <div class="combo-item" data-title="Light" data-desc="Create light source." data-ref="HDYDT p.32"><span class="combo-name">Create Light</span> <span class="combo-req">Forces 3 + Prime 2</span></div>
+                    <div class="combo-item" data-title="Battle Fury" data-desc="Buff Stats, No Fear." data-ref="HDYDT p.68"><span class="combo-name">Battle Fury Mode</span> <span class="combo-req">Life 3 + Mind 3</span></div>
+
+                    <div class="combo-cat">Travel & Movement</div>
+                    <div class="combo-item" data-title="Teleport" data-desc="Instant travel self." data-ref="M20 p.512"><span class="combo-name">Teleport Self</span> <span class="combo-req">Correspondence 3</span></div>
+                    <div class="combo-item" data-title="Teleport Other" data-desc="Move other person." data-ref="HDYDT p.78"><span class="combo-name">Teleport Other</span> <span class="combo-req">Corr 3 + Life 3</span></div>
+                    <div class="combo-item" data-title="Fly" data-desc="Personal flight." data-ref="HDYDT p.76"><span class="combo-name">Fly</span> <span class="combo-req">Forces 2 + Life 2</span></div>
+                    <div class="combo-item" data-title="Levitate" data-desc="Lift objects remotely." data-ref="HDYDT p.29"><span class="combo-name">Levitate</span> <span class="combo-req">Forces 2</span></div>
+                    <div class="combo-item" data-title="Step Sideways" data-desc="Enter Penumbra." data-ref="HDYDT p.524"><span class="combo-name">Umbral Step</span> <span class="combo-req">Spirit 3</span></div>
+                    <div class="combo-item" data-title="Multi-Blink" data-desc="Rapid teleport jumps." data-ref="HDYDT p.77"><span class="combo-name">The Blink</span> <span class="combo-req">Correspondence 3</span></div>
+                    <div class="combo-item" data-title="Flying Car" data-desc="Enchant vehicle." data-ref="HDYDT p.75"><span class="combo-name">Flying Vehicle</span> <span class="combo-req">Forces 2 + Matter 2</span></div>
+                    <div class="combo-item" data-title="Portal" data-desc="Open stable gate." data-ref="M20 p.512"><span class="combo-name">Open Portal</span> <span class="combo-req">Correspondence 4</span></div>
+                    <div class="combo-item" data-title="Telekinesis" data-desc="Move objects with mind." data-ref="HDYDT p.35"><span class="combo-name">Telekinesis</span> <span class="combo-req">Mind 3 + Forces 2</span></div>
+
+                    <div class="combo-cat">Influence & Utility</div>
+                    <div class="combo-item" data-title="Mind Read" data-desc="Deep probe." data-ref="HDYDT p.115"><span class="combo-name">Mind Read</span> <span class="combo-req">Mind 3</span></div>
+                    <div class="combo-item" data-title="Aura Read" data-desc="See emotions/health." data-ref="HDYDT p.53"><span class="combo-name">Read Aura</span> <span class="combo-req">Mind 1 or Life 1</span></div>
+                    <div class="combo-item" data-title="Alter Memory" data-desc="Edit/Wipe memories." data-ref="HDYDT p.123"><span class="combo-name">Alter Memory</span> <span class="combo-req">Mind 4</span></div>
+                    <div class="combo-item" data-title="Possession" data-desc="Control body." data-ref="HDYDT p.122"><span class="combo-name">Possession</span> <span class="combo-req">Mind 4</span></div>
+                    <div class="combo-item" data-title="Dreamwalk" data-desc="Enter dreams." data-ref="M20 p.520"><span class="combo-name">Dreamwalk</span> <span class="combo-req">Mind 3</span></div>
+                    <div class="combo-item" data-title="Time View" data-desc="Past/Future sight." data-ref="HDYDT p.55"><span class="combo-name">Postcognition</span> <span class="combo-req">Time 2</span></div>
+                    <div class="combo-item" data-title="Blackout" data-desc="Kill power grid." data-ref="HDYDT p.31"><span class="combo-name">Blackout (EMP)</span> <span class="combo-req">Forces 2 (+ Matter 2)</span></div>
+                    <div class="combo-item" data-title="Traffic Control" data-desc="Change lights." data-ref="HDYDT p.75"><span class="combo-name">Flip Traffic Lights</span> <span class="combo-req">Forces 2 / Entropy 2</span></div>
+                    <div class="combo-item" data-title="Fake ID" data-desc="Fool scanners." data-ref="HDYDT p.73"><span class="combo-name">Instant Fake ID</span> <span class="combo-req">Matter 2 + Entropy 3</span></div>
+                    <div class="combo-item" data-title="Weather" data-desc="Alter climate." data-ref="HDYDT p.38"><span class="combo-name">Weather Witching</span> <span class="combo-req">Forces 4 + Entropy 3</span></div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-head" onclick="toggleSection(this)">Rules & Tables <span>▼</span></div>
+                <div class="section-body">
+                    <div class="sub-acc-item">
+                        <div class="sub-acc-head" onclick="toggleSub(this)">Paradox Backlash</div>
+                        <div class="sub-acc-body">
+                            <table>
+                                <tr><th>Suc</th><th>Effect</th></tr>
+                                <tr><td class="hl">Botch</td><td>Discharge harmlessly.</td></tr>
+                                <tr><td class="hl">1-5</td><td>1 pt/suc. Bashing or Trivial Flaw.</td></tr>
+                                <tr><td class="hl">6-10</td><td>1 pt/suc. Burn (Bash) or Minor Flaw.</td></tr>
+                                <tr><td class="hl">11-15</td><td>Discharge all. Lethal + Sig Flaw.</td></tr>
+                                <tr><td class="hl">16-20</td><td>Discharge all. Lethal + Perm Pdx + Realm.</td></tr>
+                                <tr><td class="hl">21+</td><td>Agg Burn + Perm Pdx + Spirit.</td></tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class="gen-card">
-                        <span class="gen-label">RESONANCE</span>
-                        <div class="gen-val" id="res-rez">...</div>
-                        <button class="btn-gen" onclick="genRes()">GENERATE</button>
+                    <div class="sub-acc-item">
+                        <div class="sub-acc-head" onclick="toggleSub(this)">Weapons & Armor</div>
+                        <div class="sub-acc-body">
+                            <strong style="color:var(--accent)">Firearms (Diff / Dmg / Range)</strong>
+                            <table><tr><td>Pistol Lt.</td><td>6</td><td>4</td><td>20</td></tr><tr><td>Pistol Hvy.</td><td>6</td><td>5</td><td>30</td></tr><tr><td>Shotgun</td><td>6</td><td>8</td><td>20</td></tr></table>
+                            <strong style="color:var(--accent)">Melee (Diff / Dmg)</strong>
+                            <table><tr><td>Knife</td><td>4</td><td>Str + 1L</td></tr><tr><td>Sword</td><td>6</td><td>Str + 4L</td></tr></table>
+                            <strong style="color:var(--accent)">Armor</strong>
+                            <table><tr><th>Class</th><th>Rate</th><th>Pen</th></tr><tr><td>Clothes</td><td>1</td><td>0</td></tr><tr><td>Vest</td><td>2</td><td>1</td></tr><tr><td>Tactical</td><td>3</td><td>2</td></tr></table>
+                        </div>
                     </div>
-                    <div class="gen-card">
-                        <span class="gen-label">PARADOX FLAW</span>
-                        <div class="gen-val" id="res-flaw" style="font-weight:400; color:#fff; font-size:0.7rem;">...</div>
-                        <button class="btn-gen" onclick="genFlaw()">SPARK CHAOS</button>
+                    <div class="sub-acc-item">
+                         <div class="sub-acc-head" onclick="toggleSub(this)">Damage & Healing</div>
+                         <div class="sub-acc-body">
+                            <table>
+                                <tr><th>Type</th><th>Recovery</th><th>Heal</th></tr>
+                                <tr><td style="color:var(--primary)">Bashing</td><td>1 / Hour</td><td>Life 2</td></tr>
+                                <tr><td style="color:var(--warning)">Lethal</td><td>1 / Day(s)</td><td>Life 3</td></tr>
+                                <tr><td style="color:var(--danger)">Aggravated</td><td>1 / Week</td><td>L3 + Quint</td></tr>
+                            </table>
+                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+            <div class="section-card">
+                <div class="section-head" onclick="toggleSection(this)">GM Generators <span>▼</span></div>
+                <div class="section-body">
+                    <div class="mini-tool-box">
+                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:800; margin-bottom:5px;">QUICK ROLLER</div>
+                        <div class="mini-roller">
+                            <input type="number" id="q-pool" class="mini-inp" value="6" placeholder="Pool">
+                            <input type="number" id="q-diff" class="mini-inp" value="6" placeholder="Diff">
+                            <button class="mini-btn" onclick="quickRoll()">ROLL</button>
+                        </div>
+                        <div class="mini-res" id="q-res"></div>
+
+                        <hr style="border:0; border-top:1px solid var(--border); width:100%;">
+                        
+                        <div>
+                            <div class="gen-res" id="res-npc"></div>
+                            <button class="gen-btn" onclick="genNPC()">Generate NPC</button>
+                        </div>
+                         <div>
+                            <div class="gen-res" id="res-rez"></div>
+                            <button class="gen-btn" onclick="genRes()">Generate Resonance</button>
+                        </div>
+                         <div>
+                            <div class="gen-res" id="res-flaw" style="font-weight:400; color:#fff;"></div>
+                            <button class="gen-btn" onclick="genFlaw()">Paradox Flaw</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <div class="right-panel">
-        <header class="rit-header">
+        <div class="header-bar">
             <h1>Ritualmatic</h1>
-            <button class="btn-reset" onclick="resetAll()">RESET ALL</button>
-        </header>
-
-        <div class="mode-switch">
-            <div class="seg-btn active" id="btn-m-inst" onclick="mode('instant')">Instant</div>
-            <div class="seg-btn" id="btn-m-rit" onclick="mode('ritual')">Ritual</div>
+            <button class="btn-reset" onclick="resetAll()">RESET</button>
         </div>
 
-        <div class="hud-grid">
-            <div class="hud-card">
-                <span class="hud-label">Difficulty</span>
-                <input type="number" id="disp-diff" class="hud-input val-diff" value="6" onchange="manualOverride('diff')">
+        <div class="scroll-y">
+            
+            <div class="mode-switch">
+                <div class="seg-btn active" id="btn-m-inst" onclick="mode('instant')">Instant Casting</div>
+                <div class="seg-btn" id="btn-m-rit" onclick="mode('ritual')">Ritual Casting</div>
             </div>
-            <div class="hud-card">
-                <span class="hud-label">Goal Successes</span>
-                <input type="number" id="disp-goal" class="hud-input val-goal" value="1" onchange="manualOverride('goal')">
-            </div>
-        </div>
 
-        <div class="panel" style="padding:15px;">
-            <div class="input-group">
-                <label>Highest Sphere</label>
-                <div class="counter">
-                    <button class="btn-cnt" onclick="mod('sphere', -1)">-</button>
-                    <div class="cnt-display" id="val-sphere">3</div>
-                    <button class="btn-cnt" onclick="mod('sphere', 1)">+</button>
+            <div class="hud">
+                <div class="hud-box">
+                    <span class="hud-lbl">DIFFICULTY</span>
+                    <input type="number" id="disp-diff" class="hud-val val-diff" value="6" onchange="manualOverride('diff')">
+                </div>
+                <div class="hud-box">
+                    <span class="hud-lbl">GOAL SUC</span>
+                    <input type="number" id="disp-goal" class="hud-val val-goal" value="1" onchange="manualOverride('goal')">
                 </div>
             </div>
 
-             <div class="input-group">
-                <label>Reality / Speed</label>
-                <div style="display:flex; gap:10px;">
-                    <select id="sel-reality" onchange="calc()">
-                        <option value="3">Coincidental (+3)</option>
-                        <option value="4">Vulgar (+4)</option>
-                        <option value="5">Witness (+5)</option>
-                    </select>
-                     <select id="sel-speed" onchange="calc()">
-                        <option value="0">Normal</option>
-                        <option value="-1">Slow (-1)</option>
-                        <option value="1">Fast (+1)</option>
-                    </select>
+            <div class="param-panel">
+                <div class="c-row">
+                    <label style="margin:0">Highest Sphere</label>
+                    <div style="display:flex; align-items:center; gap:5px;">
+                        <button class="c-btn" onclick="mod('sphere', -1)">-</button>
+                        <div class="c-val" id="val-sphere">3</div>
+                        <button class="c-btn" onclick="mod('sphere', 1)">+</button>
+                    </div>
+                </div>
+                
+                <div class="c-row">
+                     <label style="margin:0">Arete Rating</label>
+                     <div style="display:flex; align-items:center; gap:5px;">
+                        <button class="c-btn" onclick="mod('arete', -1)">-</button>
+                        <div class="c-val" id="val-arete">4</div>
+                        <button class="c-btn" onclick="mod('arete', 1)">+</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Reality & Speed</label>
+                    <div style="display:flex; gap:10px; margin-top:5px;">
+                        <select id="sel-reality" onchange="calc()">
+                            <option value="3">Coincidental (+3)</option>
+                            <option value="4">Vulgar (+4)</option>
+                            <option value="5">Witness (+5)</option>
+                        </select>
+                        <select id="sel-speed" onchange="calc()">
+                            <option value="0">Normal</option>
+                            <option value="-1">Slow / Aim (-1)</option>
+                            <option value="1">Fast / Rush (+1)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Bonuses</label>
+                    <div class="tools-grid" style="margin-top:5px;">
+                        <div class="t-btn" id="btn-sanctum" onclick="tog('sanctum')" data-title="Sanctum" data-desc="-1 Diff in Node/Sanctum">🏰 Sanct</div>
+                        <div class="t-btn" id="btn-inst" onclick="tog('inst')" data-title="Instruments" data-desc="-1 Diff for Personal Focus">🔮 Focus</div>
+                        <div class="t-btn" id="btn-quint" onclick="tog('quint')" data-title="Quintessence" data-desc="-1 Diff (Max 3)">✨ Quint</div>
+                        <div class="t-btn" id="btn-lib" onclick="tog('lib')" data-title="Library" data-desc="-1 Diff Research">📚 Lib</div>
+                        <div class="t-btn" id="btn-team" onclick="tog('team')" data-title="Teamwork" data-desc="-1 Diff Help">🤝 Team</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="color:var(--danger)">Penalties</label>
+                    <div class="tools-grid" style="margin-top:5px;">
+                         <div class="t-btn neg" id="btn-notool" onclick="tog('notool')" data-title="No Tools" data-desc="+3 Difficulty">🚫 No Tool</div>
+                         <div class="t-btn neg" id="btn-discord" onclick="tog('discord')" data-title="Discord" data-desc="+1 Difficulty">⚡ Discord</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label>Bonuses</label>
-                <div class="tools-grid">
-                    <div class="btn-tool" id="btn-sanctum" onclick="tog('sanctum')">🏰 Sanct</div>
-                    <div class="btn-tool" id="btn-inst" onclick="tog('inst')">🔮 Focus</div>
-                    <div class="btn-tool" id="btn-quint" onclick="tog('quint')">✨ Quint</div>
-                </div>
+            <button id="btn-cast" class="cast-btn style-inst" onclick="cast()">CAST SPELL</button>
+            
+            <div id="log-container">
+                 <div id="logs"></div>
             </div>
 
-            <div class="input-group">
-                 <label>Arete</label>
-                 <div class="counter">
-                    <button class="btn-cnt" onclick="mod('arete', -1)">-</button>
-                    <div class="cnt-display" id="val-arete">4</div>
-                    <button class="btn-cnt" onclick="mod('arete', 1)">+</button>
-                </div>
-            </div>
-        </div>
-
-        <button id="btn-cast" class="btn-cast style-inst" onclick="cast()">CAST SPELL</button>
-
-        <div id="log-container">
-            <div class="log-scroll" id="logs"></div>
         </div>
     </div>
-
 </div>
 
 <script>
-    /* --- SHARED JS UTILS --- */
+    /* --- SHARED UTILS --- */
     function roll(sides=10) { return Math.floor(Math.random()*sides)+1; }
 
-    /* --- LEFT PANEL LOGIC (GM SCREEN) --- */
-    // Search
+    /* --- LEFT PANEL: SEARCH & INTERACTION --- */
     function filterContent() {
         let input = document.getElementById('searchBox').value.toUpperCase();
-        let items = document.querySelectorAll('.sphere-list li, .combo-item, .acc-item, .gen-card');
-        
+        let items = document.querySelectorAll('.data-list li, .combo-item, .sub-acc-body table, .mini-tool-box');
+        let cats = document.querySelectorAll('.combo-cat');
+
         if(input.length === 0) {
             items.forEach(el => el.style.display = "");
+            cats.forEach(c => c.style.display = "");
             return;
         }
-        
+
         items.forEach(li => {
             let text = li.innerText;
             if(li.getAttribute('data-title')) text += " " + li.getAttribute('data-title');
             if(text.toUpperCase().indexOf(input) > -1) {
                 li.style.display = "";
-                // If inside accordion, open it
-                let parent = li.closest('.acc-item');
-                if(parent) { parent.classList.add('open'); }
+                // Auto open parents
+                let subAcc = li.closest('.sub-acc-item');
+                let secBody = li.closest('.section-body');
+                if(subAcc) subAcc.classList.add('active');
+                if(secBody) secBody.classList.add('open');
             } else {
                 li.style.display = "none";
             }
         });
+
+        // Hide empty categories
+        cats.forEach(cat => {
+             let next = cat.nextElementSibling;
+             let hasVisible = false;
+             while(next && next.classList.contains('combo-item')) {
+                 if(next.style.display !== 'none') { hasVisible = true; break; }
+                 next = next.nextElementSibling;
+             }
+             cat.style.display = hasVisible ? "" : "none";
+        });
     }
     function clearSearch() { document.getElementById('searchBox').value = ''; filterContent(); }
 
-    // UI Toggles
-    function toggleAcc(head) { head.parentElement.classList.toggle('open'); }
-    function togglePanel(head) { 
-        head.nextElementSibling.classList.toggle('closed'); 
-        head.querySelector('span').innerText = head.nextElementSibling.classList.contains('closed') ? '+' : '-';
+    function toggleSection(head) {
+        head.nextElementSibling.classList.toggle('open');
+        head.querySelector('span').innerText = head.nextElementSibling.classList.contains('open') ? '▼' : '▶';
+    }
+    function toggleSub(head) {
+        head.parentElement.classList.toggle('active');
     }
 
-    // Generators
-    const npcRoles = ["Techno-Hacker", "Hermit", "Corporate Mage", "Street Shaman", "Cultist", "Hitman"];
-    const npcTraits = ["Paranoid", "Arrogant", "Helpful", "Cryptic", "Aggressive", "Sleepy"];
+    // GENERATORS (Restored from GM Screen)
+    const npcRoles = ["Techno-Hacker", "Hermit", "Corporate Mage", "Street Shaman", "Goth Necromancer", "Academic", "Cultist", "Hitman", "Spirit Guide"];
+    const npcTraits = ["Paranoid", "Arrogant", "Helpful", "Cryptic", "Aggressive", "Sleepy", "Obsessive", "Charming"];
     function genNPC() { document.getElementById('res-npc').innerText = `${npcTraits[Math.floor(Math.random()*npcTraits.length)]} ${npcRoles[Math.floor(Math.random()*npcRoles.length)]}`; }
     
-    const resonances = ["Fiery (Dynamic)", "Cold (Stasis)", "Rotting (Entropic)", "Holy (Sacred)", "Industrial (Tech)"];
+    const resonances = ["Fiery (Dynamic)", "Cold (Stasis)", "Rotting (Entropic)", "Holy (Sacred)", "Industrial (Tech)", "Wild (Primal)", "Digital (Data)"];
     function genRes() { document.getElementById('res-rez').innerText = resonances[Math.floor(Math.random()*resonances.length)]; }
     
-    const flaws = ["Clocks run backwards.", "Shadows detach.", "Items levitate.", "Echoing voice.", "Tech glitch.", "Sulfur smell."];
+    const flaws = ["Clocks run backwards.", "Shadows detach.", "Items levitate.", "Echoing voice.", "Tech glitch.", "Plants wither.", "Temp drop.", "Sulfur smell.", "Mirror no reflection."];
     function genFlaw() { document.getElementById('res-flaw').innerText = flaws[Math.floor(Math.random()*flaws.length)]; }
 
-    // Tooltip Logic (Global)
+    // QUICK ROLLER (GM Tool)
+    function quickRoll() {
+        let pool = parseInt(document.getElementById('q-pool').value)||1;
+        let diff = parseInt(document.getElementById('q-diff').value)||6;
+        let suc=0, ones=0;
+        for(let i=0; i<pool; i++) {
+            let d = roll();
+            if(d>=diff) suc++; if(d===1) ones++;
+        }
+        let net = suc - ones;
+        let el = document.getElementById('q-res');
+        if(suc===0 && ones>0) { el.innerText="BOTCH!"; el.style.color="var(--danger)"; }
+        else if(net<0) { el.innerText="FAIL"; el.style.color="var(--text-muted)"; }
+        else { el.innerText=`${net} SUCCESSES`; el.style.color="var(--success)"; }
+    }
+
+
+    /* --- RIGHT PANEL: RITUALMATIC LOGIC --- */
+    let s = { mode:'instant', sphere:3, arete:4, gmDiff:0, gmGoal:0, sanctum:false, inst:false, quint:false, lib:false, team:false, notool:false, discord:false };
+    let ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+    let activeTimer = null;
+
+    // Tooltip Logic
     const tt = document.getElementById('tooltip');
-    const ttT=tt.querySelector('.tt-title'), ttD=tt.querySelector('.tt-desc'), ttR=tt.querySelector('.tt-ref');
+    const ttT=tt.querySelector('.tt-t'), ttD=tt.querySelector('.tt-d'), ttR=tt.querySelector('.tt-r');
     document.querySelectorAll('[data-title]').forEach(el => {
         el.addEventListener('mousemove', e => {
             tt.style.display = 'block';
             let x = e.clientX + 15, y = e.clientY + 15;
             if(x+280 > window.innerWidth) x = e.clientX - 295;
             tt.style.left = x+'px'; tt.style.top = y+'px';
-            ttT.innerText = el.dataset.title; ttD.innerText = el.dataset.desc || ''; ttR.innerText = el.dataset.ref || '';
+            ttT.innerText = el.dataset.title; ttD.innerText = el.dataset.desc||''; ttR.innerText = el.dataset.ref||'';
         });
         el.addEventListener('mouseleave', () => tt.style.display = 'none');
     });
 
-
-    /* --- RIGHT PANEL LOGIC (RITUALMATIC) --- */
-    let s = { mode:'instant', sphere:3, arete:4, gmDiff:0, gmGoal:0, sanctum:false, inst:false, quint:false };
-    let activeTimer = null;
-    let ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-
     function resetAll() {
-        s = { mode:'instant', sphere:3, arete:4, gmDiff:0, gmGoal:0, sanctum:false, inst:false, quint:false };
-        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
         if(activeTimer) clearInterval(activeTimer);
-        document.querySelectorAll('.btn-tool').forEach(b => b.classList.remove('active'));
-        document.getElementById('log-container').style.display='none';
+        s = { mode:'instant', sphere:3, arete:4, gmDiff:0, gmGoal:0, sanctum:false, inst:false, quint:false, lib:false, team:false, notool:false, discord:false };
+        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+        
+        document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('sel-reality').value='3';
+        document.getElementById('sel-speed').value='0';
+        document.getElementById('logs').innerHTML='';
+        
         mode('instant'); updateUI(); calc();
     }
 
     function mode(m) {
+        if(activeTimer) clearInterval(activeTimer);
         s.mode = m;
         document.getElementById('btn-m-inst').className = m==='instant' ? 'seg-btn active' : 'seg-btn';
         document.getElementById('btn-m-rit').className = m==='ritual' ? 'seg-btn active' : 'seg-btn';
+        updateBtnState();
+    }
+
+    function updateBtnState() {
         let btn = document.getElementById('btn-cast');
-        btn.className = m==='instant' ? 'btn-cast style-inst' : 'btn-cast style-rit';
-        btn.innerText = m==='instant' ? 'CAST INSTANT SPELL' : 'BEGIN RITUAL';
+        if(s.mode === 'instant') {
+            btn.className = 'cast-btn style-inst'; btn.innerText = 'CAST INSTANT SPELL';
+        } else {
+            if(ritState.isPaused) { btn.className = 'cast-btn style-pause'; btn.innerText = 'CONTINUE RITUAL'; }
+            else { btn.className = 'cast-btn style-rit'; btn.innerText = 'BEGIN RITUAL'; }
+        }
     }
 
     function mod(k, v) {
@@ -457,7 +615,10 @@
 
     function tog(k) {
         s[k] = !s[k];
-        document.getElementById('btn-'+k).classList.toggle('active');
+        let el = document.getElementById('btn-'+k);
+        el.classList.toggle('active');
+        if(k==='notool' && s[k]) { s.inst=false; document.getElementById('btn-inst').classList.remove('active'); }
+        if(k==='inst' && s[k]) { s.notool=false; document.getElementById('btn-notool').classList.remove('active'); }
         calc();
     }
 
@@ -465,43 +626,94 @@
         let sph = s.sphere;
         let real = parseInt(document.getElementById('sel-reality').value);
         let spd = parseInt(document.getElementById('sel-speed').value);
-        let bon = (s.sanctum?1:0) + (s.inst?1:0) + (s.quint?1:0);
         
-        let diff = sph + real + spd - bon;
+        let bon = (s.sanctum?1:0) + (s.inst?1:0) + (s.quint?1:0) + (s.lib?1:0) + (s.team?1:0);
+        if(bon > 3) bon = 3; // Max -3 cap
+        
+        let pen = (s.notool?3:0) + (s.discord?1:0);
+        
+        let diff = sph + real + spd - bon + pen;
         if(diff < 3) diff = 3; if(diff > 10) diff = 10;
         
-        let goal = 1; // Simplified for this view
-
         document.getElementById('disp-diff').value = diff + s.gmDiff;
-        document.getElementById('disp-goal').value = goal + s.gmGoal;
+        // Goal is set manually or by ritual logic, defaulted to 1 here
+        if(!ritState.hasStarted) ritState.currentDiff = diff + s.gmDiff;
     }
-    
+
     function manualOverride(t) {
         let val = parseInt(document.getElementById('disp-'+t).value);
         if(t==='diff') s.gmDiff = val - (parseInt(document.getElementById('disp-diff').defaultValue)||6);
-        // Simplified override logic
     }
 
     function cast() {
-        // Simple Cast Logic for Combined View
         let diff = parseInt(document.getElementById('disp-diff').value);
+        let goal = parseInt(document.getElementById('disp-goal').value);
         let arete = s.arete;
         let logs = document.getElementById('logs');
-        document.getElementById('log-container').style.display = 'block';
 
-        let suc=0, ones=0, res=[];
-        for(let i=0; i<arete; i++) {
-            let d = roll();
-            if(d>=diff) suc++; if(d===1) ones++;
-            res.push(d);
+        if(s.mode === 'instant') {
+            logs.innerHTML = '';
+            let res = doRoll(arete, diff);
+            let cls = res.net < 0 ? 'botch' : (res.net === 0 ? 'fail' : 'success');
+            let msg = res.net < 0 ? `BOTCH! (${res.ones} Pdx)` : (res.net === 0 ? "FAILURE" : `${res.net} SUCCESSES`);
+            
+            logs.innerHTML = `<div class="log-entry ${cls}">
+                <div><b>Instant</b> (Diff ${diff}) [${res.dice.join(',')}]</div>
+                <div style="font-weight:900">${msg}</div>
+            </div>`;
+        } else {
+            // RITUAL MODE
+            if(!ritState.hasStarted) {
+                logs.innerHTML = '';
+                ritState.totalSuc = 0; ritState.turn = 0; ritState.hasStarted = true;
+            }
+            ritState.isPaused = false;
+            updateBtnState();
+
+            activeTimer = setInterval(() => {
+                ritState.turn++;
+                let res = doRoll(arete, ritState.currentDiff);
+                
+                let cls = 'fail'; let txt = '';
+                if(res.suc === 0 && res.ones > 0) {
+                    clearInterval(activeTimer);
+                    cls = 'botch'; txt = `BOTCH! (${ritState.totalSuc + res.ones} Pdx)`;
+                    ritState.hasStarted = false; 
+                } else if(res.net > 0) {
+                    ritState.totalSuc += res.net;
+                    cls = 'success'; txt = `+${res.net} Suc (Total: ${ritState.totalSuc}/${goal})`;
+                } else {
+                    txt = "Fail (Diff +1)";
+                    if(ritState.currentDiff < 10) ritState.currentDiff++;
+                }
+
+                logs.innerHTML = `<div class="log-entry ${cls}">
+                    <div><b>Turn ${ritState.turn}</b> (Diff ${ritState.currentDiff}) [${res.dice.join(',')}]</div>
+                    <div>${txt}</div>
+                </div>` + logs.innerHTML;
+
+                if(ritState.totalSuc >= goal) {
+                    clearInterval(activeTimer);
+                    logs.innerHTML = `<div class="log-entry success" style="background:var(--success); color:#000; justify-content:center;"><b>RITUAL COMPLETE!</b></div>` + logs.innerHTML;
+                    ritState.hasStarted = false;
+                }
+                
+                updateBtnState();
+            }, 800);
         }
-        let net = suc - ones;
-        let msg = net < 0 ? "BOTCH!" : (net === 0 ? "FAIL" : net + " SUCCESSES");
-        let cls = net < 0 ? "botch" : (net === 0 ? "fail" : "success");
-        
-        logs.innerHTML = `<div class="entry ${cls}"><div><b>Diff ${diff}</b> [${res.join(',')}]</div><b>${msg}</b></div>` + logs.innerHTML;
     }
 
+    function doRoll(pool, diff) {
+        let suc=0, ones=0, dice=[];
+        for(let i=0; i<pool; i++) {
+            let d = roll();
+            if(d>=diff) suc++; if(d===1) ones++;
+            dice.push(d);
+        }
+        return { net: suc-ones, suc: suc, ones: ones, dice: dice };
+    }
+    
+    // Init
     calc(); updateUI();
 </script>
 </body>
