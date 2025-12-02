@@ -3,569 +3,506 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mage: The Ascension - Command Node</title>
+    <title>Mage: The Ascension - Ultimate Node</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-
     <style>
-        /* --- GLOBAL LAYOUT STYLES --- */
         :root {
-            --bg-color: #0f0f13;
-            --panel-bg: #1a1a24;
-            --text-color: #e0e0e0;
-            --accent-purple: #9d4edd;
-            --border-color: #333;
+            /* GLOBAL THEME VARIABLES */
+            --bg: #0e0e10;
+            --surface: #18181b;
+            --surface-light: #27272a;
+            --primary: #a78bfa; 
+            --primary-dim: rgba(167, 139, 250, 0.1);
+            --accent: #22d3ee;
+            --success: #34d399;
+            --danger: #fb7185;
+            --warning: #fbbf24;
+            --text: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --hb: #f59e0b;
+            --pause: #f97316; 
+            --border: rgba(255, 255, 255, 0.08);
+            --radius: 12px;
+            
+            /* Typography */
+            --fs-xs: 0.7rem;
+            --fs-sm: 0.85rem;
+            --fs-md: 1rem;
+            --fs-lg: 1.25rem;
+            --fs-xl: 3.2rem;
         }
-        body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); height: 100vh; display: flex; overflow: hidden; font-family: 'Courier Prime', monospace; }
-        
-        /* LEFT PANEL */
-        .chat-panel { width: 40%; min-width: 350px; display: flex; flex-direction: column; border-right: 1px solid var(--border-color); padding: 20px; background-color: #050505; z-index: 10; }
-        .chat-header { border-bottom: 1px solid var(--accent-purple); padding-bottom: 10px; margin-bottom: 15px; }
-        .chat-header h2 { margin: 0; font-size: 1.2rem; color: var(--accent-purple); letter-spacing: 2px; }
-        .chat-history { flex-grow: 1; overflow-y: auto; margin-bottom: 15px; border: 1px solid #333; padding: 15px; background: #000; font-size: 0.9rem; line-height: 1.4; }
-        .message { margin-bottom: 12px; padding: 8px; border-radius: 4px; animation: fadeIn 0.3s; }
-        .user-msg { color: #00ffcc; text-align: right; border-right: 2px solid #00ffcc; }
-        .bot-msg { color: #d896ff; border-left: 2px solid #d896ff; }
-        .input-area { display: flex; gap: 10px; }
-        .chat-input { flex-grow: 1; background: #111; border: 1px solid #444; color: white; padding: 12px; font-family: inherit; outline: none; }
-        .chat-input:focus { border-color: var(--accent-purple); }
-        .chat-btn { background: var(--accent-purple); border: none; color: white; padding: 0 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .chat-btn:hover { background: #b06bf7; }
 
-        /* RIGHT PANEL & RITUALMATIC STYLES */
-        .tools-panel { flex: 1; position: relative; overflow-y: auto; --bg: #0e0e10; --surface: #18181b; --surface-light: #27272a; --primary: #a78bfa; --primary-dim: rgba(167, 139, 250, 0.1); --accent: #22d3ee; --success: #34d399; --danger: #fb7185; --warning: #fbbf24; --text: #f4f4f5; --text-muted: #a1a1aa; --hb: #f59e0b; --pause: #f97316; --fs-xs: 0.7rem; --fs-sm: 0.85rem; --fs-md: 1rem; --fs-lg: 1.25rem; --fs-xl: 3.2rem; }
-        .tools-panel * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Montserrat', sans-serif; }
-        .tools-panel::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; min-height: 100vh; pointer-events: none; z-index: -1; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); background-size: 150px 150px; }
-        .app { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-        .rit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .rit-h1 { margin: 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
-        #tooltip { position: fixed; display: none; pointer-events: none; z-index: 9999; background: rgba(24, 24, 27, 0.98); border: 1px solid var(--primary); border-radius: 8px; padding: 14px; max-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); backdrop-filter: blur(10px); font-family: 'Montserrat', sans-serif; }
-        .tt-title { color: var(--accent); font-size: var(--fs-sm); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block;}
-        .tt-desc { color: var(--text); font-size: var(--fs-sm); line-height: 1.5; display: block; }
-        .tt-ref { color: var(--text-muted); font-size: var(--fs-xs); font-style: italic; margin-top: 10px; display: block; border-top: 1px solid #333; padding-top: 6px;}
-        .btn-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 14px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg); color: var(--text);
+            font-family: 'Montserrat', sans-serif; margin: 0; padding: 0;
+            height: 100vh; display: flex; overflow: hidden;
+        }
+
+        /* GRAIN BACKGROUND (Global) */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-size: 150px 150px; 
+        }
+
+        /* --- LAYOUT SPLIT --- */
+        .split-container {
+            display: flex; width: 100%; height: 100%;
+        }
+        .left-panel, .right-panel {
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .left-panel { border-right: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+        .right-panel { background: transparent; }
+
+        /* SCROLLBARS */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; border: 2px solid var(--bg); }
+
+        /* --- SHARED STYLES --- */
+        h1 { 
+            margin: 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; 
+            background: linear-gradient(to right, #fff, #a78bfa); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+        
+        .panel {
+            background: var(--surface); border-radius: var(--radius); 
+            border: 1px solid var(--border); display: flex; flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+        .panel-head {
+            padding: 15px 20px; border-bottom: 1px solid var(--border);
+            font-size: 0.85rem; font-weight: 800; color: var(--accent); 
+            text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.2);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;
+        }
+        .panel-head:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .panel-body { padding: 0; display: block; }
+        .panel-body.closed { display: none; }
+
+        /* --- LEFT SIDE SPECIFIC (GM SCREEN) --- */
+        .search-wrapper { position: relative; width: 100%; margin-bottom: 10px; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+        .search-input {
+            width: 100%; padding: 12px 40px; border-radius: 30px; background: var(--surface-light); 
+            border: 1px solid var(--border); color: #fff; font-family: inherit; font-weight: 600; font-size: 0.9rem; outline: none;
+        }
+        .search-input:focus { border-color: var(--primary); background: rgba(40,40,50,0.8); }
+        .search-clear { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: none; }
+        .search-input:not(:placeholder-shown) + .search-clear { display: block; }
+
+        /* Accordions & Lists (GM Screen) */
+        .acc-item { border-bottom: 1px solid var(--border); }
+        .acc-head { padding: 12px 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; color: var(--text); }
+        .acc-head:hover { color: var(--primary); background: rgba(255,255,255,0.03); }
+        .acc-body { display: none; padding: 15px 20px; background: rgba(0,0,0,0.2); font-size: 0.8rem; line-height: 1.5; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); }
+        .acc-item.open .acc-body { display: block; }
+        .acc-item.open .acc-head { color: var(--accent); }
+
+        .sphere-list { list-style: none; padding: 0; margin: 0; }
+        .sphere-list li { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); display: flex; align-items: baseline; }
+        .rank-num { color: var(--primary); font-weight: 800; margin-right: 8px; }
+
+        .combo-cat { color: var(--warning); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; margin-top: 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+        .combo-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); cursor: help; }
+        .combo-item:hover { color: var(--accent); }
+        .combo-req { font-family: monospace; font-size: 0.7rem; color: var(--text-muted); }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th { text-align: left; border-bottom: 1px solid var(--border); padding: 4px; color: var(--text); opacity: 0.7; }
+        td { padding: 4px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .col-hl { color: var(--primary); font-weight: 700; }
+
+        .gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .gen-card { background: var(--surface-light); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+        .gen-label { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 4px; }
+        .gen-val { font-size: 0.8rem; font-weight: 700; color: var(--accent); min-height: 18px; }
+        .btn-gen { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; width: 100%; padding: 6px; font-size: 0.65rem; font-weight: 700; cursor: pointer; margin-top: 5px; border-radius: 4px; }
+        .btn-gen:hover { border-color: var(--accent); }
+
+        /* --- RIGHT SIDE SPECIFIC (RITUALMATIC) --- */
+        .rit-header { display: flex; justify-content: space-between; align-items: center; }
+        .btn-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 14px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; cursor: pointer; }
         .btn-reset:active { background: var(--danger); color: #fff; }
-        .mode-switch { display: flex; background: var(--surface-light); padding: 5px; border-radius: 12px; margin-top: 5px; }
-        .seg-btn { flex: 1; text-align: center; padding: 12px; font-size: var(--fs-sm); font-weight: 700; border-radius: 8px; cursor: pointer; color: var(--text-muted); transition: all 0.2s ease; text-transform: uppercase; }
-        .seg-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .hud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .hud-card { background: var(--surface); border-radius: 16px; padding: 20px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.06); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        .hud-label { font-size: var(--fs-xs); color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;}
-        .hud-input { background: transparent; border: none; text-align: center; width: 100%; font-family: 'Montserrat', sans-serif; font-size: var(--fs-xl); font-weight: 900; outline: none; padding: 0; margin: 0; line-height: 1; color: var(--text); transition: all 0.2s; -moz-appearance: textfield; }
-        .hud-input:focus { transform: scale(1.05); text-shadow: 0 0 30px rgba(167, 139, 250, 0.3); }
-        .val-diff { color: #c4b5fd; } .val-goal { color: #6ee7b7; } .modified { color: var(--warning) !important; }
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; gap: 20px; } }
-        .panel { background: var(--surface); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 18px; }
-        .panel-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 6px; }
-        .ph-title { font-size: var(--fs-sm); font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        .rit-label { font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted); cursor: help; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-        .rit-label:hover { color: var(--primary); }
-        .rit-select { background: var(--surface-light); color: #fff; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-family: inherit; font-weight: 600; font-size: var(--fs-md); width: 100%; outline: none; cursor: pointer; appearance: none; transition: 0.2s; }
-        .rit-select:focus { border-color: var(--primary); background-color: #2d2d33; }
-        .counter { display: flex; background: var(--surface-light); border-radius: 12px; overflow: hidden; height: 48px; }
-        .btn-cnt { width: 48px; border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 1.2rem; cursor: pointer; transition: background 0.2s; }
-        .btn-cnt:active { background: var(--primary); }
+
+        .mode-switch { display: flex; background: var(--surface-light); padding: 4px; border-radius: 12px; }
+        .seg-btn { flex: 1; text-align: center; padding: 10px; font-size: var(--fs-sm); font-weight: 700; border-radius: 8px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
+        .seg-btn.active { background: var(--primary); color: #fff; }
+
+        .hud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .hud-card { background: var(--surface); border-radius: 16px; padding: 15px; text-align: center; border: 1px solid var(--border); }
+        .hud-label { font-size: var(--fs-xs); color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 5px; }
+        .hud-input { background: transparent; border: none; text-align: center; width: 100%; font-family: inherit; font-size: 2.5rem; font-weight: 900; color: var(--text); outline: none; }
+        .val-diff { color: #c4b5fd; } .val-goal { color: #6ee7b7; } .modified { color: var(--warning); }
+
+        .input-group { margin-bottom: 12px; }
+        label { font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; }
+        select { width: 100%; background: var(--surface-light); color: #fff; border: 1px solid transparent; padding: 12px; border-radius: 10px; font-family: inherit; font-weight: 600; outline: none; }
+        select:focus { border-color: var(--primary); }
+
+        .counter { display: flex; background: var(--surface-light); border-radius: 10px; overflow: hidden; height: 44px; }
+        .btn-cnt { width: 44px; border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 1.2rem; cursor: pointer; }
         .cnt-display { flex: 1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; }
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-tool { background: var(--surface-light); border: 1px solid transparent; padding: 14px; border-radius: 10px; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
-        .btn-tool:hover { background: #2d2d33; color: #fff; }
+
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .btn-tool { background: var(--surface-light); padding: 12px; border-radius: 8px; text-align: center; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border: 1px solid transparent; }
         .btn-tool.active { background: var(--primary-dim); border-color: var(--primary); color: var(--primary); }
-        .btn-tool.neg:hover { background: rgba(239, 68, 68, 0.1); }
-        .btn-tool.neg.active { background: rgba(239, 68, 68, 0.15); border-color: var(--danger); color: var(--danger); }
-        .btn-hb { font-size: 0.65rem; padding: 6px 10px; border-radius: 6px; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); color: var(--hb); cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .btn-hb.active { background: var(--hb); color: #000; box-shadow: 0 0 12px rgba(251, 191, 36, 0.3); }
-        .btn-safety { width: 100%; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3); color: var(--pause); padding: 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
-        .btn-safety:hover { background: rgba(249, 115, 22, 0.2); }
-        .btn-safety.active { background: var(--pause); color: #fff; box-shadow: 0 0 15px rgba(249, 115, 22, 0.3); border-color: var(--pause); }
-        .btn-safety svg { fill: currentColor; width: 20px; height: 20px; }
-        .slider-card { background: var(--surface-light); padding: 16px; border-radius: 12px; }
-        .slider-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
-        .slider-val { font-size: 1rem; font-weight: 800; color: #fff; }
-        .slider-cost { font-size: 0.75rem; font-weight: 600; color: var(--success); }
-        input[type=range] { width: 100%; cursor: pointer; margin: 0; accent-color: var(--primary); height: 6px; }
-        .mini-sel { background: transparent; border: none; color: var(--text-muted); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; cursor: pointer; padding: 0; text-align: right; }
-        .chk-row { height: 48px; padding: 0 16px; border-radius: 12px; background: var(--surface-light); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); font-weight: 700; font-size: 0.65rem; transition: 0.2s; gap: 4px; }
-        .chk-row.checked { background: var(--primary-dim); color: var(--primary); border: 1px solid var(--primary); }
-        .chk-icon { font-size: 1.2rem; line-height: 1; }
-        .btn-cast { width: 100%; padding: 22px; border: none; border-radius: 14px; font-family: inherit; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; color: #fff; transition: transform 0.1s, box-shadow 0.2s; margin-top: 10px; }
-        .btn-cast:active { transform: scale(0.98); }
-        .style-inst { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 8px 25px rgba(234, 88, 12, 0.25); }
-        .style-rit { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 8px 25px rgba(109, 40, 217, 0.25); }
-        .style-pause { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
-        #log-container { display: none; background: var(--surface); padding: 20px; border-radius: 16px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.06); }
-        .log-head { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; }
-        .log-scroll { max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;}
-        .log-scroll::-webkit-scrollbar { width: 12px; }
-        .log-scroll::-webkit-scrollbar-track { background: var(--surface-light); border-radius: 6px; }
-        .log-scroll::-webkit-scrollbar-thumb { background: #4b5563; border: 2px solid var(--surface-light); border-radius: 6px; }
-        .entry { background: var(--surface-light); padding: 12px 16px; border-radius: 10px; border-left: 5px solid #444; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .entry.success { border-color: var(--success); background: rgba(16, 185, 129, 0.06); }
-        .entry.fail { border-color: var(--warning); background: rgba(245, 158, 11, 0.06); }
-        .entry.botch { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
-        .entry.pause { border-color: var(--warning); background: rgba(245, 158, 11, 0.1); border-left-style: dashed; }
-        .dice { font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; display: block;}
-        .d10 { color: var(--warning); font-weight: bold; } .d1 { color: var(--danger); font-weight: bold; }
-        .prog-bg { height: 10px; background: var(--surface-light); border-radius: 5px; overflow: hidden; margin-bottom: 12px; }
-        .prog-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s; }
-        #error-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 10000; display: none; justify-content: center; align-items: center; animation: fadeIn 0.2s; }
-        @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-        .modal-box { background: #1c1c24; border: 1px solid var(--danger); border-radius: 16px; padding: 24px; max-width: 350px; text-align: center; box-shadow: 0 10px 50px rgba(239, 68, 68, 0.3); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes popIn { from {transform: scale(0.8);} to {transform: scale(1);} }
-        .modal-title { color: var(--danger); font-weight: 900; font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; }
-        .modal-text { color: #fff; font-size: 0.9rem; margin-bottom: 16px; line-height: 1.5; }
-        .modal-ref { display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 20px; font-style: italic; }
-        .modal-btn { background: var(--danger); border: none; color: #fff; padding: 12px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-family: inherit; }
+        .btn-tool.neg.active { border-color: var(--danger); color: var(--danger); background: rgba(239, 68, 68, 0.15); }
+
+        .btn-cast { width: 100%; padding: 20px; border: none; border-radius: 12px; font-family: inherit; font-size: 1.1rem; font-weight: 900; color: #fff; cursor: pointer; margin-top: 10px; }
+        .style-inst { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .style-rit { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+        .style-pause { background: var(--hb); color:#000; animation: pulse 2s infinite; }
+
+        #log-container { display: none; background: var(--surface); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid var(--border); }
+        .log-scroll { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+        .entry { background: var(--surface-light); padding: 10px; border-radius: 8px; border-left: 4px solid #444; font-size: 0.85rem; display: flex; justify-content: space-between; }
+        .entry.success { border-color: var(--success); } .entry.fail { border-color: var(--warning); } .entry.botch { border-color: var(--danger); }
+        
+        /* TOOLTIP */
+        #tooltip { position: fixed; display: none; pointer-events: none; z-index: 9999; background: rgba(24, 24, 27, 0.98); border: 1px solid var(--primary); border-radius: 8px; padding: 12px; max-width: 280px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); }
+        .tt-title { color: var(--accent); font-size: 0.7rem; font-weight: 800; display: block; margin-bottom: 4px; }
+        .tt-desc { color: #eee; font-size: 0.75rem; }
+        .tt-ref { color: var(--text-muted); font-size: 0.65rem; font-style: italic; margin-top: 8px; display: block; border-top: 1px solid #444; padding-top: 4px;}
+
+        /* MOBILE FIX */
+        @media (max-width: 900px) { .split-container { flex-direction: column; } .left-panel { border-right: none; border-bottom: 1px solid var(--border); height: 50%; } }
     </style>
 </head>
 <body>
 
-    <div class="chat-panel">
-        <div class="chat-header">
-            <h2>MAGICK FOCUS</h2>
-        </div>
-        
-        <div class="chat-history" id="chat-history">
-            <div class="message bot-msg">Arete systems online. Ready for query.</div>
+<div id="tooltip"><span class="tt-title"></span><span class="tt-desc"></span><span class="tt-ref"></span></div>
+
+<div class="split-container">
+    
+    <div class="left-panel">
+        <header style="display:flex; justify-content:space-between; align-items:center;">
+            <h1>GM Screen</h1>
+            <div style="font-size:0.7rem; color:var(--text-muted);">M20 Database</div>
+        </header>
+
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchBox" class="search-input" placeholder="Search Spheres, Rotes, Rules..." onkeyup="filterContent()">
+            <button class="search-clear" onclick="clearSearch()">✕</button>
         </div>
 
-        <div class="input-area">
-            <input type="text" id="user-input" class="chat-input" placeholder="Query the Consensus..." onkeypress="handleChatEnter(event)">
-            <button class="chat-btn" onclick="sendChatMessage()">SEND</button>
+        <div class="panel">
+            <div class="panel-head" onclick="togglePanel(this)">Spheres <span>-</span></div>
+            <div class="panel-body">
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🌐 Correspondence</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Perception</li><li><span class="rank-num">2</span> Sense/Touch</li><li><span class="rank-num">3</span> Pierce Space</li><li><span class="rank-num">4</span> Rend Space</li><li><span class="rank-num">5</span> Mutate Space</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">✨ Prime</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Prime</li><li><span class="rank-num">2</span> Fuel Pattern</li><li><span class="rank-num">3</span> Channel</li><li><span class="rank-num">4</span> Expel Energy</li><li><span class="rank-num">5</span> Mastery</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">⏳ Time</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Time Sense</li><li><span class="rank-num">2</span> Post/Precognition</li><li><span class="rank-num">3</span> Time Control</li><li><span class="rank-num">4</span> Time Bubble</li><li><span class="rank-num">5</span> Time Travel</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🔥 Forces</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Perceive</li><li><span class="rank-num">2</span> Control Minor</li><li><span class="rank-num">3</span> Transmute Minor</li><li><span class="rank-num">4</span> Control Major</li><li><span class="rank-num">5</span> Transmute Major</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🧬 Life</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Life</li><li><span class="rank-num">2</span> Alter Simple</li><li><span class="rank-num">3</span> Alter Self/Complex</li><li><span class="rank-num">4</span> Alter Complex</li><li><span class="rank-num">5</span> Create Life</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🧱 Matter</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Analysis</li><li><span class="rank-num">2</span> Transmute Basic</li><li><span class="rank-num">3</span> Alter Form</li><li><span class="rank-num">4</span> Complex</li><li><span class="rank-num">5</span> Create Matter</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🧠 Mind</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Thought</li><li><span class="rank-num">2</span> Read Surface</li><li><span class="rank-num">3</span> Mental Link</li><li><span class="rank-num">4</span> Control Mind</li><li><span class="rank-num">5</span> Create Mind</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">👻 Spirit</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Spirit Sight</li><li><span class="rank-num">2</span> Touch Spirit</li><li><span class="rank-num">3</span> Step Sideways</li><li><span class="rank-num">4</span> Bind Spirit</li><li><span class="rank-num">5</span> Forge Spirit</li></ul></div></div>
+                <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">🎲 Entropy</div><div class="acc-body"><ul class="sphere-list"><li><span class="rank-num">1</span> Sense Fate</li><li><span class="rank-num">2</span> Probability</li><li><span class="rank-num">3</span> Affect Matter</li><li><span class="rank-num">4</span> Affect Life</li><li><span class="rank-num">5</span> Affect Thought</li></ul></div></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head" onclick="togglePanel(this)" style="color:var(--warning)">Common Rotes <span>-</span></div>
+            <div class="panel-body" style="padding:10px;">
+                <div class="combo-cat">Combat</div>
+                <div class="combo-item" data-title="Aggravated Wound" data-desc="Burns internal organs." data-ref="HDYDT p.33"><span>Internal Burn (Agg)</span> <span class="combo-req">Life 3 + Forces 2</span></div>
+                <div class="combo-item" data-title="Sunlight" data-desc="True sunlight vs Vampires." data-ref="HDYDT p.32"><span>Artificial Sunlight</span> <span class="combo-req">Forces 3 + Prime 2</span></div>
+                <div class="combo-item" data-title="Chain Lightning" data-desc="Arcing electrical blast." data-ref="HDYDT p.37"><span>Chain Lightning</span> <span class="combo-req">Forces 3 + Prime 2</span></div>
+                <div class="combo-item" data-title="Kinetic Punch" data-desc="Increase velocity." data-ref="HDYDT p.30"><span>Kinetic Strike</span> <span class="combo-req">Forces 2</span></div>
+                <div class="combo-cat">Defense</div>
+                <div class="combo-item" data-title="Iron Skin" data-desc="Soak Aggravated damage." data-ref="HDYDT p.67"><span>Iron Skin</span> <span class="combo-req">Life 3 + Matter 3</span></div>
+                <div class="combo-item" data-title="Counter-Magic" data-desc="General anti-magic field." data-ref="M20 p.545"><span>Null Zone</span> <span class="combo-req">Prime 2</span></div>
+                <div class="combo-item" data-title="Invisibility" data-desc="Bends light around self." data-ref="HDYDT p.34"><span>Invisibility</span> <span class="combo-req">Forces 2</span></div>
+                <div class="combo-cat">Utility</div>
+                <div class="combo-item" data-title="Teleport" data-desc="Instant travel self." data-ref="M20 p.512"><span>Teleport Self</span> <span class="combo-req">Corr 3</span></div>
+                <div class="combo-item" data-title="Step Sideways" data-desc="Enter Penumbra." data-ref="HDYDT p.524"><span>Umbral Step</span> <span class="combo-req">Spirit 3</span></div>
+                <div class="combo-item" data-title="Mind Read" data-desc="Deep probe." data-ref="HDYDT p.115"><span>Mind Read</span> <span class="combo-req">Mind 3</span></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head" onclick="togglePanel(this)">Rules & Tables <span>-</span></div>
+            <div class="panel-body">
+                 <div class="acc-item">
+                    <div class="acc-head" onclick="toggleAcc(this)">Paradox Backlash <span>+</span></div>
+                    <div class="acc-body">
+                        <table>
+                            <tr><th>Suc</th><th>Effect</th></tr>
+                            <tr><td>1-5</td><td>1 pt/suc. Bashing or Trivial.</td></tr>
+                            <tr><td>6-10</td><td>1 pt/suc. Burn (Bash) or Minor.</td></tr>
+                            <tr><td>11-15</td><td>Lethal Burn + Sig Flaw.</td></tr>
+                            <tr><td>16+</td><td>Agg Burn + Perm Paradox.</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="acc-item">
+                     <div class="acc-head" onclick="toggleAcc(this)">Damage & Healing <span>+</span></div>
+                     <div class="acc-body">
+                        <table>
+                            <tr><th>Type</th><th>Recovery</th><th>Heal</th></tr>
+                            <tr><td style="color:var(--primary)">Bashing</td><td>1 / Hour</td><td>Life 2</td></tr>
+                            <tr><td style="color:var(--warning)">Lethal</td><td>1 / Day(s)</td><td>Life 3</td></tr>
+                            <tr><td style="color:var(--danger)">Aggravated</td><td>1 / Week</td><td>L3 + Quint</td></tr>
+                        </table>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head" onclick="togglePanel(this)">Generators <span>-</span></div>
+            <div class="panel-body" style="padding:15px;">
+                <div class="gen-grid">
+                    <div class="gen-card">
+                        <span class="gen-label">INSTANT NPC</span>
+                        <div class="gen-val" id="res-npc">...</div>
+                        <button class="btn-gen" onclick="genNPC()">GENERATE</button>
+                    </div>
+                    <div class="gen-card">
+                        <span class="gen-label">RESONANCE</span>
+                        <div class="gen-val" id="res-rez">...</div>
+                        <button class="btn-gen" onclick="genRes()">GENERATE</button>
+                    </div>
+                    <div class="gen-card">
+                        <span class="gen-label">PARADOX FLAW</span>
+                        <div class="gen-val" id="res-flaw" style="font-weight:400; color:#fff; font-size:0.7rem;">...</div>
+                        <button class="btn-gen" onclick="genFlaw()">SPARK CHAOS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="right-panel">
+        <header class="rit-header">
+            <h1>Ritualmatic</h1>
+            <button class="btn-reset" onclick="resetAll()">RESET ALL</button>
+        </header>
+
+        <div class="mode-switch">
+            <div class="seg-btn active" id="btn-m-inst" onclick="mode('instant')">Instant</div>
+            <div class="seg-btn" id="btn-m-rit" onclick="mode('ritual')">Ritual</div>
+        </div>
+
+        <div class="hud-grid">
+            <div class="hud-card">
+                <span class="hud-label">Difficulty</span>
+                <input type="number" id="disp-diff" class="hud-input val-diff" value="6" onchange="manualOverride('diff')">
+            </div>
+            <div class="hud-card">
+                <span class="hud-label">Goal Successes</span>
+                <input type="number" id="disp-goal" class="hud-input val-goal" value="1" onchange="manualOverride('goal')">
+            </div>
+        </div>
+
+        <div class="panel" style="padding:15px;">
+            <div class="input-group">
+                <label>Highest Sphere</label>
+                <div class="counter">
+                    <button class="btn-cnt" onclick="mod('sphere', -1)">-</button>
+                    <div class="cnt-display" id="val-sphere">3</div>
+                    <button class="btn-cnt" onclick="mod('sphere', 1)">+</button>
+                </div>
+            </div>
+
+             <div class="input-group">
+                <label>Reality / Speed</label>
+                <div style="display:flex; gap:10px;">
+                    <select id="sel-reality" onchange="calc()">
+                        <option value="3">Coincidental (+3)</option>
+                        <option value="4">Vulgar (+4)</option>
+                        <option value="5">Witness (+5)</option>
+                    </select>
+                     <select id="sel-speed" onchange="calc()">
+                        <option value="0">Normal</option>
+                        <option value="-1">Slow (-1)</option>
+                        <option value="1">Fast (+1)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Bonuses</label>
+                <div class="tools-grid">
+                    <div class="btn-tool" id="btn-sanctum" onclick="tog('sanctum')">🏰 Sanct</div>
+                    <div class="btn-tool" id="btn-inst" onclick="tog('inst')">🔮 Focus</div>
+                    <div class="btn-tool" id="btn-quint" onclick="tog('quint')">✨ Quint</div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                 <label>Arete</label>
+                 <div class="counter">
+                    <button class="btn-cnt" onclick="mod('arete', -1)">-</button>
+                    <div class="cnt-display" id="val-arete">4</div>
+                    <button class="btn-cnt" onclick="mod('arete', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <button id="btn-cast" class="btn-cast style-inst" onclick="cast()">CAST SPELL</button>
+
+        <div id="log-container">
+            <div class="log-scroll" id="logs"></div>
         </div>
     </div>
 
-    <div class="tools-panel">
-        <div id="tooltip"><span class="tt-title"></span><span class="tt-desc"></span><span class="tt-ref"></span></div>
-        <div id="error-modal">
-            <div class="modal-box">
-                <div class="modal-title">⚠ Rule Violation</div>
-                <div class="modal-text">Your Sphere rating cannot exceed your Arete rating.</div>
-                <span class="modal-ref">Reference: M20 Core Rulebook, p.251</span>
-                <button class="modal-btn" onclick="closeError()">UNDERSTOOD</button>
-            </div>
-        </div>
-        <div class="app">
-            <header class="rit-header">
-                <h1 class="rit-h1">Ozan's Ritualmatic</h1>
-                <button class="btn-reset" onclick="resetAll()" data-title="Reset" data-desc="Clears all settings." data-ref="UI">RESET ALL</button>
-            </header>
-            <div class="mode-switch">
-                <div class="seg-btn active" id="btn-m-inst" onclick="mode('instant')" data-title="Instant Casting" data-desc="Single roll attempt. Results are immediate." data-ref="M20 p.538">Instant</div>
-                <div class="seg-btn" id="btn-m-rit" onclick="mode('ritual')" data-title="Ritual Casting" data-desc="Extended roll over time. Accumulate successes." data-ref="M20 p.538">Ritual</div>
-            </div>
-            <div class="hud-grid">
-                <div class="hud-card" data-title="Final Difficulty" data-desc="Calculated Base + GM Override. Click number to edit." data-ref="M20 p.536">
-                    <span class="hud-label">Difficulty</span>
-                    <input type="number" id="disp-diff" class="hud-input val-diff" value="6" onchange="manualOverride('diff')">
-                </div>
-                <div class="hud-card" data-title="Goal Successes" data-desc="Total cost of Duration, Area, Damage, etc. Click to Edit." data-ref="M20 p.502">
-                    <span class="hud-label">Goal Successes</span>
-                    <input type="number" id="disp-goal" class="hud-input val-goal" value="1" onchange="manualOverride('goal')">
-                </div>
-            </div>
-            <div class="main-grid">
-                <div class="panel">
-                    <div class="panel-header"><span class="ph-title">Parameters</span></div>
-                    <div class="input-group">
-                        <label class="rit-label" data-title="Highest Sphere" data-desc="Base Diff = Level + 3. Cannot exceed Arete." data-ref="M20 p.328">Highest Sphere</label>
-                        <div class="counter">
-                            <button class="btn-cnt" onclick="mod('sphere', -1)">-</button>
-                            <div class="cnt-display" id="val-sphere">3</div>
-                            <button class="btn-cnt" onclick="mod('sphere', 1)">+</button>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label class="rit-label" data-title="Reality" data-desc="Coincidental (+3), Vulgar (+4), Witnessed (+5)." data-ref="M20 p.536">Reality Effect</label>
-                        <select id="sel-reality" class="rit-select" onchange="calc()">
-                            <option value="3">Coincidental (+3)</option>
-                            <option value="4">Vulgar (+4)</option>
-                            <option value="5">Witness (+5)</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label class="rit-label" data-title="Speed" data-desc="Fast (+1 Diff), Slow (-1 Diff)." data-ref="M20 p.536">Casting Speed</label>
-                        <select id="sel-speed" class="rit-select" onchange="calc()">
-                            <option value="0">Normal</option>
-                            <option value="-1">Slow / Aiming (-1)</option>
-                            <option value="1">Fast / Rush (+1)</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label class="rit-label">Bonuses (Max -3 Cap)</label>
-                        <div class="tools-grid" style="grid-template-columns: 1fr 1fr 1fr;">
-                            <div class="btn-tool" id="btn-sanctum" onclick="tog('sanctum')" data-title="Sanctum" data-desc="-1 Diff within Sanctum/Node." data-ref="M20 p.536">🏰 Sanct</div>
-                            <div class="btn-tool" id="btn-inst" onclick="tog('inst')" data-title="Instrument" data-desc="-1 Diff for personalized Focus." data-ref="M20 p.536">🔮 Focus</div>
-                            <div class="btn-tool" id="btn-res" onclick="tog('res')" data-title="Research" data-desc="-1 Diff for Library use." data-ref="M20 p.536">📚 Lib</div>
-                            <div class="btn-tool" id="btn-quint" onclick="tog('quint')" data-title="Quintessence" data-desc="-1 Diff per point spent." data-ref="M20 p.536">✨ Quint</div>
-                            <div class="btn-tool" id="btn-team" onclick="tog('team')" data-title="Teamwork" data-desc="-1 Diff for Assistants." data-ref="M20 p.541">🤝 Team</div>
-                            <div class="btn-tool" id="btn-syn" onclick="tog('syn')" data-title="Synergy" data-desc="-1 Diff for Resonant Synergy." data-ref="M20 p.536">☯️ Syn</div>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label class="rit-label" style="color:var(--danger)">Penalties (Uncapped)</label>
-                        <div class="tools-grid">
-                            <div class="btn-tool neg" id="btn-notool" onclick="tog('notool')" data-title="No Tools" data-desc="+3 Diff for working without Instruments." data-ref="M20 p.536">🚫 No Tools</div>
-                            <div class="btn-tool neg" id="btn-discord" onclick="tog('discord')" data-title="Discord" data-desc="+1 Diff for Resonant Discord." data-ref="M20 p.536">⚡ Discord</div>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-                            <label class="rit-label" style="flex:1; color:var(--danger)" data-title="Distraction" data-desc="+1 Diff per level of distraction." data-ref="M20 p.536">Distraction (+)</label>
-                            <div class="counter" style="flex:1; height:36px; border-color:rgba(248, 113, 113, 0.3)">
-                                <button class="btn-cnt" onclick="mod('distract', -1)">-</button>
-                                <div class="cnt-display" id="val-distract" style="color:var(--danger)">0</div>
-                                <button class="btn-cnt" onclick="mod('distract', 1)">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="border-top:1px dashed rgba(255,255,255,0.1); padding-top:10px; display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end;">
-                        <div class="input-group">
-                            <label class="rit-label" data-title="Arete" data-desc="Magical enlightenment & Dice Pool. (M20 p.328)" data-ref="M20 p.328">Arete</label>
-                            <select id="arete" class="rit-select" onchange="lim()"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
-                        </div>
-                        <div class="input-group">
-                            <label class="rit-label" data-title="Willpower" data-desc="Determines Ritual Roll Limit. (M20 p.540)" data-ref="M20 p.540">Willpower</label>
-                            <select id="will" class="rit-select" onchange="lim()"><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
-                        </div>
-                        <div style="padding-bottom:12px;">
-                            <div class="chk-row" id="btn-spec" onclick="togSpec()" data-title="Specialty" data-desc="10s explode on Arete roll." data-ref="Rule">
-                                <div class="chk-box" id="chk-spec-vis"></div>
-                                <span style="font-size:0.65rem; font-weight:700; color:var(--text-muted)">SPEC</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="text-align:center; font-size:0.65rem; color:var(--text-muted);">Limit: <strong id="val-limit" style="color:#fff">9</strong> Rolls</div>
-                    <div class="btn-safety" id="toggle-safety" onclick="tog('pauseOnDiff')" data-title="Safety Protocol" data-desc="Automatically pause Ritual if Difficulty increases due to failure." data-ref="UX Feature">
-                        <svg viewBox="0 0 100 100" fill="#f97316"><path d="M50 5 L90 35 L50 95 L10 35 Z M50 5 L50 95 M10 35 L90 35" stroke="#000" stroke-width="2" /></svg>
-                        <span>Pause on Diff +</span>
-                    </div>
-                </div>
-                <div class="panel">
-                    <div class="panel-header"><span class="ph-title" style="color:var(--success)">Goal & Feats</span><div class="btn-hb" id="btn-hb" onclick="tog('hb')" data-title="Homebrew Rule" data-desc="Use 1/2/4/6 scale instead of 1/2/3/4." data-ref="House Rule">🏠 Homebrew</div></div>
-                    <div class="input-group">
-                        <label class="rit-label" data-title="Duration" data-desc="Base success cost for time." data-ref="M20 p.504">Duration</label>
-                        <select id="sel-dur" class="rit-select" onchange="calc()"><option value="0">One Scene (approx. 1 Hour)</option><option value="1">One Day (24 Hours)</option><option value="2">One Story (Chapter/Arc)</option><option value="3">Six Months</option><option value="4">Permanent (Burn WP/Quint)</option></select>
-                    </div>
-                    <div class="input-group">
-                        <label class="rit-label" data-title="Targets" data-desc="Cost for area/targets." data-ref="M20 p.504">Target / Area</label>
-                        <select id="sel-targ" class="rit-select" onchange="calc()"><option value="0">1 Target / Self (Touch)</option><option value="1">2-4 Ppl / ~5m Radius (+1)</option><option value="2">5-10 Ppl / ~10m Radius (+2)</option><option value="3">Mass / Building (+3)</option></select>
-                    </div>
-                    <div class="slider-card" data-title="Damage Effect" data-desc="1 Success buys 2 Levels of Damage." data-ref="M20 p.504">
-                        <div class="slider-header">
-                            <div><label class="rit-label" style="margin:0; display:inline;">DAMAGE</label><select id="sel-dmg-type" onchange="calc()" class="mini-sel"><option value="Lethal" style="color:var(--warning)">Lethal</option><option value="Bashing" style="color:var(--info)">Bashing</option><option value="Aggravated" style="color:var(--danger)">Aggravated</option></select></div>
-                            <div style="text-align:right; line-height:1;"><div class="slider-val" id="txt-dmg">0 Levels</div><div class="slider-cost" id="cost-dmg">+0 Suc</div></div>
-                        </div>
-                        <input type="range" id="rng-dmg" min="0" max="20" value="0" oninput="calc()">
-                    </div>
-                    <div class="input-group">
-                        <label class="rit-label" data-title="Combo / Complexity" data-desc="Add +1 Success per extra Sphere or Feat." data-ref="M20 p.503">Other Feats / Combo</label>
-                        <div class="counter"><button class="btn-cnt" onclick="mod('extra', -1)">-</button><div class="cnt-display" id="val-extra">0</div><button class="btn-cnt" onclick="mod('extra', 1)">+</button></div>
-                    </div>
-                    <div class="input-group">
-                        <label class="rit-label" style="color:var(--danger)" data-title="Opposition" data-desc="+1 Goal per opposing success/threshold." data-ref="M20 p.532">Opposition / Threshold</label>
-                        <div class="counter" style="border-color:rgba(248, 113, 113, 0.3)"><button class="btn-cnt" onclick="mod('resist', -1)">-</button><div class="cnt-display" id="val-resist" style="color:var(--danger)">0</div><button class="btn-cnt" onclick="mod('resist', 1)">+</button></div>
-                    </div>
-                </div>
-            </div>
-            <button id="btn-cast" class="btn-cast style-inst" onclick="cast()">Cast Instant Spell</button>
-            <div id="log-container"><div class="log-head"><span id="log-title">Result</span> <span id="prog-txt"></span></div><div class="prog-bg"><div class="prog-fill" id="p-bar"></div></div><div class="log-scroll" id="logs"></div></div>
-        </div>
-    </div>
+</div>
 
-    <script>
-        /* =========================================================
-           CONFIG: GEMINI API KEY
-           WARNING: Bu kodu GitHub'a herkese açık yüklediğin için
-           Google Cloud Console'dan bu Key'e kısıtlama eklemelisin.
-           (Sadece 'yalcinozan.github.io' referrer kabul etmeli)
-           ========================================================= */
+<script>
+    /* --- SHARED JS UTILS --- */
+    function roll(sides=10) { return Math.floor(Math.random()*sides)+1; }
+
+    /* --- LEFT PANEL LOGIC (GM SCREEN) --- */
+    // Search
+    function filterContent() {
+        let input = document.getElementById('searchBox').value.toUpperCase();
+        let items = document.querySelectorAll('.sphere-list li, .combo-item, .acc-item, .gen-card');
         
-        const GOOGLE_API_KEY = "AIzaSyA7DLP9PVC-SBxgDiwpTA-FKjBqQz9wjkA"; // <-- BURAYA YAPIŞTIR!
-
-        /* --- CHAT FUNCTIONALITY --- */
-        async function sendChatMessage() {
-            const inputField = document.getElementById('user-input');
-            const chatHistory = document.getElementById('chat-history');
-            const prompt = inputField.value;
-
-            if (!prompt) return;
-
-            chatHistory.innerHTML += `<div class="message user-msg">> ${prompt}</div>`;
-            inputField.value = '';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            const loadingId = 'loading-' + Date.now();
-            chatHistory.innerHTML += `<div class="message bot-msg" id="${loadingId}">aligning spheres...</div>`;
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            try {
-                // gemini-1.5-flash
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=${GOOGLE_API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{ 
-                                text: "You are an expert GM assistant for Mage: The Ascension. Provide concise, objective, and atmospheric responses suitable for the game setting (Technocracy/Traditions). Keep it short. Question: " + prompt 
-                            }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.error) {
-                    throw new Error(data.error.message);
-                }
-
-                const botReply = data.candidates[0].content.parts[0].text;
-                document.getElementById(loadingId).remove();
-                chatHistory.innerHTML += `<div class="message bot-msg">${formatText(botReply)}</div>`;
-                
-            } catch (error) {
-                document.getElementById(loadingId).innerText = "Error: Paradox Backlash (API Restriction or Quota).";
-                console.error(error);
-            }
-            
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+        if(input.length === 0) {
+            items.forEach(el => el.style.display = "");
+            return;
         }
-
-        function handleChatEnter(e) { if (e.key === 'Enter') sendChatMessage(); }
-        function formatText(text) { return text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
-
-        /* --- RITUALMATIC FUNCTIONALITY (Zar Kodu) --- */
-        let s = { mode:'instant', sphere:3, extra:0, resist:0, gmDiff:0, gmGoal:0, sanctum:false, inst:false, res:false, quint:false, team:false, syn:false, notool:false, discord:false, distract:0, hb:false, pauseOnDiff: false, spec: false };
-        let activeTimer = null;
-        let ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-
-        const errorModal = document.getElementById('error-modal');
-        function showError(msg) { errorModal.style.display = 'flex'; }
-        function closeError() { errorModal.style.display = 'none'; }
-
-        const tt = document.getElementById('tooltip');
-        const ttT=tt.querySelector('.tt-title'), ttD=tt.querySelector('.tt-desc'), ttR=tt.querySelector('.tt-ref');
-        document.querySelectorAll('[data-title]').forEach(el => {
-            el.addEventListener('mousemove', e => {
-                tt.style.display = 'block';
-                let x = e.clientX + 15, y = e.clientY + 15;
-                if(x + 280 > window.innerWidth) x = e.clientX - 295;
-                tt.style.left = x + 'px'; tt.style.top = y + 'px';
-                if(ttT.innerText !== el.dataset.title) {
-                    ttT.innerText = el.dataset.title; ttD.innerText = el.dataset.desc; ttR.innerText = el.dataset.ref;
-                }
-            });
-            el.addEventListener('mouseleave', () => tt.style.display = 'none');
-        });
-
-        function resetAll() {
-            if(activeTimer) { clearInterval(activeTimer); activeTimer = null; }
-            s = { mode:'instant', sphere:3, extra:0, resist:0, gmDiff:0, gmGoal:0, sanctum:false, inst:false, res:false, quint:false, team:false, syn:false, notool:false, discord:false, distract:0, hb:false, pauseOnDiff: false, spec: false };
-            document.getElementById('sel-reality').value = '3';
-            document.getElementById('sel-speed').value = '0';
-            document.getElementById('sel-dur').value = '0';
-            document.getElementById('sel-targ').value = '0';
-            document.getElementById('rng-dmg').value = 0;
-            document.getElementById('sel-dmg-type').value = 'Lethal';
-            document.getElementById('arete').value = '4';
-            document.getElementById('will').value = '5';
-            document.querySelectorAll('.btn-tool, .btn-hb, .btn-safety').forEach(b => b.classList.remove('active'));
-            document.getElementById('chk-spec-vis').classList.remove('checked');
-            document.getElementById('val-sphere').innerText = '3';
-            document.getElementById('val-extra').innerText = '0';
-            document.getElementById('val-resist').innerText = '0';
-            document.getElementById('val-distract').innerText = '0';
-            document.getElementById('log-container').style.display = 'none';
-            ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-            mode('instant'); calc(); lim();
-        }
-        function mode(m) {
-            if(activeTimer) { clearInterval(activeTimer); activeTimer=null; }
-            s.mode = m;
-            document.getElementById('btn-m-inst').className = m==='instant' ? 'seg-btn active' : 'seg-btn';
-            document.getElementById('btn-m-rit').className = m==='ritual' ? 'seg-btn active' : 'seg-btn';
-            updateButtonState();
-        }
-        function updateButtonState() {
-            let btn = document.getElementById('btn-cast');
-            if(s.mode === 'instant') { btn.innerText = "CAST INSTANT SPELL"; btn.className = "btn-cast style-inst"; } else {
-                if (ritState.isPaused) { btn.innerText = "CONTINUE RITUAL"; btn.className = "btn-cast style-pause"; } else { btn.innerText = "BEGIN RITUAL"; btn.className = "btn-cast style-rit"; }
-            }
-        }
-        function mod(k, v) {
-            s[k] += v;
-            if(k==='sphere') { if(s[k]<1) s[k]=1; if(s[k]>9) s[k]=9; }
-            if((k==='extra' || k==='resist' || k==='distract') && s[k]<0) s[k]=0; 
-            if(document.getElementById('val-' + k)) document.getElementById('val-' + k).innerText = s[k];
-            calc();
-        }
-        function tog(k) {
-            s[k] = !s[k];
-            let id = k==='hb' ? 'btn-hb' : (k==='pauseOnDiff' ? 'toggle-safety' : 'btn-'+k);
-            let el = document.getElementById(id);
-            if(k==='notool' && s[k]) { s.inst=false; document.getElementById('btn-inst').classList.remove('active'); }
-            if(k==='inst' && s[k]) { s.notool=false; document.getElementById('btn-notool').classList.remove('active'); }
-            if(s[k]) el.classList.add('active'); else el.classList.remove('active');
-            calc();
-        }
-        function togSpec() {
-            s.spec = !s.spec;
-            let el = document.getElementById('chk-spec-vis');
-            if(s.spec) el.classList.add('checked'); else el.classList.remove('checked');
-        }
-        function lim() {
-            let a = parseInt(document.getElementById('arete').value);
-            let w = parseInt(document.getElementById('will').value);
-            document.getElementById('val-limit').innerText = a + w;
-        }
-        function getBaseValues() {
-            let sph = parseInt(document.getElementById('val-sphere').innerText);
-            let real = parseInt(document.getElementById('sel-reality').value);
-            let spd = parseInt(document.getElementById('sel-speed').value);
-            let bon = (s.sanctum?1:0) + (s.inst?1:0) + (s.res?1:0) + (s.quint?1:0) + (s.team?1:0) + (s.syn?1:0);
-            if(bon > 3) bon = 3;
-            let pen = (s.notool?3:0) + (s.discord?1:0) + s.distract;
-            let baseDiff = sph + real + spd - bon + pen;
-            let floor = sph < 3 ? 3 : sph;
-            if(baseDiff < floor) baseDiff = floor;
-            if(baseDiff > 10) baseDiff = 10; if(baseDiff < 3) baseDiff = 3;
-            let durIdx = parseInt(document.getElementById('sel-dur').value);
-            let durCosts = s.hb ? [1, 2, 4, 6, 10] : [1, 2, 3, 4, 6];
-            let baseDur = durCosts[durIdx];
-            let targ = parseInt(document.getElementById('sel-targ').value);
-            let dmg = parseInt(document.getElementById('rng-dmg').value);
-            let dmgC = Math.ceil(dmg/2);
-            let baseGoal = baseDur + targ + dmgC + s.extra + s.resist;
-            if(baseGoal < 1) baseGoal = 1;
-            return { diff: baseDiff, goal: baseGoal };
-        }
-        function calc() {
-            let base = getBaseValues();
-            let dmg = parseInt(document.getElementById('rng-dmg').value);
-            let dmgT = document.getElementById('sel-dmg-type').value;
-            let dCol = dmgT==="Lethal"?"var(--warning)":(dmgT==="Aggravated"?"var(--danger)":"var(--info)");
-            let dTxt = document.getElementById('txt-dmg');
-            dTxt.innerText = `${dmg} ${dmgT}`; dTxt.style.color = dCol;
-            document.getElementById('cost-dmg').innerText = `+${Math.ceil(dmg/2)} Suc`;
-            let elDiff = document.getElementById('disp-diff');
-            let elGoal = document.getElementById('disp-goal');
-            elDiff.value = base.diff + s.gmDiff;
-            elGoal.value = base.goal + s.gmGoal;
-            if (!ritState.hasStarted) ritState.currentDiff = parseInt(elDiff.value);
-            if(s.gmDiff !== 0) elDiff.classList.add('modified'); else elDiff.classList.remove('modified');
-            if(s.gmGoal !== 0) elGoal.classList.add('modified'); else elGoal.classList.remove('modified');
-        }
-        function manualOverride(type) {
-            let inputEl = document.getElementById('disp-' + type);
-            let rawVal = inputEl.value;
-            let base = getBaseValues(); 
-            if (rawVal === "" || isNaN(parseInt(rawVal))) {
-                if(type === 'diff') s.gmDiff = 0; else s.gmGoal = 0;
+        
+        items.forEach(li => {
+            let text = li.innerText;
+            if(li.getAttribute('data-title')) text += " " + li.getAttribute('data-title');
+            if(text.toUpperCase().indexOf(input) > -1) {
+                li.style.display = "";
+                // If inside accordion, open it
+                let parent = li.closest('.acc-item');
+                if(parent) { parent.classList.add('open'); }
             } else {
-                let userVal = parseInt(rawVal);
-                if(type === 'diff') s.gmDiff = userVal - base.diff;
-                else s.gmGoal = userVal - base.goal;
+                li.style.display = "none";
             }
-            calc(); 
-        }
-        function roll(sides=10) { return Math.floor(Math.random()*sides)+1; }
-        function cast() {
-            let currentSphere = parseInt(document.getElementById('val-sphere').innerText);
-            let currentArete = parseInt(document.getElementById('arete').value);
-            if(currentSphere > currentArete) { showError("Invalid Cast"); return; }
-            if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
-            document.getElementById('log-container').style.display = 'block';
-            let arete = parseInt(document.getElementById('arete').value);
-            let goal = parseInt(document.getElementById('disp-goal').value);
-            let limit = parseInt(document.getElementById('val-limit').innerText);
-            if(s.mode === 'instant') {
-                document.getElementById('log-title').innerText = "Instant Result";
-                document.getElementById('prog-txt').innerText = "";
-                document.getElementById('p-bar').style.width = "0%";
-                document.getElementById('logs').innerHTML = ""; 
-                let diff = parseInt(document.getElementById('disp-diff').value);
-                let res = doRoll(arete, diff, s.spec);
-                let net = res.suc - res.ones;
-                let type = "fail", msg = "";
-                if(res.suc===0 && res.ones>0) { type="botch"; msg=`BOTCH! (${res.ones} Pdx)`; }
-                else if(net < 1) { msg="FAILED"; }
-                else if(net < goal) { msg=`WEAK (${net}/${goal} Suc)`; }
-                else { type="success"; msg=`SUCCESS! (${net} Suc)`; }
-                addLog(1, diff, res.html, msg, type);
-                return;
-            }
-            document.getElementById('log-title').innerText = "Ritual Progress";
-            if (!ritState.isPaused) {
-                document.getElementById('logs').innerHTML = ""; 
-                ritState.totalSuc = 0; ritState.turn = 0;
-                ritState.currentDiff = parseInt(document.getElementById('disp-diff').value);
-                ritState.hasStarted = true;
-            } else { ritState.isPaused = false; updateButtonState(); }
-            document.getElementById('prog-txt').innerText = `${ritState.totalSuc} / ${goal}`;
-            document.getElementById('p-bar').style.width = (ritState.totalSuc/goal*100)+"%";
-            activeTimer = setInterval(() => {
-                ritState.turn++;
-                let res = doRoll(arete, ritState.currentDiff, s.spec);
-                let net = res.suc - res.ones;
-                let type = "", msg = "";
-                let diffIncreased = false;
-                if(res.suc===0 && res.ones>0) {
-                    clearInterval(activeTimer); activeTimer=null;
-                    let pdx = ritState.totalSuc + res.ones;
-                    msg = `BOTCH! (${pdx} Pdx)`; end(false, "BACKLASH"); type="botch";
-                    ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-                    updateButtonState();
-                } else {
-                    if(net <= 0) {
-                        type="fail"; 
-                        if(net < 0) { ritState.totalSuc += net; if(ritState.totalSuc<0) ritState.totalSuc=0; msg=`Fail (${net})`; } else { msg="Fail (0). Diff +1"; }
-                        if(ritState.currentDiff < 10) { ritState.currentDiff++; diffIncreased = true; }
-                    } else { type="success"; ritState.totalSuc += net; msg=`+${net} Suc`; }
-                }
-                if (type) { 
-                    addLog(ritState.turn, diffIncreased ? ritState.currentDiff-1 : ritState.currentDiff, res.html, msg, type);
-                    let pct = (ritState.totalSuc/goal)*100; if(pct>100) pct=100;
-                    document.getElementById('p-bar').style.width = pct+"%";
-                    document.getElementById('prog-txt').innerText = `${ritState.totalSuc} / ${goal}`;
-                    if (diffIncreased && s.pauseOnDiff && ritState.totalSuc < goal) {
-                        clearInterval(activeTimer); activeTimer = null; ritState.isPaused = true; updateButtonState();
-                        let l = document.getElementById('logs');
-                        l.innerHTML = `<div class="entry pause"><div style="font-weight:bold; color:var(--warning)">PAUSED (Diff Increased to ${ritState.currentDiff})</div></div>` + l.innerHTML;
-                        return;
-                    }
-                    if(ritState.totalSuc >= goal) { 
-                        clearInterval(activeTimer); activeTimer=null; end(true, "COMPLETE"); 
-                        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false }; updateButtonState();
-                    } else if(ritState.turn >= limit) { 
-                        clearInterval(activeTimer); activeTimer=null; end(false, "EXHAUSTED"); 
-                        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false }; updateButtonState();
-                    }
-                }
-            }, 600);
-        }
-        function doRoll(pool, diff, spec) {
-            let suc=0, ones=0, html=[];
-            for(let i=0; i<pool; i++) {
-                let d = roll();
-                if(d >= diff) suc++; if(d === 1) ones++;
-                let cls = d===1 ? "d1" : (d>=diff ? (d===10&&spec ? "d10" : "suc") : "");
-                let txt = d;
-                if(spec && d===10) { let x = roll(); if(x>=diff) suc++; txt = `10+${x}`; }
-                html.push(`<span class="${cls}" style="${d>=diff && d!=1 ? 'color:var(--success)' : ''}">${txt}</span>`);
-            }
-            return {suc, ones, html};
-        }
-        function addLog(turn, diff, dice, msg, type) {
-            let l = document.getElementById('logs');
-            l.innerHTML = `<div class="entry ${type}"><div><b>T${turn}</b> <span style="opacity:0.6">(${diff})</span> <span class="dice">[${dice.join(',')}]</span></div><b>${msg}</b></div>` + l.innerHTML;
-        }
-        function end(win, txt) {
-            let c = win ? "var(--success)" : "var(--text-muted)";
-            document.getElementById('logs').innerHTML = `<div style="text-align:center; padding:10px; margin-bottom:10px; border:2px solid ${c}; color:${c}; border-radius:8px; font-weight:800;">${txt}</div>` + document.getElementById('logs').innerHTML;
-        }
+        });
+    }
+    function clearSearch() { document.getElementById('searchBox').value = ''; filterContent(); }
 
-        calc(); lim();
-    </script>
+    // UI Toggles
+    function toggleAcc(head) { head.parentElement.classList.toggle('open'); }
+    function togglePanel(head) { 
+        head.nextElementSibling.classList.toggle('closed'); 
+        head.querySelector('span').innerText = head.nextElementSibling.classList.contains('closed') ? '+' : '-';
+    }
+
+    // Generators
+    const npcRoles = ["Techno-Hacker", "Hermit", "Corporate Mage", "Street Shaman", "Cultist", "Hitman"];
+    const npcTraits = ["Paranoid", "Arrogant", "Helpful", "Cryptic", "Aggressive", "Sleepy"];
+    function genNPC() { document.getElementById('res-npc').innerText = `${npcTraits[Math.floor(Math.random()*npcTraits.length)]} ${npcRoles[Math.floor(Math.random()*npcRoles.length)]}`; }
+    
+    const resonances = ["Fiery (Dynamic)", "Cold (Stasis)", "Rotting (Entropic)", "Holy (Sacred)", "Industrial (Tech)"];
+    function genRes() { document.getElementById('res-rez').innerText = resonances[Math.floor(Math.random()*resonances.length)]; }
+    
+    const flaws = ["Clocks run backwards.", "Shadows detach.", "Items levitate.", "Echoing voice.", "Tech glitch.", "Sulfur smell."];
+    function genFlaw() { document.getElementById('res-flaw').innerText = flaws[Math.floor(Math.random()*flaws.length)]; }
+
+    // Tooltip Logic (Global)
+    const tt = document.getElementById('tooltip');
+    const ttT=tt.querySelector('.tt-title'), ttD=tt.querySelector('.tt-desc'), ttR=tt.querySelector('.tt-ref');
+    document.querySelectorAll('[data-title]').forEach(el => {
+        el.addEventListener('mousemove', e => {
+            tt.style.display = 'block';
+            let x = e.clientX + 15, y = e.clientY + 15;
+            if(x+280 > window.innerWidth) x = e.clientX - 295;
+            tt.style.left = x+'px'; tt.style.top = y+'px';
+            ttT.innerText = el.dataset.title; ttD.innerText = el.dataset.desc || ''; ttR.innerText = el.dataset.ref || '';
+        });
+        el.addEventListener('mouseleave', () => tt.style.display = 'none');
+    });
+
+
+    /* --- RIGHT PANEL LOGIC (RITUALMATIC) --- */
+    let s = { mode:'instant', sphere:3, arete:4, gmDiff:0, gmGoal:0, sanctum:false, inst:false, quint:false };
+    let activeTimer = null;
+    let ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+
+    function resetAll() {
+        s = { mode:'instant', sphere:3, arete:4, gmDiff:0, gmGoal:0, sanctum:false, inst:false, quint:false };
+        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+        if(activeTimer) clearInterval(activeTimer);
+        document.querySelectorAll('.btn-tool').forEach(b => b.classList.remove('active'));
+        document.getElementById('log-container').style.display='none';
+        mode('instant'); updateUI(); calc();
+    }
+
+    function mode(m) {
+        s.mode = m;
+        document.getElementById('btn-m-inst').className = m==='instant' ? 'seg-btn active' : 'seg-btn';
+        document.getElementById('btn-m-rit').className = m==='ritual' ? 'seg-btn active' : 'seg-btn';
+        let btn = document.getElementById('btn-cast');
+        btn.className = m==='instant' ? 'btn-cast style-inst' : 'btn-cast style-rit';
+        btn.innerText = m==='instant' ? 'CAST INSTANT SPELL' : 'BEGIN RITUAL';
+    }
+
+    function mod(k, v) {
+        if(k==='sphere') s.sphere = Math.max(1, Math.min(9, s.sphere + v));
+        if(k==='arete') s.arete = Math.max(1, Math.min(10, s.arete + v));
+        updateUI(); calc();
+    }
+    
+    function updateUI() {
+        document.getElementById('val-sphere').innerText = s.sphere;
+        document.getElementById('val-arete').innerText = s.arete;
+    }
+
+    function tog(k) {
+        s[k] = !s[k];
+        document.getElementById('btn-'+k).classList.toggle('active');
+        calc();
+    }
+
+    function calc() {
+        let sph = s.sphere;
+        let real = parseInt(document.getElementById('sel-reality').value);
+        let spd = parseInt(document.getElementById('sel-speed').value);
+        let bon = (s.sanctum?1:0) + (s.inst?1:0) + (s.quint?1:0);
+        
+        let diff = sph + real + spd - bon;
+        if(diff < 3) diff = 3; if(diff > 10) diff = 10;
+        
+        let goal = 1; // Simplified for this view
+
+        document.getElementById('disp-diff').value = diff + s.gmDiff;
+        document.getElementById('disp-goal').value = goal + s.gmGoal;
+    }
+    
+    function manualOverride(t) {
+        let val = parseInt(document.getElementById('disp-'+t).value);
+        if(t==='diff') s.gmDiff = val - (parseInt(document.getElementById('disp-diff').defaultValue)||6);
+        // Simplified override logic
+    }
+
+    function cast() {
+        // Simple Cast Logic for Combined View
+        let diff = parseInt(document.getElementById('disp-diff').value);
+        let arete = s.arete;
+        let logs = document.getElementById('logs');
+        document.getElementById('log-container').style.display = 'block';
+
+        let suc=0, ones=0, res=[];
+        for(let i=0; i<arete; i++) {
+            let d = roll();
+            if(d>=diff) suc++; if(d===1) ones++;
+            res.push(d);
+        }
+        let net = suc - ones;
+        let msg = net < 0 ? "BOTCH!" : (net === 0 ? "FAIL" : net + " SUCCESSES");
+        let cls = net < 0 ? "botch" : (net === 0 ? "fail" : "success");
+        
+        logs.innerHTML = `<div class="entry ${cls}"><div><b>Diff ${diff}</b> [${res.join(',')}]</div><b>${msg}</b></div>` + logs.innerHTML;
+    }
+
+    calc(); updateUI();
+</script>
 </body>
 </html>
