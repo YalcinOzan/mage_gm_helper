@@ -189,6 +189,12 @@
         .modal-text { color: #ccc; font-size: 1rem; margin-bottom: 24px; line-height: 1.5; }
         .modal-btn { background: var(--danger); border: none; color: #fff; padding: 14px 24px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
         .modal-btn:hover { background: #dc2626; }
+        
+        /* Merits & Flaws Flavor Text Style */
+        .data-info { display: flex; flex-direction: column; gap: 2px; }
+        .data-name { font-weight: 700; color: #fff; display: block; margin-bottom: 2px; font-size: 0.95rem; }
+        .data-desc { display: block; font-size: 0.85rem; color: var(--primary); font-weight: 600; } /* Kural kısmı vurgulu */
+        .data-flavor { display: block; font-size: 0.75rem; color: var(--text-muted); font-style: italic; line-height: 1.3; margin-top: 2px; } /* Açıklama kısmı */
     </style>
 </head>
 <body>
@@ -201,6 +207,7 @@
         <button class="nav-btn" onclick="switchTab('tab-spheres', this)">🔮 Spheres</button>
         <button class="nav-btn" onclick="switchTab('tab-rotes', this)">📚 Rotes</button>
         <button class="nav-btn" onclick="switchTab('tab-rules', this)">⚖️ Rules</button>
+        <button class="nav-btn" onclick="switchTab('tab-merits', this)">⚖️ Merits</button>
         <button class="nav-btn active" onclick="switchTab('tab-tools', this)">🎲 Tools</button>
     </div>
 
@@ -497,14 +504,97 @@
                 <div class="acc-item">
                     <div class="acc-header" onclick="toggleAcc(this)">⬆️ Stat Boost Rules</div>
                     <div class="acc-content" style="padding:16px; font-size:0.9rem; line-height:1.6; color:#ccc;">
-                        <p><strong style="color:var(--accent)">Base Cost:</strong> 3 Successes per Dot.</p>
+                        <p><strong style="color:var(--accent)">Base Cost:</strong> 1 Successes per Dot.</p>
                         <p><strong style="color:var(--success)">Spheres:</strong> Life 3 (Physical) / Mind 3 (Mental/Social).</p>
                         <p><strong style="color:var(--danger)">Limit:</strong> Attributes above 5 are Vulgar & cause Pattern Bleeding if not permanent.</p>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="tab-merits" class="tab-page">
+            <div class="accordion">
+                
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">💪 Physical Merits</div>
+                    <div class="acc-content">
+                        <div class="data-row" data-search="Acute Senses"><div class="data-info"><span class="data-name">Acute Senses</span><span class="data-desc">-2 difficulty to all rolls with the chosen sense.</span><span class="data-flavor">Your mage has exceptionally sharp senses (vision, hearing, etc.), doubling normal sensitivity.</span></div><span class="data-meta">1 or 3 pts</span></div>
+                        <div class="data-row" data-search="Ambidextrous"><div class="data-info"><span class="data-name">Ambidextrous</span><span class="data-desc">No penalty for using off-hand.</span><span class="data-flavor">You have equal facility with either hand, suffering no off-hand penalties.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Catlike Balance"><div class="data-info"><span class="data-name">Catlike Balance</span><span class="data-desc">-2 difficulty to balance-related rolls.</span><span class="data-flavor">Possesses an innately perfect sense of balance, useful for tightrope walking or ledges.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Claws Fangs Horns"><div class="data-info"><span class="data-name">Claws / Fangs / Horns</span><span class="data-desc">Natural weapons dealing Str+1 to Str+3 damage.</span><span class="data-flavor">You possess natural weaponry like claws, fangs, or horns. Can be retractable for extra cost.</span></div><span class="data-meta">3+ pts</span></div>
+                        <div class="data-row" data-search="Cloak of Seasons"><div class="data-info"><span class="data-name">Cloak of the Seasons</span><span class="data-desc">Protected from extreme weather/temperatures.</span><span class="data-flavor">Magically protected from natural heat or cold; comfortable regardless of clothing.</span></div><span class="data-meta">3 pts</span></div>
+                        <div class="data-row" data-search="Huge Size"><div class="data-info"><span class="data-name">Huge Size</span><span class="data-desc">Gain one extra 'Bruised' Health Level.</span><span class="data-flavor">You are abnormally large, granting extra resilience against damage.</span></div><span class="data-meta">4 pts</span></div>
+                        <div class="data-row" data-search="Insensible Pain"><div class="data-info"><span class="data-name">Insensible to Pain</span><span class="data-desc">Ignore all wound penalties until Incapacitated.</span><span class="data-flavor">Your body deadens pain signals, allowing you to function normally even when severely injured.</span></div><span class="data-meta">5 pts</span></div>
+                    </div>
+                </div>
 
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">🧠 Mental Merits</div>
+                    <div class="acc-content">
+                        <div class="data-row" data-search="Ability Aptitude"><div class="data-info"><span class="data-name">Ability Aptitude</span><span class="data-desc">-2 difficulty for one specific Ability.</span><span class="data-flavor">A natural flair for a specific skill (e.g., languages, driving), performing it with ease.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Berserker"><div class="data-info"><span class="data-name">Berserker</span><span class="data-desc">WP roll (Diff 6+Wounds) when injured or frenzy. Ignore wound penalties.</span><span class="data-flavor">You enter a red rage in combat, ignoring pain but attacking friend and foe alike.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Code of Honor"><div class="data-info"><span class="data-name">Code of Honor</span><span class="data-desc">+2 dice to Willpower when acting via code.</span><span class="data-flavor">A personal ethical code gives you strength to resist compulsion and temptation.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Common Sense"><div class="data-info"><span class="data-name">Common Sense</span><span class="data-desc">ST warns you if you act against common sense.</span><span class="data-flavor">Practical wisdom that alerts you before you do something disastrously stupid.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Concentration"><div class="data-info"><span class="data-name">Concentration</span><span class="data-desc">No penalty for distractions/environment.</span><span class="data-flavor">Ability to shut out all distractions and focus intently on the task at hand.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Eidetic Memory"><div class="data-info"><span class="data-name">Eidetic Memory</span><span class="data-desc">Perfect recall; Perc+Alertness (Diff 6) under stress.</span><span class="data-flavor">You remember everything you experience with perfect clarity, like a photographic memory.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Iron Will"><div class="data-info"><span class="data-name">Iron Will</span><span class="data-desc">+3 dice to resist mind magic; spend 1 WP to shake off domination.</span><span class="data-flavor">Your mind is a fortress, highly resistant to mental control and manipulation.</span></div><span class="data-meta">3 pts</span></div>
+                        <div class="data-row" data-search="Lightning Calculator"><div class="data-info"><span class="data-name">Lightning Calculator</span><span class="data-desc">-2 difficulty on math-related rolls.</span><span class="data-flavor">You can perform complex mathematical calculations instantly in your head.</span></div><span class="data-meta">1 pt</span></div>
+                    </div>
+                </div>
+
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">🤝 Social Merits</div>
+                    <div class="acc-content">
+                        <div class="data-row" data-search="Celestial Affinity"><div class="data-info"><span class="data-name">Celestial Affinity</span><span class="data-desc">-2 difficulty dealing with High Umbrood.</span><span class="data-flavor">You have a knack for conversing with noble spirits and angels.</span></div><span class="data-meta">3 pts</span></div>
+                        <div class="data-row" data-search="Ecumenist"><div class="data-info"><span class="data-name">Ecumenist</span><span class="data-desc">Purchase two specialty Spheres at x7 cost.</span><span class="data-flavor">You understand distinct factions within a Tradition, gaining affinity for both paths.</span></div><span class="data-meta">5 pts</span></div>
+                        <div class="data-row" data-search="Faction Founder"><div class="data-info"><span class="data-name">Faction Founder</span><span class="data-desc">+1 Social dice within Tradition; teach specialty sphere.</span><span class="data-flavor">You created your own sub-faction, gaining respect and followers.</span></div><span class="data-meta">4 pts</span></div>
+                        <div class="data-row" data-search="Well Connected"><div class="data-info"><span class="data-name">Well Connected</span><span class="data-desc">Backgrounds cost 1 pt/level (Allies, Contacts, etc).</span><span class="data-flavor">You have an extensive network of friends and influence, cheaper to maintain.</span></div><span class="data-meta">3 pts</span></div>
+                    </div>
+                </div>
+
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">✨ Supernatural Merits</div>
+                    <div class="acc-content">
+                        <div class="data-row" data-search="Astral Vigor"><div class="data-info"><span class="data-name">Astral Vigor</span><span class="data-desc">No astral side effects; 2 Armor in Astral; Sense body.</span><span class="data-flavor">Your astral form is resilient, avoiding fatigue and retaining a link to your body.</span></div><span class="data-meta">3 pts</span></div>
+                        <div class="data-row" data-search="Avatar Companion"><div class="data-info"><span class="data-name">Avatar Companion</span><span class="data-desc">Living companion linked to your Avatar (Storyteller Char).</span><span class="data-flavor">A person shares your reincarnation cycle, offering guidance and past-life memories.</span></div><span class="data-meta">7 pts</span></div>
+                        <div class="data-row" data-search="Circumspect Avatar"><div class="data-info"><span class="data-name">Circumspect Avatar</span><span class="data-desc">Avatar is subtle; seekings are grounded in reality.</span><span class="data-flavor">Your Avatar acts as a subconscious nudge rather than a flashy spirit guide.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Medium"><div class="data-info"><span class="data-name">Medium</span><span class="data-desc">Naturally sense and speak to ghosts without magic.</span><span class="data-flavor">You are a conduit for the dead, able to hear and see restless spirits.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Parlor Trick"><div class="data-info"><span class="data-name">Parlor Trick</span><span class="data-desc">Perform minor magic at will (no roll/cost).</span><span class="data-flavor">Simple tricks like lighting a candle or changing eye color effortlessly.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Personal Talisman"><div class="data-info"><span class="data-name">Personal Talisman</span><span class="data-desc">Start with a permanent Talisman tied to you.</span><span class="data-flavor">You possess a magical item imbued with your own willpower.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Sphere Natural"><div class="data-info"><span class="data-name">Sphere Natural</span><span class="data-desc">Use one Sphere without Focus instruments.</span><span class="data-flavor">You have internalized the magic of one Sphere so deeply you need no tools for it.</span></div><span class="data-meta">5 pts</span></div>
+                        <div class="data-row" data-search="True Faith"><div class="data-info"><span class="data-name">True Faith</span><span class="data-desc">Start with 1 dot of True Faith trait.</span><span class="data-flavor">A deep, unshakable belief that provides protection and miracles against darkness.</span></div><span class="data-meta">7 pts</span></div>
+                        <div class="data-row" data-search="Unaging"><div class="data-info"><span class="data-name">Unaging</span><span class="data-desc">You do not age physically; immune to aging potions.</span><span class="data-flavor">You stop aging at a certain point, remaining eternally youthful.</span></div><span class="data-meta">2 pts</span></div>
+                    </div>
+                </div>
+
+                <div class="acc-item" style="border-color:var(--danger);">
+                    <div class="acc-header" onclick="toggleAcc(this)" style="color:var(--danger);">⚠️ Flaws (Physical/Mental)</div>
+                    <div class="acc-content">
+                        <div class="data-row" data-search="Addiction"><div class="data-info"><span class="data-name">Addiction</span><span class="data-desc">Must indulge or suffer dice penalties.</span><span class="data-flavor">Dependent on a substance/act; withdrawal causes weakness and craving.</span></div><span class="data-meta">1-3 pts</span></div>
+                        <div class="data-row" data-search="Bad Sight"><div class="data-info"><span class="data-name">Bad Sight</span><span class="data-desc">+2 difficulty on vision rolls.</span><span class="data-flavor">Uncorrectable vision problem like severe myopia.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Deranged"><div class="data-info"><span class="data-name">Deranged</span><span class="data-desc">Permanent mental disorder (e.g. Megalomania).</span><span class="data-flavor">You suffer from a permanent, uncurable mental illness.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Nightmares"><div class="data-info"><span class="data-name">Nightmares</span><span class="data-desc">WP roll (Diff 7) to sleep restfully or lose 1 die next day.</span><span class="data-flavor">Horrific dreams plague your sleep, leaving you exhausted.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Phobia"><div class="data-info"><span class="data-name">Phobia</span><span class="data-desc">WP roll to face object; +2 diff or flee.</span><span class="data-flavor">An overwhelming, irrational fear of a specific object or situation.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Short Fuse"><div class="data-info"><span class="data-name">Short Fuse</span><span class="data-desc">WP roll (Diff 6) to avoid anger; -2 diff to frenzy.</span><span class="data-flavor">You are easily provoked and struggle to control your temper.</span></div><span class="data-meta">2 pts</span></div>
+                        <div class="data-row" data-search="Vulnerability"><div class="data-info"><span class="data-name">Vulnerability</span><span class="data-desc">Specific substance causes Agg damage.</span><span class="data-flavor">You are allergic to a common substance (like iron or plastic) which harms you.</span></div><span class="data-meta">2-4 pts</span></div>
+                    </div>
+                </div>
+
+                <div class="acc-item" style="border-color:var(--danger);">
+                    <div class="acc-header" onclick="toggleAcc(this)" style="color:var(--danger);">🔮 Flaws (Supernatural)</div>
+                    <div class="acc-content">
+                        <div class="data-row" data-search="Bard's Tongue"><div class="data-info"><span class="data-name">Bard's Tongue</span><span class="data-desc">Speak uncomfortable truths; 1 WP + 1 Bashing to resist.</span><span class="data-flavor">You compulsively speak prophecies or secrets you'd rather keep hidden.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Beast Within"><div class="data-info"><span class="data-name">Beast Within</span><span class="data-desc">Roll Dynamic Res (Diff 6) to avoid frenzy in stress.</span><span class="data-flavor">An inner beast drives you to rage, similar to vampires or werewolves.</span></div><span class="data-meta">5 pts</span></div>
+                        <div class="data-row" data-search="Bedeviled"><div class="data-info"><span class="data-name">Bedeviled</span><span class="data-desc">ST creates random misfortunes automatically.</span><span class="data-flavor">A hostile force watches you, causing things to go wrong at the worst times.</span></div><span class="data-meta">6 pts</span></div>
+                        <div class="data-row" data-search="Cast No Shadow"><div class="data-info"><span class="data-name">Cast No Shadow</span><span class="data-desc">No reflection/shadow; immune to some mirrors.</span><span class="data-flavor">You lack a shadow or reflection, marking you as supernatural.</span></div><span class="data-meta">1 pt</span></div>
+                        <div class="data-row" data-search="Dark Fate"><div class="data-info"><span class="data-name">Dark Fate</span><span class="data-desc">Horrible demise inevitable; suffer damage/fail per session.</span><span class="data-flavor">You are doomed to a tragic end, and the universe conspires to bring it about.</span></div><span class="data-meta">5 pts</span></div>
+                        <div class="data-row" data-search="Echoes"><div class="data-info"><span class="data-name">Echoes</span><span class="data-desc">Supernatural side-effects (cold, smell, static).</span><span class="data-flavor">Your magic bleeds into reality, causing eerie phenomena around you.</span></div><span class="data-meta">1-5 pts</span></div>
+                        <div class="data-row" data-search="Geasa"><div class="data-info"><span class="data-name">Geasa / Taboo</span><span class="data-desc">Breaking oath causes loss of powers/stats.</span><span class="data-flavor">A sacred oath or ban. Violating it brings dire magical consequences.</span></div><span class="data-meta">1-5 pts</span></div>
+                        <div class="data-row" data-search="Sphere Inept"><div class="data-info"><span class="data-name">Sphere Inept</span><span class="data-desc">+2 difficulty with one specific Sphere.</span><span class="data-flavor">You struggle to grasp the concepts of one Sphere, finding it harder to use.</span></div><span class="data-meta">5 pts</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         <div id="tab-tools" class="tab-page active">
             
             <div class="sub-nav">
