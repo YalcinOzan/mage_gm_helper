@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mage: Master Library</title>
+    <title>MAGE 20TH: Secret Library</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800;900&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 
@@ -22,7 +22,124 @@
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; letter-spacing: -0.015em; }
-        
+
+        /* --- GÖRSEL GÜNCELLEME (VISUAL OVERHAUL) --- */
+
+        /* 1. Derinlikli Arka Plan */
+        body {
+            background-color: var(--bg-body);
+            /* Hafif bir radyal gradyan ile merkeze ışık verelim */
+            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, var(--bg-body) 85%);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            letter-spacing: -0.015em;
+        }
+
+        /* 2. Hero Banner (Yeni Üst Alan) */
+        .hero-header {
+            background: linear-gradient(180deg, rgba(11, 11, 15, 0.9) 0%, rgba(11, 11, 15, 0.6) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 20px 30px 20px; /* Alt boşluk search bar için */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            position: relative;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .brand-container {
+            text-align: center;
+        }
+
+        .brand-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            margin: 0;
+            background: linear-gradient(to right, #fff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .brand-subtitle {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        /* Search Bar Revizyonu (Header içine entegre) */
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            background: rgba(9, 9, 11, 0.8);
+            border: 1px solid var(--border);
+            padding: 14px 20px;
+            padding-left: 45px; /* İkon için yer */
+            border-radius: 50px; /* Daha modern, yuvarlak hatlar */
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s var(--ease);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+            .search-bar:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px var(--primary-dim), 0 4px 20px rgba(0,0,0,0.4);
+                background: #000;
+            }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* 3. Footer (Alt Bilgi) */
+        .site-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            background: var(--bg-panel);
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+            .site-footer span {
+                color: var(--primary);
+                font-weight: 700;
+            }
+
         /* =========================================
            2. HEADER & NAV
            ========================================= */
@@ -199,8 +316,16 @@
 </head>
 <body>
 
-    <div class="app-header">
-        <input type="text" id="searchBox" class="search-bar" placeholder="Search Rotes, Rules, Spheres..." onkeyup="filterContent()">
+    <div class="hero-header">
+        <div class="brand-container">
+            <h1 class="brand-title">MAGE 20TH: SECRET LIBRARY</h1>
+            <div class="brand-subtitle">Reality Alteration Protocols v2.0</div>
+        </div>
+
+        <div class="search-container">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchBox" class="search-bar" placeholder="Search Rotes, Rules, Spheres..." onkeyup="filterContent()">
+        </div>
     </div>
 
     <div class="nav-tabs">
@@ -212,13 +337,13 @@
     </div>
 
     <div class="content-area">
-        
+
         <div id="tooltip">
             <span class="tt-title"></span>
             <span class="tt-desc"></span>
             <span class="tt-ref"></span>
         </div>
-        
+
         <div id="error-modal">
             <div class="modal-box">
                 <div class="modal-title">⚠ Rule Violation</div>
@@ -229,107 +354,107 @@
         </div>
 
         <div id="tab-spheres" class="tab-page">
-                <div class="grid-3">
-                    <div class="card">
-                        <span class="card-title">🌐 Correspondence</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Immediate spatial perception and orientation." data-ref="M20 QS p.19"><span>1</span> Immediate Spatial Perception</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Sense and touch space; minor warding." data-ref="M20 QS p.19"><span>2</span> Sense & Touch Space</li>
-                            <li data-title="Rank 3: Control" data-desc="Pierce space; teleportation and perception." data-ref="M20 QS p.19"><span>3</span> Pierce Space / Teleport</li>
-                            <li data-title="Rank 4: Command" data-desc="Rend space; co-location and gateways." data-ref="M20 QS p.19"><span>4</span> Rend Space / Co-location</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Mutate space; distort distances and volumes." data-ref="M20 QS p.19"><span>5</span> Mutate Space / Distort</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">🎲 Entropy</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Sense fate, flaws, and probability currents." data-ref="M20 QS p.19"><span>1</span> Sense Fate & Flaws</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Control probability and minor fortune." data-ref="M20 QS p.19"><span>2</span> Control Probability</li>
-                            <li data-title="Rank 3: Control" data-desc="Affect predictable matter and energy patterns." data-ref="M20 QS p.19"><span>3</span> Affect Matter & Energy</li>
-                            <li data-title="Rank 4: Command" data-desc="Affect life cycles; induce rapid decay." data-ref="M20 QS p.19"><span>4</span> Affect Life / Decay</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Affect thought, concepts, and abstract ideas." data-ref="M20 QS p.19"><span>5</span> Affect Thought / Concepts</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">⚡ Forces</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Perceive energy currents and forces." data-ref="M20 QS p.19"><span>1</span> Perceive Energy</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Control minor forces; alter direction/quality." data-ref="M20 QS p.19"><span>2</span> Control Minor Forces</li>
-                            <li data-title="Rank 3: Control" data-desc="Transmute minor forces; conjure energy." data-ref="M20 QS p.19"><span>3</span> Transmute Minor Forces</li>
-                            <li data-title="Rank 4: Command" data-desc="Control major forces; weather and storms." data-ref="M20 QS p.19"><span>4</span> Control Major Forces</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Forces mastery; summon cataclysms." data-ref="M20 QS p.19"><span>5</span> Mastery / Cataclysm</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">🧬 Life</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Sense life, health, and biological patterns." data-ref="M20 QS p.19"><span>1</span> Sense Life & Health</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Alter simple life forms; heal self." data-ref="M20 QS p.19"><span>2</span> Alter Simple / Self</li>
-                            <li data-title="Rank 3: Control" data-desc="Transform self; heal others; alter simple life." data-ref="M20 QS p.19"><span>3</span> Transform Self / Simple</li>
-                            <li data-title="Rank 4: Command" data-desc="Transform complex life forms; major alterations." data-ref="M20 QS p.19"><span>4</span> Transform Complex Forms</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Create complex life; perfect metamorphosis." data-ref="M20 QS p.19"><span>5</span> Create Life / Perfect</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">🧱 Matter</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Analyze substance structures and properties." data-ref="M20 QS p.19"><span>1</span> Matter Perception</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Transmute basic homogeneous substances." data-ref="M20 QS p.19"><span>2</span> Basic Transmutation</li>
-                            <li data-title="Rank 3: Control" data-desc="Alter form and shape; conjure solid matter." data-ref="M20 QS p.19"><span>3</span> Alter Form & Shape</li>
-                            <li data-title="Rank 4: Command" data-desc="Complex transformations; alter properties." data-ref="M20 QS p.19"><span>4</span> Complex Transformation</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Create or destroy matter; impossible materials." data-ref="M20 QS p.19"><span>5</span> Create / Destroy Matter</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">🧠 Mind</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Sense thoughts, emotions, and resonance." data-ref="M20 QS p.19"><span>1</span> Sense Thought & Emotion</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Read surface thoughts; influence moods." data-ref="M20 QS p.19"><span>2</span> Read Surface / Impulse</li>
-                            <li data-title="Rank 3: Control" data-desc="Mental link; dreamwalk; psychic assault." data-ref="M20 QS p.19"><span>3</span> Mental Link / Dreamwalk</li>
-                            <li data-title="Rank 4: Command" data-desc="Control conscious mind; alter memories." data-ref="M20 QS p.19"><span>4</span> Control Conscious Mind</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Control subconscious; rewrite personality." data-ref="M20 QS p.19"><span>5</span> Control Subconscious</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">✨ Prime</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Sense Quintessence and magic use." data-ref="M20 QS p.19"><span>1</span> Sense Quintessence</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Fuel patterns; enchant weapons; body of light." data-ref="M20 QS p.19"><span>2</span> Fuel Pattern / Enchant</li>
-                            <li data-title="Rank 3: Control" data-desc="Channel/extract energy from Tass/Nodes." data-ref="M20 QS p.19"><span>3</span> Channel / Extract Energy</li>
-                            <li data-title="Rank 4: Command" data-desc="Expel energy from patterns; siphon power." data-ref="M20 QS p.19"><span>4</span> Expel / Siphon Energy</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Alter flow; create Node; infuse life." data-ref="M20 QS p.19"><span>5</span> Alter Flow / Create Node</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">👻 Spirit</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="See spirits and across the Gauntlet." data-ref="M20 QS p.19"><span>1</span> Spirit Sight</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Touch spirits; communicate; minor calls." data-ref="M20 QS p.19"><span>2</span> Touch Spirit</li>
-                            <li data-title="Rank 3: Control" data-desc="Step Sideways; harm spirits; waken objects." data-ref="M20 QS p.19"><span>3</span> Step Sideways / Gauntlet</li>
-                            <li data-title="Rank 4: Command" data-desc="Rend Gauntlet; bind spirits; create fetish." data-ref="M20 QS p.19"><span>4</span> Rend Gauntlet / Bind</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Forge spirits; Gilgul; outer realms." data-ref="M20 QS p.19"><span>5</span> Forge Spirit / Gilgul</li>
-                        </ul>
-                    </div>
-    
-                    <div class="card">
-                        <span class="card-title">⏳ Time</span>
-                        <ul class="card-list">
-                            <li data-title="Rank 1: Perception" data-desc="Perfect time sense; spot distortions." data-ref="M20 QS p.19"><span>1</span> Time Sense</li>
-                            <li data-title="Rank 2: Manipulation" data-desc="Past and future sight (Post/Precognition)." data-ref="M20 QS p.19"><span>2</span> Past & Future Sight</li>
-                            <li data-title="Rank 3: Control" data-desc="Distort time; speed up; slow down." data-ref="M20 QS p.19"><span>3</span> Time Distortion / Speed</li>
-                            <li data-title="Rank 4: Command" data-desc="Time bubbles; trigger effects." data-ref="M20 QS p.19"><span>4</span> Time Bubble / Trigger</li>
-                            <li data-title="Rank 5: Mastery" data-desc="Time travel; time immunity." data-ref="M20 QS p.19"><span>5</span> Time Travel / Immunity</li>
-                        </ul>
-                    </div>
+            <div class="grid-3">
+                <div class="card">
+                    <span class="card-title">🌐 Correspondence</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Immediate spatial perception and orientation." data-ref="M20 QS p.19"><span>1</span> Immediate Spatial Perception</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Sense and touch space; minor warding." data-ref="M20 QS p.19"><span>2</span> Sense & Touch Space</li>
+                        <li data-title="Rank 3: Control" data-desc="Pierce space; teleportation and perception." data-ref="M20 QS p.19"><span>3</span> Pierce Space / Teleport</li>
+                        <li data-title="Rank 4: Command" data-desc="Rend space; co-location and gateways." data-ref="M20 QS p.19"><span>4</span> Rend Space / Co-location</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Mutate space; distort distances and volumes." data-ref="M20 QS p.19"><span>5</span> Mutate Space / Distort</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">🎲 Entropy</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Sense fate, flaws, and probability currents." data-ref="M20 QS p.19"><span>1</span> Sense Fate & Flaws</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Control probability and minor fortune." data-ref="M20 QS p.19"><span>2</span> Control Probability</li>
+                        <li data-title="Rank 3: Control" data-desc="Affect predictable matter and energy patterns." data-ref="M20 QS p.19"><span>3</span> Affect Matter & Energy</li>
+                        <li data-title="Rank 4: Command" data-desc="Affect life cycles; induce rapid decay." data-ref="M20 QS p.19"><span>4</span> Affect Life / Decay</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Affect thought, concepts, and abstract ideas." data-ref="M20 QS p.19"><span>5</span> Affect Thought / Concepts</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">⚡ Forces</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Perceive energy currents and forces." data-ref="M20 QS p.19"><span>1</span> Perceive Energy</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Control minor forces; alter direction/quality." data-ref="M20 QS p.19"><span>2</span> Control Minor Forces</li>
+                        <li data-title="Rank 3: Control" data-desc="Transmute minor forces; conjure energy." data-ref="M20 QS p.19"><span>3</span> Transmute Minor Forces</li>
+                        <li data-title="Rank 4: Command" data-desc="Control major forces; weather and storms." data-ref="M20 QS p.19"><span>4</span> Control Major Forces</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Forces mastery; summon cataclysms." data-ref="M20 QS p.19"><span>5</span> Mastery / Cataclysm</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">🧬 Life</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Sense life, health, and biological patterns." data-ref="M20 QS p.19"><span>1</span> Sense Life & Health</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Alter simple life forms; heal self." data-ref="M20 QS p.19"><span>2</span> Alter Simple / Self</li>
+                        <li data-title="Rank 3: Control" data-desc="Transform self; heal others; alter simple life." data-ref="M20 QS p.19"><span>3</span> Transform Self / Simple</li>
+                        <li data-title="Rank 4: Command" data-desc="Transform complex life forms; major alterations." data-ref="M20 QS p.19"><span>4</span> Transform Complex Forms</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Create complex life; perfect metamorphosis." data-ref="M20 QS p.19"><span>5</span> Create Life / Perfect</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">🧱 Matter</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Analyze substance structures and properties." data-ref="M20 QS p.19"><span>1</span> Matter Perception</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Transmute basic homogeneous substances." data-ref="M20 QS p.19"><span>2</span> Basic Transmutation</li>
+                        <li data-title="Rank 3: Control" data-desc="Alter form and shape; conjure solid matter." data-ref="M20 QS p.19"><span>3</span> Alter Form & Shape</li>
+                        <li data-title="Rank 4: Command" data-desc="Complex transformations; alter properties." data-ref="M20 QS p.19"><span>4</span> Complex Transformation</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Create or destroy matter; impossible materials." data-ref="M20 QS p.19"><span>5</span> Create / Destroy Matter</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">🧠 Mind</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Sense thoughts, emotions, and resonance." data-ref="M20 QS p.19"><span>1</span> Sense Thought & Emotion</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Read surface thoughts; influence moods." data-ref="M20 QS p.19"><span>2</span> Read Surface / Impulse</li>
+                        <li data-title="Rank 3: Control" data-desc="Mental link; dreamwalk; psychic assault." data-ref="M20 QS p.19"><span>3</span> Mental Link / Dreamwalk</li>
+                        <li data-title="Rank 4: Command" data-desc="Control conscious mind; alter memories." data-ref="M20 QS p.19"><span>4</span> Control Conscious Mind</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Control subconscious; rewrite personality." data-ref="M20 QS p.19"><span>5</span> Control Subconscious</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">✨ Prime</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Sense Quintessence and magic use." data-ref="M20 QS p.19"><span>1</span> Sense Quintessence</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Fuel patterns; enchant weapons; body of light." data-ref="M20 QS p.19"><span>2</span> Fuel Pattern / Enchant</li>
+                        <li data-title="Rank 3: Control" data-desc="Channel/extract energy from Tass/Nodes." data-ref="M20 QS p.19"><span>3</span> Channel / Extract Energy</li>
+                        <li data-title="Rank 4: Command" data-desc="Expel energy from patterns; siphon power." data-ref="M20 QS p.19"><span>4</span> Expel / Siphon Energy</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Alter flow; create Node; infuse life." data-ref="M20 QS p.19"><span>5</span> Alter Flow / Create Node</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">👻 Spirit</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="See spirits and across the Gauntlet." data-ref="M20 QS p.19"><span>1</span> Spirit Sight</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Touch spirits; communicate; minor calls." data-ref="M20 QS p.19"><span>2</span> Touch Spirit</li>
+                        <li data-title="Rank 3: Control" data-desc="Step Sideways; harm spirits; waken objects." data-ref="M20 QS p.19"><span>3</span> Step Sideways / Gauntlet</li>
+                        <li data-title="Rank 4: Command" data-desc="Rend Gauntlet; bind spirits; create fetish." data-ref="M20 QS p.19"><span>4</span> Rend Gauntlet / Bind</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Forge spirits; Gilgul; outer realms." data-ref="M20 QS p.19"><span>5</span> Forge Spirit / Gilgul</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">⏳ Time</span>
+                    <ul class="card-list">
+                        <li data-title="Rank 1: Perception" data-desc="Perfect time sense; spot distortions." data-ref="M20 QS p.19"><span>1</span> Time Sense</li>
+                        <li data-title="Rank 2: Manipulation" data-desc="Past and future sight (Post/Precognition)." data-ref="M20 QS p.19"><span>2</span> Past & Future Sight</li>
+                        <li data-title="Rank 3: Control" data-desc="Distort time; speed up; slow down." data-ref="M20 QS p.19"><span>3</span> Time Distortion / Speed</li>
+                        <li data-title="Rank 4: Command" data-desc="Time bubbles; trigger effects." data-ref="M20 QS p.19"><span>4</span> Time Bubble / Trigger</li>
+                        <li data-title="Rank 5: Mastery" data-desc="Time travel; time immunity." data-ref="M20 QS p.19"><span>5</span> Time Travel / Immunity</li>
+                    </ul>
                 </div>
             </div>
+        </div>
         <div id="tab-rotes" class="tab-page">
             <div class="accordion">
 
@@ -485,15 +610,15 @@
                 </div>
 
                 <div class="acc-item">
-                      <div class="acc-header" onclick="toggleAcc(this)">✨ Magickal Feats Difficulty</div>
-                      <div class="acc-content">
-                          <table>
-                              <tr><th>Feat Type</th><th>Difficulty</th></tr>
-                              <tr><td class="hl-green">Coincidental</td><td>Highest Sphere + 3</td></tr>
-                              <tr><td class="hl-yellow">Vulgar (No Witness)</td><td>Highest Sphere + 4</td></tr>
-                              <tr><td class="hl-red">Vulgar (Witnessed)</td><td>Highest Sphere + 5</td></tr>
-                          </table>
-                      </div>
+                    <div class="acc-header" onclick="toggleAcc(this)">✨ Magickal Feats Difficulty</div>
+                    <div class="acc-content">
+                        <table>
+                            <tr><th>Feat Type</th><th>Difficulty</th></tr>
+                            <tr><td class="hl-green">Coincidental</td><td>Highest Sphere + 3</td></tr>
+                            <tr><td class="hl-yellow">Vulgar (No Witness)</td><td>Highest Sphere + 4</td></tr>
+                            <tr><td class="hl-red">Vulgar (Witnessed)</td><td>Highest Sphere + 5</td></tr>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="acc-item">
@@ -511,7 +636,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="acc-item">
                     <div class="acc-header" onclick="toggleAcc(this)">🔥 Feat Magnitude</div>
                     <div class="acc-content">
@@ -525,7 +650,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="acc-item">
                     <div class="acc-header" onclick="toggleAcc(this)">⬆️ Stat Boost Rules</div>
                     <div class="acc-content" style="padding:16px; font-size:0.9rem; line-height:1.6; color:#ccc;">
@@ -538,7 +663,7 @@
         </div>
         <div id="tab-merits" class="tab-page">
             <div class="accordion">
-                
+
                 <div class="acc-item">
                     <div class="acc-header" onclick="toggleAcc(this)">💪 Physical Merits</div>
                     <div class="acc-content">
@@ -621,7 +746,7 @@
             </div>
         </div>
         <div id="tab-tools" class="tab-page active">
-            
+
             <div class="sub-nav">
                 <button class="sub-nav-btn active" onclick="switchSubTab('sub-ritual', this)">🎴 Ritualmatic</button>
                 <button class="sub-nav-btn" onclick="switchSubTab('sub-gens', this)">⚡ GM Generators</button>
@@ -629,26 +754,26 @@
 
             <div id="sub-ritual" class="sub-tab-content active">
                 <div class="rit-container">
-                    
+
                     <div class="rit-header">
                         <h1 class="rit-title">Ozan's Ritualmatic</h1>
                         <button class="btn-reset" onclick="resetAll()" data-title="Reset" data-desc="Clears all settings." data-ref="UI">RESET ALL</button>
                     </div>
 
                     <div class="mode-switch">
-                        <div class="mode-opt active" id="btn-m-inst" onclick="mode('instant')" 
-                                data-title="Instant Casting" data-desc="Single roll attempt. Results are immediate." data-ref="M20 p.538">Instant</div>
-                        <div class="mode-opt" id="btn-m-rit" onclick="mode('ritual')" 
-                                data-title="Ritual Casting" data-desc="Extended roll over time. Accumulate successes." data-ref="M20 p.538">Ritual</div>
+                        <div class="mode-opt active" id="btn-m-inst" onclick="mode('instant')"
+                             data-title="Instant Casting" data-desc="Single roll attempt. Results are immediate." data-ref="M20 p.538">Instant</div>
+                        <div class="mode-opt" id="btn-m-rit" onclick="mode('ritual')"
+                             data-title="Ritual Casting" data-desc="Extended roll over time. Accumulate successes." data-ref="M20 p.538">Ritual</div>
                     </div>
 
                     <div class="hud-grid">
-                        <div class="hud-box" 
+                        <div class="hud-box"
                              data-title="Final Difficulty" data-desc="Calculated Base + GM Override. Click number to edit." data-ref="M20 p.536">
                             <span class="hud-lbl">Difficulty</span>
                             <input type="number" id="disp-diff" class="hud-val val-diff" value="6" onchange="manualOverride('diff')">
                         </div>
-                        <div class="hud-box" 
+                        <div class="hud-box"
                              data-title="Goal Successes" data-desc="Total cost of Duration, Area, Damage, etc. Click to Edit." data-ref="M20 p.502">
                             <span class="hud-lbl">Goal Successes</span>
                             <input type="number" id="disp-goal" class="hud-val val-goal" value="1" onchange="manualOverride('goal')">
@@ -688,17 +813,17 @@
                         <div class="input-group">
                             <label class="rit-label">Bonuses (Max -3 Cap)</label>
                             <div class="tools-grid" style="grid-template-columns: repeat(3, 1fr);">
-                                <div class="btn-tool" id="btn-sanctum" onclick="tog('sanctum')" 
+                                <div class="btn-tool" id="btn-sanctum" onclick="tog('sanctum')"
                                      data-title="Sanctum" data-desc="-1 Diff within Sanctum/Node." data-ref="M20 p.536">🏰 Sanct</div>
-                                <div class="btn-tool" id="btn-inst" onclick="tog('inst')" 
+                                <div class="btn-tool" id="btn-inst" onclick="tog('inst')"
                                      data-title="Instrument" data-desc="-1 Diff for personalized Focus." data-ref="M20 p.536">🔮 Focus</div>
-                                <div class="btn-tool" id="btn-res" onclick="tog('res')" 
+                                <div class="btn-tool" id="btn-res" onclick="tog('res')"
                                      data-title="Research" data-desc="-1 Diff for Library use." data-ref="M20 p.536">📚 Lib</div>
-                                <div class="btn-tool" id="btn-quint" onclick="tog('quint')" 
+                                <div class="btn-tool" id="btn-quint" onclick="tog('quint')"
                                      data-title="Quintessence" data-desc="-1 Diff per point spent." data-ref="M20 p.536">✨ Quint</div>
-                                 <div class="btn-tool" id="btn-team" onclick="tog('team')" 
+                                <div class="btn-tool" id="btn-team" onclick="tog('team')"
                                      data-title="Teamwork" data-desc="-1 Diff for Assistants." data-ref="M20 p.541">🤝 Team</div>
-                                <div class="btn-tool" id="btn-syn" onclick="tog('syn')" 
+                                <div class="btn-tool" id="btn-syn" onclick="tog('syn')"
                                      data-title="Synergy" data-desc="-1 Diff for Resonant Synergy." data-ref="M20 p.536">☯️ Syn</div>
                             </div>
                         </div>
@@ -706,9 +831,9 @@
                         <div class="input-group">
                             <label class="rit-label" style="color:var(--danger)">Penalties (Uncapped)</label>
                             <div class="tools-grid">
-                                <div class="btn-tool neg" id="btn-notool" onclick="tog('notool')" 
+                                <div class="btn-tool neg" id="btn-notool" onclick="tog('notool')"
                                      data-title="No Tools" data-desc="+3 Diff for working without Instruments." data-ref="M20 p.536">🚫 No Tools</div>
-                                <div class="btn-tool neg" id="btn-discord" onclick="tog('discord')" 
+                                <div class="btn-tool neg" id="btn-discord" onclick="tog('discord')"
                                      data-title="Discord" data-desc="+1 Diff for Resonant Discord." data-ref="M20 p.536">⚡ Discord</div>
                             </div>
                             <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
@@ -722,7 +847,7 @@
                         </div>
 
                         <div style="border-top:1px dashed var(--border); padding-top:16px; display:grid; grid-template-columns: 1fr 1fr 0.5fr; gap:12px; align-items:end;">
-                            
+
                             <div class="input-group">
                                 <label class="rit-label" data-title="Arete" data-desc="Magical enlightenment & Dice Pool." data-ref="M20 p.328">Arete</label>
                                 <select id="arete" class="rit-select" onchange="lim()"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
@@ -741,7 +866,7 @@
                             </div>
 
                         </div>
-                        
+
                         <div style="text-align:center; font-size:0.75rem; color:var(--text-muted); padding-top:4px;">Limit: <strong id="val-limit" style="color:#fff">9</strong> Rolls</div>
 
                         <div class="btn-safety" id="toggle-safety" onclick="tog('pauseOnDiff')"
@@ -834,26 +959,26 @@
             <div id="sub-gens" class="sub-tab-content">
                 <div class="gen-section">
                     <div class="tools-grid">
-                       <div class="control-panel" style="grid-column: span 2;">
-    <label class="rit-label">QUICK DICE ROLLER</label>
-    
-    <div style="display:flex; gap:12px; margin-top:10px; justify-content: center; align-items: flex-end;">
-        
-        <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
-            <span class="rit-label" style="font-size:0.65rem; color:var(--text-muted); letter-spacing:0.5px;">DICE POOL</span>
-            <input type="number" id="q-pool" placeholder="#" value="6" class="gen-input" style="width:80px;">
-        </div>
+                        <div class="control-panel" style="grid-column: span 2;">
+                            <label class="rit-label">QUICK DICE ROLLER</label>
 
-        <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
-            <span class="rit-label" style="font-size:0.65rem; color:var(--text-muted); letter-spacing:0.5px;">DIFF</span>
-            <input type="number" id="q-diff" placeholder="#" value="6" class="gen-input" style="width:80px;">
-        </div>
+                            <div style="display:flex; gap:12px; margin-top:10px; justify-content: center; align-items: flex-end;">
 
-        <button class="gen-btn" style="width: auto; margin:0; height:46px; background:var(--primary); color:#fff; padding: 0 24px; border:1px solid var(--primary);" onclick="quickRoll()">ROLL</button>
-    </div>
-    
-    <div id="q-res" class="gen-res" style="font-size:1.4rem; margin-top:20px;">-</div>
-</div>
+                                <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
+                                    <span class="rit-label" style="font-size:0.65rem; color:var(--text-muted); letter-spacing:0.5px;">DICE POOL</span>
+                                    <input type="number" id="q-pool" placeholder="#" value="6" class="gen-input" style="width:80px;">
+                                </div>
+
+                                <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
+                                    <span class="rit-label" style="font-size:0.65rem; color:var(--text-muted); letter-spacing:0.5px;">DIFF</span>
+                                    <input type="number" id="q-diff" placeholder="#" value="6" class="gen-input" style="width:80px;">
+                                </div>
+
+                                <button class="gen-btn" style="width: auto; margin:0; height:46px; background:var(--primary); color:#fff; padding: 0 24px; border:1px solid var(--primary);" onclick="quickRoll()">ROLL</button>
+                            </div>
+
+                            <div id="q-res" class="gen-res" style="font-size:1.4rem; margin-top:20px;">-</div>
+                        </div>
 
                         <div class="control-panel">
                             <label class="rit-label">INSTANT NPC</label>
@@ -879,457 +1004,461 @@
         </div>
 
     </div>
+    
+    <footer class="site-footer">
+        System: <span>Mage 20th Anniversary</span> // Architect: <span>Ozan</span> // Protocol: <span>Active</span>
+    </footer>
 
-<script>
-    /**
-     * ==========================================
-     * MAGE ENGINE: MVC ARCHITECTURE (PATCHED v1.2)
-     * Fix: Specialty Button Logic & Visuals Restored
-     * ==========================================
-     */
+    <script>
+        /**
+         * ==========================================
+         * MAGE ENGINE: MVC ARCHITECTURE (PATCHED v1.2)
+         * Fix: Specialty Button Logic & Visuals Restored
+         * ==========================================
+         */
 
-    // --- UTILITIES ---
-    function switchTab(tabId, btn) {
-        document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        btn.classList.add('active');
-    }
+        // --- UTILITIES ---
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
 
-    function switchSubTab(tabId, btn) {
-        document.querySelectorAll('.sub-tab-content').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        btn.classList.add('active');
-    }
+        function switchSubTab(tabId, btn) {
+            document.querySelectorAll('.sub-tab-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
 
-    function toggleAcc(header) { header.parentElement.classList.toggle('open'); }
+        function toggleAcc(header) { header.parentElement.classList.toggle('open'); }
 
-    function filterContent() {
-        let input = document.getElementById('searchBox').value.toLowerCase();
-        document.querySelectorAll('.card, .data-row').forEach(item => {
-            let text = item.innerText.toLowerCase();
-            if (item.getAttribute('data-search')) text += " " + item.getAttribute('data-search').toLowerCase();
-            if (text.includes(input)) {
-                item.style.display = "";
-                if (item.classList.contains('data-row')) item.closest('.acc-item').classList.add('open');
-            } else item.style.display = "none";
+        function filterContent() {
+            let input = document.getElementById('searchBox').value.toLowerCase();
+            document.querySelectorAll('.card, .data-row').forEach(item => {
+                let text = item.innerText.toLowerCase();
+                if (item.getAttribute('data-search')) text += " " + item.getAttribute('data-search').toLowerCase();
+                if (text.includes(input)) {
+                    item.style.display = "";
+                    if (item.classList.contains('data-row')) item.closest('.acc-item').classList.add('open');
+                } else item.style.display = "none";
+            });
+        }
+
+        // --- STATE MANAGEMENT ---
+        const s = {
+            mode: 'instant', sphere: 3, extra: 0, resist: 0, gmDiff: 0, gmGoal: 0,
+            sanctum: false, inst: false, res: false, quint: false, team: false,
+            syn: false, notool: false, discord: false, distract: 0, hb: false,
+            pauseOnDiff: false, spec: false
+        };
+
+        let activeTimer = null;
+        let ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+
+        // --- ERROR & TOOLTIP ---
+        const errorModal = document.getElementById('error-modal');
+        function showError(msg) { errorModal.style.display = 'flex'; }
+        function closeError() { errorModal.style.display = 'none'; }
+
+        const tt = document.getElementById('tooltip');
+        const ttT = tt.querySelector('.tt-title');
+        const ttD = tt.querySelector('.tt-desc');
+        const ttR = tt.querySelector('.tt-ref');
+
+        document.querySelectorAll('[data-title]').forEach(el => {
+            el.addEventListener('mousemove', e => {
+                tt.style.display = 'block';
+                let x = e.clientX + 15, y = e.clientY + 15;
+                if (x + 280 > window.innerWidth) x = e.clientX - 295;
+                tt.style.left = x + 'px'; tt.style.top = y + 'px';
+                if (ttT.innerText !== el.dataset.title) {
+                    ttT.innerText = el.dataset.title;
+                    ttD.innerText = el.dataset.desc;
+                    ttR.innerText = el.dataset.ref;
+                }
+            });
+            el.addEventListener('mouseleave', () => tt.style.display = 'none');
         });
-    }
 
-    // --- STATE MANAGEMENT ---
-    const s = { 
-        mode: 'instant', sphere: 3, extra: 0, resist: 0, gmDiff: 0, gmGoal: 0, 
-        sanctum: false, inst: false, res: false, quint: false, team: false, 
-        syn: false, notool: false, discord: false, distract: 0, hb: false, 
-        pauseOnDiff: false, spec: false 
-    };
+        // --- CORE LOGIC ---
+        function resetAll() {
+            if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
+            Object.assign(s, {
+                mode: 'instant', sphere: 3, extra: 0, resist: 0, gmDiff: 0, gmGoal: 0,
+                sanctum: false, inst: false, res: false, quint: false, team: false,
+                syn: false, notool: false, discord: false, distract: 0, hb: false,
+                pauseOnDiff: false, spec: false
+            });
 
-    let activeTimer = null;
-    let ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+            // Reset Inputs
+            document.getElementById('sel-reality').value = '3';
+            document.getElementById('sel-speed').value = '0';
+            document.getElementById('sel-dur').value = '0';
+            document.getElementById('sel-targ').value = '0';
+            document.getElementById('rng-dmg').value = 0;
+            document.getElementById('sel-dmg-type').value = 'Lethal';
+            document.getElementById('arete').value = '4';
+            document.getElementById('will').value = '5';
 
-    // --- ERROR & TOOLTIP ---
-    const errorModal = document.getElementById('error-modal');
-    function showError(msg) { errorModal.style.display = 'flex'; }
-    function closeError() { errorModal.style.display = 'none'; }
+            document.querySelectorAll('.btn-tool, .btn-hb, .btn-safety').forEach(b => b.classList.remove('active'));
 
-    const tt = document.getElementById('tooltip');
-    const ttT = tt.querySelector('.tt-title');
-    const ttD = tt.querySelector('.tt-desc');
-    const ttR = tt.querySelector('.tt-ref');
+            // Fix: Spec button visual reset (Using new ID)
+            document.getElementById('btn-spec').classList.remove('checked');
 
-    document.querySelectorAll('[data-title]').forEach(el => {
-        el.addEventListener('mousemove', e => {
-            tt.style.display = 'block';
-            let x = e.clientX + 15, y = e.clientY + 15;
-            if (x + 280 > window.innerWidth) x = e.clientX - 295;
-            tt.style.left = x + 'px'; tt.style.top = y + 'px';
-            if (ttT.innerText !== el.dataset.title) {
-                ttT.innerText = el.dataset.title; 
-                ttD.innerText = el.dataset.desc; 
-                ttR.innerText = el.dataset.ref;
-            }
-        });
-        el.addEventListener('mouseleave', () => tt.style.display = 'none');
-    });
+            document.getElementById('val-sphere').textContent = '3';
+            document.getElementById('val-extra').textContent = '0';
+            document.getElementById('val-resist').textContent = '0';
+            document.getElementById('val-distract').textContent = '0';
+            document.getElementById('log-container').style.display = 'none';
 
-    // --- CORE LOGIC ---
-    function resetAll() {
-        if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
-        Object.assign(s, { 
-            mode: 'instant', sphere: 3, extra: 0, resist: 0, gmDiff: 0, gmGoal: 0, 
-            sanctum: false, inst: false, res: false, quint: false, team: false, 
-            syn: false, notool: false, discord: false, distract: 0, hb: false, 
-            pauseOnDiff: false, spec: false 
-        });
-        
-        // Reset Inputs
-        document.getElementById('sel-reality').value = '3';
-        document.getElementById('sel-speed').value = '0';
-        document.getElementById('sel-dur').value = '0';
-        document.getElementById('sel-targ').value = '0';
-        document.getElementById('rng-dmg').value = 0;
-        document.getElementById('sel-dmg-type').value = 'Lethal';
-        document.getElementById('arete').value = '4';
-        document.getElementById('will').value = '5';
-        
-        document.querySelectorAll('.btn-tool, .btn-hb, .btn-safety').forEach(b => b.classList.remove('active'));
-        
-        // Fix: Spec button visual reset (Using new ID)
-        document.getElementById('btn-spec').classList.remove('checked');
-        
-        document.getElementById('val-sphere').textContent = '3';
-        document.getElementById('val-extra').textContent = '0';
-        document.getElementById('val-resist').textContent = '0';
-        document.getElementById('val-distract').textContent = '0';
-        document.getElementById('log-container').style.display = 'none';
-        
-        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-        mode('instant'); 
-        calc(); 
-        lim();
-    }
-
-    function mode(modeName) {
-        if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
-        s.mode = modeName;
-        document.getElementById('btn-m-inst').className = modeName === 'instant' ? 'mode-opt active' : 'mode-opt';
-        document.getElementById('btn-m-rit').className = modeName === 'ritual' ? 'mode-opt active' : 'mode-opt';
-        updateButtonState();
-    }
-
-    function updateButtonState() {
-        let btn = document.getElementById('btn-cast');
-        if (s.mode === 'instant') {
-            btn.textContent = "CAST INSTANT SPELL"; 
-            btn.className = "btn-cast style-inst";
-        } else {
-            if (ritState.isPaused) {
-                btn.textContent = "CONTINUE RITUAL";
-                btn.className = "btn-cast style-pause";
-            } else {
-                btn.textContent = "BEGIN RITUAL";
-                btn.className = "btn-cast style-rit";
-            }
-        }
-    }
-
-    function mod(key, value) {
-        s[key] += value;
-        if (key === 'sphere') { 
-            if (s[key] < 1) s[key] = 1; 
-            if (s[key] > 9) s[key] = 9; 
-        }
-        if ((key === 'extra' || key === 'resist' || key === 'distract') && s[key] < 0) s[key] = 0;
-        
-        const el = document.getElementById('val-' + key);
-        if (el) el.textContent = s[key];
-        calc();
-    }
-
-    function tog(key) {
-        s[key] = !s[key];
-        let id = key === 'hb' ? 'btn-hb' : (key === 'pauseOnDiff' ? 'toggle-safety' : 'btn-' + key);
-        let el = document.getElementById(id);
-        
-        if (key === 'notool' && s[key]) { s.inst = false; document.getElementById('btn-inst').classList.remove('active'); }
-        if (key === 'inst' && s[key]) { s.notool = false; document.getElementById('btn-notool').classList.remove('active'); }
-        
-        if (s[key]) el.classList.add('active'); else el.classList.remove('active');
-        calc();
-    }
-
-    // --- FIX: BUTTON TARGETING CORRECTED ---
-    function togSpec() {
-        s.spec = !s.spec;
-        // Targeting new ID for CSS class toggle
-        let el = document.getElementById('btn-spec'); 
-        if (s.spec) el.classList.add('checked'); else el.classList.remove('checked');
-    }
-
-    function lim() {
-        let a = parseInt(document.getElementById('arete').value);
-        let w = parseInt(document.getElementById('will').value);
-        document.getElementById('val-limit').textContent = a + w;
-    }
-
-    function getBaseValues() {
-        let sph = parseInt(document.getElementById('val-sphere').textContent);
-        let real = parseInt(document.getElementById('sel-reality').value);
-        let spd = parseInt(document.getElementById('sel-speed').value);
-        
-        let bon = (s.sanctum ? 1 : 0) + (s.inst ? 1 : 0) + (s.res ? 1 : 0) + (s.quint ? 1 : 0) + (s.team ? 1 : 0) + (s.syn ? 1 : 0);
-        if (bon > 3) bon = 3; 
-
-        let pen = (s.notool ? 3 : 0) + (s.discord ? 1 : 0) + s.distract;
-        let baseDiff = sph + real + spd - bon + pen;
-        let floor = Math.max(3, sph);
-        
-        baseDiff = Math.max(floor, Math.min(baseDiff, 10));
-
-        let durIdx = parseInt(document.getElementById('sel-dur').value);
-        let durCosts = s.hb ? [1, 2, 4, 6, 10] : [1, 2, 3, 4, 6];
-        let baseDur = durCosts[durIdx];
-        
-        let targ = parseInt(document.getElementById('sel-targ').value);
-        let dmg = parseInt(document.getElementById('rng-dmg').value);
-        let dmgC = Math.ceil(dmg / 2);
-        
-        let baseGoal = Math.max(1, baseDur + targ + dmgC + s.extra + s.resist);
-
-        return { diff: baseDiff, goal: baseGoal };
-    }
-
-    function calc() {
-        let base = getBaseValues();
-        
-        let dmg = parseInt(document.getElementById('rng-dmg').value);
-        let dmgT = document.getElementById('sel-dmg-type').value;
-        let dCol = dmgT === "Lethal" ? "var(--warning)" : (dmgT === "Aggravated" ? "var(--danger)" : "var(--accent)");
-        let dTxt = document.getElementById('txt-dmg');
-        
-        dTxt.textContent = `${dmg} ${dmgT}`; 
-        dTxt.style.color = dCol;
-        document.getElementById('cost-dmg').textContent = `+${Math.ceil(dmg / 2)} Suc`;
-
-        let elDiff = document.getElementById('disp-diff');
-        let elGoal = document.getElementById('disp-goal');
-
-        elDiff.value = base.diff + s.gmDiff;
-        elGoal.value = base.goal + s.gmGoal;
-
-        if (!ritState.hasStarted) ritState.currentDiff = parseInt(elDiff.value);
-
-        if (s.gmDiff !== 0) elDiff.classList.add('modified'); else elDiff.classList.remove('modified');
-        if (s.gmGoal !== 0) elGoal.classList.add('modified'); else elGoal.classList.remove('modified');
-    }
-
-    function manualOverride(type) {
-        let inputEl = document.getElementById('disp-' + type);
-        let rawVal = inputEl.value;
-        let base = getBaseValues(); 
-        
-        if (rawVal === "" || isNaN(parseInt(rawVal))) {
-            if (type === 'diff') s.gmDiff = 0; else s.gmGoal = 0;
-        } else {
-            let userVal = parseInt(rawVal);
-            if (type === 'diff') s.gmDiff = userVal - base.diff;
-            else s.gmGoal = userVal - base.goal;
-        }
-        calc(); 
-    }
-
-    // --- CASTING ENGINE (SECURE) ---
-    function doRoll(pool, diff, spec) {
-        let suc = 0, ones = 0, results = [];
-        for (let i = 0; i < pool; i++) {
-            let d = Math.floor(Math.random() * 10) + 1;
-            if (d >= diff) suc++; 
-            if (d === 1) ones++;
-            
-            let val = d;
-            let exploded = false;
-
-            if (spec && d === 10) { 
-                let x = Math.floor(Math.random() * 10) + 1;
-                if (x >= diff) suc++; 
-                val = `10+${x}`;
-                exploded = true;
-            }
-            results.push({ val: val, raw: d, hit: d >= diff, botch: d === 1 });
-        }
-        return { suc, ones, results };
-    }
-
-    function addLogEntry(turn, diff, rollData, msg, type) {
-        const entry = document.createElement('div');
-        entry.className = `entry ${type}`;
-        
-        const info = document.createElement('div');
-        info.innerHTML = `<b>T${turn}</b> <span style="opacity:0.6">(${diff})</span>`;
-        
-        const diceSpan = document.createElement('span');
-        diceSpan.className = 'dice';
-        diceSpan.style.marginLeft = "10px";
-        
-        rollData.results.forEach(r => {
-            const s = document.createElement('span');
-            s.textContent = r.val;
-            if (r.botch) { s.className = 'd1 hl-red'; }
-            else if (r.hit && !r.botch) { s.className = 'suc hl-green'; }
-            else { s.style.color = 'var(--text-muted)'; }
-            s.style.marginRight = "4px";
-            diceSpan.appendChild(s);
-        });
-        
-        const msgDiv = document.createElement('b');
-        msgDiv.textContent = msg;
-        
-        info.appendChild(diceSpan);
-        entry.appendChild(info);
-        entry.appendChild(msgDiv);
-        
-        const logs = document.getElementById('logs');
-        logs.insertBefore(entry, logs.firstChild);
-    }
-
-    function addSystemMsg(txt, win) {
-        const div = document.createElement('div');
-        let c = win ? "var(--success)" : "var(--text-muted)";
-        div.style.cssText = `text-align:center; padding:10px; margin-bottom:10px; border:2px solid ${c}; color:${c}; border-radius:8px; font-weight:800;`;
-        div.textContent = txt;
-        const logs = document.getElementById('logs');
-        logs.insertBefore(div, logs.firstChild);
-    }
-
-    function cast() {
-        let currentSphere = parseInt(document.getElementById('val-sphere').textContent);
-        let currentArete = parseInt(document.getElementById('arete').value);
-        
-        if (currentSphere > currentArete) { showError("Invalid Cast"); return; }
-
-        if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
-        document.getElementById('log-container').style.display = 'block';
-        
-        let arete = parseInt(document.getElementById('arete').value);
-        let goal = parseInt(document.getElementById('disp-goal').value);
-        let limit = parseInt(document.getElementById('val-limit').textContent);
-
-        // INSTANT MODE
-        if (s.mode === 'instant') {
-            document.getElementById('log-title').textContent = "Instant Result";
-            document.getElementById('prog-txt').textContent = "";
-            document.getElementById('p-bar').style.width = "0%";
-            document.getElementById('logs').innerHTML = ""; 
-            
-            let diff = parseInt(document.getElementById('disp-diff').value);
-            let res = doRoll(arete, diff, s.spec);
-            let net = res.suc - res.ones;
-            let type = "fail", msg = "";
-
-            if (res.suc === 0 && res.ones > 0) { type = "botch"; msg = `BOTCH! (${res.ones} Pdx)`; } 
-            else if (net < 1) { msg = "FAILED"; } 
-            else if (net < goal) { msg = `WEAK (${net}/${goal} Suc)`; } 
-            else { type = "success"; msg = `SUCCESS! (${net} Suc)`; }
-            
-            addLogEntry(1, diff, res, msg, type);
-            return;
+            ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+            mode('instant');
+            calc();
+            lim();
         }
 
-        // RITUAL MODE
-        document.getElementById('log-title').textContent = "Ritual Progress";
-        if (!ritState.isPaused) {
-            document.getElementById('logs').innerHTML = ""; 
-            ritState.totalSuc = 0; 
-            ritState.turn = 0;
-            ritState.currentDiff = parseInt(document.getElementById('disp-diff').value);
-            ritState.hasStarted = true;
-        } else {
-            ritState.isPaused = false;
+        function mode(modeName) {
+            if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
+            s.mode = modeName;
+            document.getElementById('btn-m-inst').className = modeName === 'instant' ? 'mode-opt active' : 'mode-opt';
+            document.getElementById('btn-m-rit').className = modeName === 'ritual' ? 'mode-opt active' : 'mode-opt';
             updateButtonState();
         }
 
-        document.getElementById('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
-        document.getElementById('p-bar').style.width = (ritState.totalSuc / goal * 100) + "%";
-
-        activeTimer = setInterval(() => {
-            ritState.turn++;
-            let res = doRoll(arete, ritState.currentDiff, s.spec);
-            let net = res.suc - res.ones;
-            let type = "", msg = "";
-            let diffIncreased = false;
-
-            if (res.suc === 0 && res.ones > 0) {
-                clearInterval(activeTimer); activeTimer = null;
-                let pdx = ritState.totalSuc + res.ones;
-                msg = `BOTCH! (${pdx} Pdx)`; 
-                addSystemMsg("BACKLASH - RITUAL FAILED", false);
-                type = "botch";
-                ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-                updateButtonState();
+        function updateButtonState() {
+            let btn = document.getElementById('btn-cast');
+            if (s.mode === 'instant') {
+                btn.textContent = "CAST INSTANT SPELL";
+                btn.className = "btn-cast style-inst";
             } else {
-                if (net <= 0) {
-                    type = "fail"; 
-                    if (net < 0) { 
-                        ritState.totalSuc += net; 
-                        if (ritState.totalSuc < 0) ritState.totalSuc = 0; 
-                        msg = `Fail (${net})`; 
-                    } else { 
-                        msg = "Fail (0). Diff +1"; 
-                    }
-                    if (ritState.currentDiff < 10) { ritState.currentDiff++; diffIncreased = true; }
+                if (ritState.isPaused) {
+                    btn.textContent = "CONTINUE RITUAL";
+                    btn.className = "btn-cast style-pause";
                 } else {
-                    type = "success"; 
-                    ritState.totalSuc += net; 
-                    msg = `+${net} Suc`;
+                    btn.textContent = "BEGIN RITUAL";
+                    btn.className = "btn-cast style-rit";
                 }
             }
-            
-            if (type) { 
-                addLogEntry(ritState.turn, diffIncreased ? ritState.currentDiff - 1 : ritState.currentDiff, res, msg, type);
-                
-                let pct = (ritState.totalSuc / goal) * 100; 
-                if (pct > 100) pct = 100;
-                document.getElementById('p-bar').style.width = pct + "%";
-                document.getElementById('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
-
-                // PAUSE
-                if (diffIncreased && s.pauseOnDiff && ritState.totalSuc < goal) {
-                    clearInterval(activeTimer); activeTimer = null;
-                    ritState.isPaused = true;
-                    updateButtonState();
-                    addSystemMsg(`PAUSED (Diff Increased to ${ritState.currentDiff})`, false);
-                    return;
-                }
-
-                // WIN
-                if (ritState.totalSuc >= goal) { 
-                    clearInterval(activeTimer); activeTimer = null; 
-                    addSystemMsg("RITUAL COMPLETE", true);
-                    ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false }; 
-                    updateButtonState();
-                } 
-                // EXHAUST
-                else if (ritState.turn >= limit) { 
-                    clearInterval(activeTimer); activeTimer = null; 
-                    addSystemMsg("EXHAUSTED (Willpower Limit)", false);
-                    ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false }; 
-                    updateButtonState();
-                }
-            }
-        }, 600);
-    }
-
-    // --- GENERATORS ---
-    const npcRoles = ["Techno-Hacker", "Hermit", "Corporate Mage", "Street Shaman", "Necromancer", "Hitman", "Cultist", "Detective", "Spirit Guide"];
-    const npcTraits = ["Paranoid", "Arrogant", "Helpful", "Cryptic", "Aggressive", "Sleepy", "Fanatical", "Charming"];
-    function genNPC() { document.getElementById('res-npc').textContent = `${npcTraits[Math.floor(Math.random()*npcTraits.length)]} ${npcRoles[Math.floor(Math.random()*npcRoles.length)]}`; }
-    
-    const resonances = ["Fiery (Dynamic)", "Cold (Stasis)", "Rotting (Entropic)", "Holy (Sacred)", "Industrial (Tech)", "Wild (Primal)", "Empty (Static)"];
-    function genRes() { document.getElementById('res-rez').textContent = resonances[Math.floor(Math.random()*resonances.length)]; }
-
-    const flaws = ["Clocks run backwards", "Shadows detach", "Echoing voice", "Tech glitch", "Milk sours", "Temperature drop", "Sulfur smell", "Animals panic"];
-    function genFlaw() { document.getElementById('res-flaw').textContent = flaws[Math.floor(Math.random()*flaws.length)]; }
-
-    function quickRoll() {
-        let p = parseInt(document.getElementById('q-pool').value) || 1;
-        let d = parseInt(document.getElementById('q-diff').value) || 6;
-        let suc = 0, ones = 0;
-        for (let i = 0; i < p; i++) { 
-            let r = Math.floor(Math.random() * 10) + 1; 
-            if (r >= d) suc++; 
-            if (r === 1) ones++; 
         }
-        let net = suc - ones;
-        let el = document.getElementById('q-res');
-        if (suc === 0 && ones > 0) { el.textContent = "BOTCH!"; el.style.color = "var(--danger)"; }
-        else if (net < 0) { el.textContent = "FAIL"; el.style.color = "var(--text-muted)"; }
-        else { el.textContent = `${net} SUCCESSES`; el.style.color = "var(--success)"; }
-    }
 
-    // Init
-    calc(); 
-    lim();
-</script>
+        function mod(key, value) {
+            s[key] += value;
+            if (key === 'sphere') {
+                if (s[key] < 1) s[key] = 1;
+                if (s[key] > 9) s[key] = 9;
+            }
+            if ((key === 'extra' || key === 'resist' || key === 'distract') && s[key] < 0) s[key] = 0;
+
+            const el = document.getElementById('val-' + key);
+            if (el) el.textContent = s[key];
+            calc();
+        }
+
+        function tog(key) {
+            s[key] = !s[key];
+            let id = key === 'hb' ? 'btn-hb' : (key === 'pauseOnDiff' ? 'toggle-safety' : 'btn-' + key);
+            let el = document.getElementById(id);
+
+            if (key === 'notool' && s[key]) { s.inst = false; document.getElementById('btn-inst').classList.remove('active'); }
+            if (key === 'inst' && s[key]) { s.notool = false; document.getElementById('btn-notool').classList.remove('active'); }
+
+            if (s[key]) el.classList.add('active'); else el.classList.remove('active');
+            calc();
+        }
+
+        // --- FIX: BUTTON TARGETING CORRECTED ---
+        function togSpec() {
+            s.spec = !s.spec;
+            // Targeting new ID for CSS class toggle
+            let el = document.getElementById('btn-spec');
+            if (s.spec) el.classList.add('checked'); else el.classList.remove('checked');
+        }
+
+        function lim() {
+            let a = parseInt(document.getElementById('arete').value);
+            let w = parseInt(document.getElementById('will').value);
+            document.getElementById('val-limit').textContent = a + w;
+        }
+
+        function getBaseValues() {
+            let sph = parseInt(document.getElementById('val-sphere').textContent);
+            let real = parseInt(document.getElementById('sel-reality').value);
+            let spd = parseInt(document.getElementById('sel-speed').value);
+
+            let bon = (s.sanctum ? 1 : 0) + (s.inst ? 1 : 0) + (s.res ? 1 : 0) + (s.quint ? 1 : 0) + (s.team ? 1 : 0) + (s.syn ? 1 : 0);
+            if (bon > 3) bon = 3;
+
+            let pen = (s.notool ? 3 : 0) + (s.discord ? 1 : 0) + s.distract;
+            let baseDiff = sph + real + spd - bon + pen;
+            let floor = Math.max(3, sph);
+
+            baseDiff = Math.max(floor, Math.min(baseDiff, 10));
+
+            let durIdx = parseInt(document.getElementById('sel-dur').value);
+            let durCosts = s.hb ? [1, 2, 4, 6, 10] : [1, 2, 3, 4, 6];
+            let baseDur = durCosts[durIdx];
+
+            let targ = parseInt(document.getElementById('sel-targ').value);
+            let dmg = parseInt(document.getElementById('rng-dmg').value);
+            let dmgC = Math.ceil(dmg / 2);
+
+            let baseGoal = Math.max(1, baseDur + targ + dmgC + s.extra + s.resist);
+
+            return { diff: baseDiff, goal: baseGoal };
+        }
+
+        function calc() {
+            let base = getBaseValues();
+
+            let dmg = parseInt(document.getElementById('rng-dmg').value);
+            let dmgT = document.getElementById('sel-dmg-type').value;
+            let dCol = dmgT === "Lethal" ? "var(--warning)" : (dmgT === "Aggravated" ? "var(--danger)" : "var(--accent)");
+            let dTxt = document.getElementById('txt-dmg');
+
+            dTxt.textContent = `${dmg} ${dmgT}`;
+            dTxt.style.color = dCol;
+            document.getElementById('cost-dmg').textContent = `+${Math.ceil(dmg / 2)} Suc`;
+
+            let elDiff = document.getElementById('disp-diff');
+            let elGoal = document.getElementById('disp-goal');
+
+            elDiff.value = base.diff + s.gmDiff;
+            elGoal.value = base.goal + s.gmGoal;
+
+            if (!ritState.hasStarted) ritState.currentDiff = parseInt(elDiff.value);
+
+            if (s.gmDiff !== 0) elDiff.classList.add('modified'); else elDiff.classList.remove('modified');
+            if (s.gmGoal !== 0) elGoal.classList.add('modified'); else elGoal.classList.remove('modified');
+        }
+
+        function manualOverride(type) {
+            let inputEl = document.getElementById('disp-' + type);
+            let rawVal = inputEl.value;
+            let base = getBaseValues();
+
+            if (rawVal === "" || isNaN(parseInt(rawVal))) {
+                if (type === 'diff') s.gmDiff = 0; else s.gmGoal = 0;
+            } else {
+                let userVal = parseInt(rawVal);
+                if (type === 'diff') s.gmDiff = userVal - base.diff;
+                else s.gmGoal = userVal - base.goal;
+            }
+            calc();
+        }
+
+        // --- CASTING ENGINE (SECURE) ---
+        function doRoll(pool, diff, spec) {
+            let suc = 0, ones = 0, results = [];
+            for (let i = 0; i < pool; i++) {
+                let d = Math.floor(Math.random() * 10) + 1;
+                if (d >= diff) suc++;
+                if (d === 1) ones++;
+
+                let val = d;
+                let exploded = false;
+
+                if (spec && d === 10) {
+                    let x = Math.floor(Math.random() * 10) + 1;
+                    if (x >= diff) suc++;
+                    val = `10+${x}`;
+                    exploded = true;
+                }
+                results.push({ val: val, raw: d, hit: d >= diff, botch: d === 1 });
+            }
+            return { suc, ones, results };
+        }
+
+        function addLogEntry(turn, diff, rollData, msg, type) {
+            const entry = document.createElement('div');
+            entry.className = `entry ${type}`;
+
+            const info = document.createElement('div');
+            info.innerHTML = `<b>T${turn}</b> <span style="opacity:0.6">(${diff})</span>`;
+
+            const diceSpan = document.createElement('span');
+            diceSpan.className = 'dice';
+            diceSpan.style.marginLeft = "10px";
+
+            rollData.results.forEach(r => {
+                const s = document.createElement('span');
+                s.textContent = r.val;
+                if (r.botch) { s.className = 'd1 hl-red'; }
+                else if (r.hit && !r.botch) { s.className = 'suc hl-green'; }
+                else { s.style.color = 'var(--text-muted)'; }
+                s.style.marginRight = "4px";
+                diceSpan.appendChild(s);
+            });
+
+            const msgDiv = document.createElement('b');
+            msgDiv.textContent = msg;
+
+            info.appendChild(diceSpan);
+            entry.appendChild(info);
+            entry.appendChild(msgDiv);
+
+            const logs = document.getElementById('logs');
+            logs.insertBefore(entry, logs.firstChild);
+        }
+
+        function addSystemMsg(txt, win) {
+            const div = document.createElement('div');
+            let c = win ? "var(--success)" : "var(--text-muted)";
+            div.style.cssText = `text-align:center; padding:10px; margin-bottom:10px; border:2px solid ${c}; color:${c}; border-radius:8px; font-weight:800;`;
+            div.textContent = txt;
+            const logs = document.getElementById('logs');
+            logs.insertBefore(div, logs.firstChild);
+        }
+
+        function cast() {
+            let currentSphere = parseInt(document.getElementById('val-sphere').textContent);
+            let currentArete = parseInt(document.getElementById('arete').value);
+
+            if (currentSphere > currentArete) { showError("Invalid Cast"); return; }
+
+            if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
+            document.getElementById('log-container').style.display = 'block';
+
+            let arete = parseInt(document.getElementById('arete').value);
+            let goal = parseInt(document.getElementById('disp-goal').value);
+            let limit = parseInt(document.getElementById('val-limit').textContent);
+
+            // INSTANT MODE
+            if (s.mode === 'instant') {
+                document.getElementById('log-title').textContent = "Instant Result";
+                document.getElementById('prog-txt').textContent = "";
+                document.getElementById('p-bar').style.width = "0%";
+                document.getElementById('logs').innerHTML = "";
+
+                let diff = parseInt(document.getElementById('disp-diff').value);
+                let res = doRoll(arete, diff, s.spec);
+                let net = res.suc - res.ones;
+                let type = "fail", msg = "";
+
+                if (res.suc === 0 && res.ones > 0) { type = "botch"; msg = `BOTCH! (${res.ones} Pdx)`; }
+                else if (net < 1) { msg = "FAILED"; }
+                else if (net < goal) { msg = `WEAK (${net}/${goal} Suc)`; }
+                else { type = "success"; msg = `SUCCESS! (${net} Suc)`; }
+
+                addLogEntry(1, diff, res, msg, type);
+                return;
+            }
+
+            // RITUAL MODE
+            document.getElementById('log-title').textContent = "Ritual Progress";
+            if (!ritState.isPaused) {
+                document.getElementById('logs').innerHTML = "";
+                ritState.totalSuc = 0;
+                ritState.turn = 0;
+                ritState.currentDiff = parseInt(document.getElementById('disp-diff').value);
+                ritState.hasStarted = true;
+            } else {
+                ritState.isPaused = false;
+                updateButtonState();
+            }
+
+            document.getElementById('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
+            document.getElementById('p-bar').style.width = (ritState.totalSuc / goal * 100) + "%";
+
+            activeTimer = setInterval(() => {
+                ritState.turn++;
+                let res = doRoll(arete, ritState.currentDiff, s.spec);
+                let net = res.suc - res.ones;
+                let type = "", msg = "";
+                let diffIncreased = false;
+
+                if (res.suc === 0 && res.ones > 0) {
+                    clearInterval(activeTimer); activeTimer = null;
+                    let pdx = ritState.totalSuc + res.ones;
+                    msg = `BOTCH! (${pdx} Pdx)`;
+                    addSystemMsg("BACKLASH - RITUAL FAILED", false);
+                    type = "botch";
+                    ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+                    updateButtonState();
+                } else {
+                    if (net <= 0) {
+                        type = "fail";
+                        if (net < 0) {
+                            ritState.totalSuc += net;
+                            if (ritState.totalSuc < 0) ritState.totalSuc = 0;
+                            msg = `Fail (${net})`;
+                        } else {
+                            msg = "Fail (0). Diff +1";
+                        }
+                        if (ritState.currentDiff < 10) { ritState.currentDiff++; diffIncreased = true; }
+                    } else {
+                        type = "success";
+                        ritState.totalSuc += net;
+                        msg = `+${net} Suc`;
+                    }
+                }
+
+                if (type) {
+                    addLogEntry(ritState.turn, diffIncreased ? ritState.currentDiff - 1 : ritState.currentDiff, res, msg, type);
+
+                    let pct = (ritState.totalSuc / goal) * 100;
+                    if (pct > 100) pct = 100;
+                    document.getElementById('p-bar').style.width = pct + "%";
+                    document.getElementById('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
+
+                    // PAUSE
+                    if (diffIncreased && s.pauseOnDiff && ritState.totalSuc < goal) {
+                        clearInterval(activeTimer); activeTimer = null;
+                        ritState.isPaused = true;
+                        updateButtonState();
+                        addSystemMsg(`PAUSED (Diff Increased to ${ritState.currentDiff})`, false);
+                        return;
+                    }
+
+                    // WIN
+                    if (ritState.totalSuc >= goal) {
+                        clearInterval(activeTimer); activeTimer = null;
+                        addSystemMsg("RITUAL COMPLETE", true);
+                        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+                        updateButtonState();
+                    }
+                    // EXHAUST
+                    else if (ritState.turn >= limit) {
+                        clearInterval(activeTimer); activeTimer = null;
+                        addSystemMsg("EXHAUSTED (Willpower Limit)", false);
+                        ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+                        updateButtonState();
+                    }
+                }
+            }, 600);
+        }
+
+        // --- GENERATORS ---
+        const npcRoles = ["Techno-Hacker", "Hermit", "Corporate Mage", "Street Shaman", "Necromancer", "Hitman", "Cultist", "Detective", "Spirit Guide"];
+        const npcTraits = ["Paranoid", "Arrogant", "Helpful", "Cryptic", "Aggressive", "Sleepy", "Fanatical", "Charming"];
+        function genNPC() { document.getElementById('res-npc').textContent = `${npcTraits[Math.floor(Math.random() * npcTraits.length)]} ${npcRoles[Math.floor(Math.random() * npcRoles.length)]}`; }
+
+        const resonances = ["Fiery (Dynamic)", "Cold (Stasis)", "Rotting (Entropic)", "Holy (Sacred)", "Industrial (Tech)", "Wild (Primal)", "Empty (Static)"];
+        function genRes() { document.getElementById('res-rez').textContent = resonances[Math.floor(Math.random() * resonances.length)]; }
+
+        const flaws = ["Clocks run backwards", "Shadows detach", "Echoing voice", "Tech glitch", "Milk sours", "Temperature drop", "Sulfur smell", "Animals panic"];
+        function genFlaw() { document.getElementById('res-flaw').textContent = flaws[Math.floor(Math.random() * flaws.length)]; }
+
+        function quickRoll() {
+            let p = parseInt(document.getElementById('q-pool').value) || 1;
+            let d = parseInt(document.getElementById('q-diff').value) || 6;
+            let suc = 0, ones = 0;
+            for (let i = 0; i < p; i++) {
+                let r = Math.floor(Math.random() * 10) + 1;
+                if (r >= d) suc++;
+                if (r === 1) ones++;
+            }
+            let net = suc - ones;
+            let el = document.getElementById('q-res');
+            if (suc === 0 && ones > 0) { el.textContent = "BOTCH!"; el.style.color = "var(--danger)"; }
+            else if (net < 0) { el.textContent = "FAIL"; el.style.color = "var(--text-muted)"; }
+            else { el.textContent = `${net} SUCCESSES`; el.style.color = "var(--success)"; }
+        }
+
+        // Init
+        calc();
+        lim();
+    </script>
 </body>
 </html>
