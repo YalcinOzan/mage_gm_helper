@@ -479,8 +479,45 @@
     </div>
 
     <footer class="site-footer">
-        System: <span>Mage 20th Anniversary</span> // Architect: <span>Unknown</span> // Protocol: <span>Optimized</span>
+        <div style="margin-bottom: 10px;">
+            System: <span>Mage 20th Anniversary</span> // Architect: <span>Unkn0wn </span> // Protocol: <span>Active</span>
+        </div>
+
+        <button class="btn-report" onclick="openFeedback()">
+            <svg viewBox="0 0 24 24">
+                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+            Report Bug / Contact
+        </button>
     </footer>
+
+    <div id="feedback-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="rit-title" style="font-size:1rem; margin:0;">TRANSMISSION</h3>
+                <span class="close-btn" onclick="closeFeedback()">&times;</span>
+            </div>
+
+            <form id="contactForm" onsubmit="sendFeedback(event)">
+                <input type="hidden" name="access_key" value="SENIN_ACCESS_KEY_BURAYA">
+
+                <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                <div class="input-group">
+                    <label class="rit-label">Identity (Optional)</label>
+                    <input type="text" name="name" class="rit-select" placeholder="Mage Name or Email">
+                </div>
+
+                <div class="input-group" style="margin-top:10px;">
+                    <label class="rit-label">Signal Data</label>
+                    <textarea name="message" class="rit-select" rows="4" placeholder="Describe the glitch or request..." required style="resize: vertical;"></textarea>
+                </div>
+
+                <button type="submit" class="btn-cast style-rit" id="form-submit-btn" style="margin-top:15px; font-size: 0.9rem; padding: 15px;">SEND SIGNAL</button>
+                <div id="form-result" style="margin-top:10px; font-size:0.8rem; display:none;"></div>
+            </form>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>

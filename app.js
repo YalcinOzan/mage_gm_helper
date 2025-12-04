@@ -1050,6 +1050,74 @@ function quickRoll() {
     else { el.textContent = `${net} SUCCESSES`; el.style.color = "var(--success)"; }
 }
 
+/* --- FEEDBACK SYSTEM --- */
+function openFeedback() {
+    document.getElementById('feedback-modal').style.display = 'flex';
+}
+
+function closeFeedback() {
+    document.getElementById('feedback-modal').style.display = 'none';
+    document.getElementById('form-result').style.display = 'none';
+}
+
+// Form Gönderme İşlemi (AJAX)
+function sendFeedback(e) {
+    e.preventDefault(); // Sayfa yenilenmesini engelle
+
+    const form = document.getElementById('contactForm');
+    const result = document.getElementById('form-result');
+    const btn = document.getElementById('form-submit-btn');
+
+    btn.textContent = "TRANSMITTING...";
+    btn.disabled = true;
+
+    const formData = new FormData(form);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: json
+    })
+        .then(async (response) => {
+            let json = await response.json();
+            if (response.status == 200) {
+                result.style.display = "block";
+                result.style.color = "var(--success)";
+                result.innerHTML = "✓ SIGNAL RECEIVED. THANK YOU.";
+                form.reset();
+                setTimeout(() => { closeFeedback(); btn.textContent = "SEND SIGNAL"; btn.disabled = false; }, 3000);
+            } else {
+                console.log(response);
+                result.style.display = "block";
+                result.style.color = "var(--danger)";
+                result.innerHTML = json.message;
+                btn.textContent = "RETRY";
+                btn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            result.style.display = "block";
+            result.style.color = "var(--danger)";
+            result.innerHTML = "CONNECTION ERROR.";
+            btn.textContent = "RETRY";
+            btn.disabled = false;
+        });
+}
+
+// Modal dışına tıklayınca kapatma
+window.onclick = function (event) {
+    const modal = document.getElementById('feedback-modal');
+    if (event.target == modal) {
+        closeFeedback();
+    }
+}
+
 /* 9. INITIALIZATION */
 window.onload = function () {
     recalculate();
