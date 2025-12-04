@@ -3,6 +3,7 @@
    File: style.css
    ========================================= */
 
+
 /* 1. THEME & VARIABLES */
 :root {
     --bg-body: #050507;
@@ -81,7 +82,7 @@ body {
 }
 
 .brand-subtitle {
-    font-family: 'Courier Prime', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
     color: var(--primary);
     letter-spacing: 2px;
@@ -390,7 +391,7 @@ body {
 }
 
 .data-meta {
-    font-family: 'Courier Prime', monospace;
+    font-family: 'JetBrains Mono', monospace;
     color: var(--primary);
     font-size: 0.85rem;
     text-align: right;
@@ -968,7 +969,7 @@ input[type=range] {
     min-height: 24px;
     text-align: center;
     margin-bottom: 15px;
-    font-family: 'Courier Prime', monospace;
+    font-family: 'JetBrains Mono', monospace;
     margin-top: 10px;
 }
 
