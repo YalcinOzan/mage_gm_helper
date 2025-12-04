@@ -1,10 +1,42 @@
-/**
+﻿/**
  * ==========================================
  * MAGE 20TH: SECRET LIBRARY - LOGIC CORE
  * File: app.js
  * Architect: Refactor Bey
  * ==========================================
  */
+
+/* ==========================================
+   DATA LAYER: ROTE DATABASE (JSON)
+   ========================================== */
+const ROTE_DB = [
+    // --- COMBAT ---
+    { cat: "combat", name: "Chi-Fire Punch", meta: "Prime 2", desc: "Inflict Aggravated damage with bare hands.", flavor: "Channels Quintessence into fists. Cost: 1 Quint/strike." },
+    { cat: "combat", name: "The Slipstream", meta: "Forces 2 / Corr 2", desc: "Subtract successes from attacker's roll.", flavor: "Bend light/gravity to appear slightly away from actual location." },
+    { cat: "combat", name: "The Neo (Bullet Stop)", meta: "Forces 2", desc: "Stop projectiles in mid-air. Vulgar.", flavor: "Creates a kinetic shield that halts bullets instantly." },
+    { cat: "combat", name: "Internal Burn", meta: "Life 3 + Forces 2", desc: "Inflict Aggravated damage ignoring armor.", flavor: "Disrupts bio-electrical processes. Lethal or Agg." },
+    { cat: "combat", name: "Iron Skin", meta: "Life 3 / Matter 3", desc: "Soak Lethal/Aggravated damage.", flavor: "Transforms skin into stone/metal to withstand attacks." },
+
+    // --- TRANSMUTATION ---
+    { cat: "transmutation", name: "Conjure Object", meta: "Matter 3 + Prime 2", desc: "Create complex matter from nothing.", flavor: "Weaves Quintessence into a pattern. Permanent with Prime 4." },
+    { cat: "transmutation", name: "Shapechange (Self)", meta: "Life 4", desc: "Transform own body (Wolf, Bird, etc).", flavor: "Alter biology to take animal forms or change appearance." },
+    { cat: "transmutation", name: "EMP Blackout", meta: "Forces 2", desc: "Kill power grid or devices.", flavor: "Drains or overloads electrical energy in an area." },
+
+    // --- TRAVEL ---
+    { cat: "travel", name: "Teleport", meta: "Correspondence 3", desc: "Instant travel to known location.", flavor: "Instantly moves pattern from A to B." },
+    { cat: "travel", name: "The Blink", meta: "Correspondence 3", desc: "Rapid, combat-range teleportation.", flavor: "Short range teleports to confuse enemies/gain position." },
+    { cat: "travel", name: "Bullet Time", meta: "Time 3", desc: "Gain extra actions.", flavor: "Speeds up personal time. 1 Extra Action per 2 Suc." },
+
+    // --- MIND ---
+    { cat: "mind", name: "Mind Control", meta: "Mind 4", desc: "Take full control of target.", flavor: "Overrides target's will, forcing them to obey." },
+    { cat: "mind", name: "Read Thoughts", meta: "Mind 2", desc: "Hear current thoughts/emotions.", flavor: "Scans what the target is currently thinking or feeling." },
+    { cat: "mind", name: "Psychic Blast", meta: "Mind 3", desc: "Direct mental bashing.", flavor: "Direct psychic assault using Willpower as difficulty." },
+
+    // --- SPIRIT ---
+    { cat: "spirit", name: "Step Sideways", meta: "Spirit 3", desc: "Enter the Spirit World.", flavor: "Physically cross the Gauntlet into the Penumbra." },
+    { cat: "spirit", name: "Bind Spirit", meta: "Spirit 4", desc: "Force spirit into service/object.", flavor: "Traps spirit into a fetish or forces it to obey." },
+    { cat: "spirit", name: "Exorcism", meta: "Spirit 4", desc: "Banish possessing entity.", flavor: "Forces a spirit or ghost out of a host body/object." }
+];
 
 /* 1. GLOBAL STATE MANAGEMENT */
 const appState = {
@@ -313,7 +345,33 @@ function manualOverride(type) {
     recalculate();
 }
 
+/* --- ROTE RENDER ENGINE --- */
+function initRoteLibrary() {
+    ROTE_DB.forEach(rote => {
+        // Hedef konteyneri bul (cat-combat, cat-mind vb.)
+        const container = document.getElementById('cat-' + rote.cat);
+        if (!container) return;
 
+        // HTML Elemanlarını Oluştur
+        const row = document.createElement('div');
+        row.className = 'data-row';
+        // Arama için data-search attribute'u ekle (Name + Meta + Desc)
+        row.setAttribute('data-search', `${rote.name} ${rote.meta} ${rote.desc}`);
+
+        // İçerik HTML'ini hazırla (XSS Korumalı yöntem yerine performans için Template Literal kullanıyoruz ama veri bizim olduğu için güvenli)
+        row.innerHTML = `
+            <div class="data-info">
+                <span class="data-name">${rote.name}</span>
+                <span class="data-desc">${rote.desc}</span>
+                <span class="data-flavor">${rote.flavor}</span>
+            </div>
+            <span class="data-meta">${rote.meta}</span>
+        `;
+
+        // Konteynere ekle
+        container.appendChild(row);
+    });
+}
 /* 6. DICE ROLLING ENGINE */
 function doRoll(pool, diff, spec) {
     let suc = 0, ones = 0, results = [];
@@ -536,4 +594,5 @@ window.onload = function () {
     recalculate();
     updateLimits();
     initTooltips();
+    initRoteLibrary(); // <--- YENİ EKLENEN SATIR
 };
