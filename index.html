@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mage: Master Node (Pro)</title>
+    <title>Mage: Master Library</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800;900&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 
@@ -222,19 +222,107 @@
         </div>
 
         <div id="tab-spheres" class="tab-page">
-                        <div class="grid-3">
-                <div class="card"><span class="card-title">🌐 Correspondence</span><ul class="card-list"><li><span>1</span> Perception</li><li><span>2</span> Sense/Touch</li><li><span>3</span> Pierce Space</li><li><span>4</span> Rend Space</li><li><span>5</span> Mutate Space</li></ul></div>
-                <div class="card"><span class="card-title">🎲 Entropy</span><ul class="card-list"><li><span>1</span> Sense Fate</li><li><span>2</span> Probability</li><li><span>3</span> Matter/Energy</li><li><span>4</span> Life/Death</li><li><span>5</span> Thought</li></ul></div>
-                <div class="card"><span class="card-title">⚡ Forces</span><ul class="card-list"><li><span>1</span> Perceive</li><li><span>2</span> Control Minor</li><li><span>3</span> Transmute Minor</li><li><span>4</span> Control Major</li><li><span>5</span> Mastery</li></ul></div>
-                <div class="card"><span class="card-title">🧬 Life</span><ul class="card-list"><li><span>1</span> Sense Life</li><li><span>2</span> Alter Simple</li><li><span>3</span> Alter Self</li><li><span>4</span> Alter Complex</li><li><span>5</span> Create Life</li></ul></div>
-                <div class="card"><span class="card-title">🧱 Matter</span><ul class="card-list"><li><span>1</span> Analysis</li><li><span>2</span> Transmute Basic</li><li><span>3</span> Alter Form</li><li><span>4</span> Complex</li><li><span>5</span> Create Matter</li></ul></div>
-                <div class="card"><span class="card-title">🧠 Mind</span><ul class="card-list"><li><span>1</span> Sense Thought</li><li><span>2</span> Read Surface</li><li><span>3</span> Mental Link</li><li><span>4</span> Control Mind</li><li><span>5</span> Create Mind</li></ul></div>
-                <div class="card"><span class="card-title">✨ Prime</span><ul class="card-list"><li><span>1</span> Sense Prime</li><li><span>2</span> Fuel Pattern</li><li><span>3</span> Channel</li><li><span>4</span> Expel Energy</li><li><span>5</span> Mastery</li></ul></div>
-                <div class="card"><span class="card-title">👻 Spirit</span><ul class="card-list"><li><span>1</span> Spirit Sight</li><li><span>2</span> Touch Spirit</li><li><span>3</span> Step Sideways</li><li><span>4</span> Bind Spirit</li><li><span>5</span> Forge Spirit</li></ul></div>
-                <div class="card"><span class="card-title">⏳ Time</span><ul class="card-list"><li><span>1</span> Time Sense</li><li><span>2</span> Precognition</li><li><span>3</span> Time Control</li><li><span>4</span> Time Bubble</li><li><span>5</span> Time Travel</li></ul></div>
+                <div class="grid-3">
+                    <div class="card">
+                        <span class="card-title">🌐 Correspondence</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Immediate spatial perception and orientation." data-ref="M20 QS p.19"><span>1</span> Immediate Spatial Perception</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Sense and touch space; minor warding." data-ref="M20 QS p.19"><span>2</span> Sense & Touch Space</li>
+                            <li data-title="Rank 3: Control" data-desc="Pierce space; teleportation and perception." data-ref="M20 QS p.19"><span>3</span> Pierce Space / Teleport</li>
+                            <li data-title="Rank 4: Command" data-desc="Rend space; co-location and gateways." data-ref="M20 QS p.19"><span>4</span> Rend Space / Co-location</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Mutate space; distort distances and volumes." data-ref="M20 QS p.19"><span>5</span> Mutate Space / Distort</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">🎲 Entropy</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Sense fate, flaws, and probability currents." data-ref="M20 QS p.19"><span>1</span> Sense Fate & Flaws</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Control probability and minor fortune." data-ref="M20 QS p.19"><span>2</span> Control Probability</li>
+                            <li data-title="Rank 3: Control" data-desc="Affect predictable matter and energy patterns." data-ref="M20 QS p.19"><span>3</span> Affect Matter & Energy</li>
+                            <li data-title="Rank 4: Command" data-desc="Affect life cycles; induce rapid decay." data-ref="M20 QS p.19"><span>4</span> Affect Life / Decay</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Affect thought, concepts, and abstract ideas." data-ref="M20 QS p.19"><span>5</span> Affect Thought / Concepts</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">⚡ Forces</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Perceive energy currents and forces." data-ref="M20 QS p.19"><span>1</span> Perceive Energy</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Control minor forces; alter direction/quality." data-ref="M20 QS p.19"><span>2</span> Control Minor Forces</li>
+                            <li data-title="Rank 3: Control" data-desc="Transmute minor forces; conjure energy." data-ref="M20 QS p.19"><span>3</span> Transmute Minor Forces</li>
+                            <li data-title="Rank 4: Command" data-desc="Control major forces; weather and storms." data-ref="M20 QS p.19"><span>4</span> Control Major Forces</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Forces mastery; summon cataclysms." data-ref="M20 QS p.19"><span>5</span> Mastery / Cataclysm</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">🧬 Life</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Sense life, health, and biological patterns." data-ref="M20 QS p.19"><span>1</span> Sense Life & Health</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Alter simple life forms; heal self." data-ref="M20 QS p.19"><span>2</span> Alter Simple / Self</li>
+                            <li data-title="Rank 3: Control" data-desc="Transform self; heal others; alter simple life." data-ref="M20 QS p.19"><span>3</span> Transform Self / Simple</li>
+                            <li data-title="Rank 4: Command" data-desc="Transform complex life forms; major alterations." data-ref="M20 QS p.19"><span>4</span> Transform Complex Forms</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Create complex life; perfect metamorphosis." data-ref="M20 QS p.19"><span>5</span> Create Life / Perfect</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">🧱 Matter</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Analyze substance structures and properties." data-ref="M20 QS p.19"><span>1</span> Matter Perception</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Transmute basic homogeneous substances." data-ref="M20 QS p.19"><span>2</span> Basic Transmutation</li>
+                            <li data-title="Rank 3: Control" data-desc="Alter form and shape; conjure solid matter." data-ref="M20 QS p.19"><span>3</span> Alter Form & Shape</li>
+                            <li data-title="Rank 4: Command" data-desc="Complex transformations; alter properties." data-ref="M20 QS p.19"><span>4</span> Complex Transformation</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Create or destroy matter; impossible materials." data-ref="M20 QS p.19"><span>5</span> Create / Destroy Matter</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">🧠 Mind</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Sense thoughts, emotions, and resonance." data-ref="M20 QS p.19"><span>1</span> Sense Thought & Emotion</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Read surface thoughts; influence moods." data-ref="M20 QS p.19"><span>2</span> Read Surface / Impulse</li>
+                            <li data-title="Rank 3: Control" data-desc="Mental link; dreamwalk; psychic assault." data-ref="M20 QS p.19"><span>3</span> Mental Link / Dreamwalk</li>
+                            <li data-title="Rank 4: Command" data-desc="Control conscious mind; alter memories." data-ref="M20 QS p.19"><span>4</span> Control Conscious Mind</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Control subconscious; rewrite personality." data-ref="M20 QS p.19"><span>5</span> Control Subconscious</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">✨ Prime</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Sense Quintessence and magic use." data-ref="M20 QS p.19"><span>1</span> Sense Quintessence</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Fuel patterns; enchant weapons; body of light." data-ref="M20 QS p.19"><span>2</span> Fuel Pattern / Enchant</li>
+                            <li data-title="Rank 3: Control" data-desc="Channel/extract energy from Tass/Nodes." data-ref="M20 QS p.19"><span>3</span> Channel / Extract Energy</li>
+                            <li data-title="Rank 4: Command" data-desc="Expel energy from patterns; siphon power." data-ref="M20 QS p.19"><span>4</span> Expel / Siphon Energy</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Alter flow; create Node; infuse life." data-ref="M20 QS p.19"><span>5</span> Alter Flow / Create Node</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">👻 Spirit</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="See spirits and across the Gauntlet." data-ref="M20 QS p.19"><span>1</span> Spirit Sight</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Touch spirits; communicate; minor calls." data-ref="M20 QS p.19"><span>2</span> Touch Spirit</li>
+                            <li data-title="Rank 3: Control" data-desc="Step Sideways; harm spirits; waken objects." data-ref="M20 QS p.19"><span>3</span> Step Sideways / Gauntlet</li>
+                            <li data-title="Rank 4: Command" data-desc="Rend Gauntlet; bind spirits; create fetish." data-ref="M20 QS p.19"><span>4</span> Rend Gauntlet / Bind</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Forge spirits; Gilgul; outer realms." data-ref="M20 QS p.19"><span>5</span> Forge Spirit / Gilgul</li>
+                        </ul>
+                    </div>
+    
+                    <div class="card">
+                        <span class="card-title">⏳ Time</span>
+                        <ul class="card-list">
+                            <li data-title="Rank 1: Perception" data-desc="Perfect time sense; spot distortions." data-ref="M20 QS p.19"><span>1</span> Time Sense</li>
+                            <li data-title="Rank 2: Manipulation" data-desc="Past and future sight (Post/Precognition)." data-ref="M20 QS p.19"><span>2</span> Past & Future Sight</li>
+                            <li data-title="Rank 3: Control" data-desc="Distort time; speed up; slow down." data-ref="M20 QS p.19"><span>3</span> Time Distortion / Speed</li>
+                            <li data-title="Rank 4: Command" data-desc="Time bubbles; trigger effects." data-ref="M20 QS p.19"><span>4</span> Time Bubble / Trigger</li>
+                            <li data-title="Rank 5: Mastery" data-desc="Time travel; time immunity." data-ref="M20 QS p.19"><span>5</span> Time Travel / Immunity</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-
         <div id="tab-rotes" class="tab-page">
             <div class="accordion">
                 <div class="acc-item">
@@ -631,15 +719,26 @@
             <div id="sub-gens" class="sub-tab-content">
                 <div class="gen-section">
                     <div class="tools-grid">
-                        <div class="control-panel" style="grid-column: span 2;">
-                            <label class="rit-label">QUICK DICE ROLLER</label>
-                            <div style="display:flex; gap:10px; margin-top:10px; justify-content: center;">
-                                <input type="number" id="q-pool" placeholder="Pool" value="6" class="gen-input">
-                                <input type="number" id="q-diff" placeholder="Diff" value="6" class="gen-input">
-                                <button class="gen-btn" style="width: auto; margin:0; background:var(--primary); color:#fff; padding: 0 24px;" onclick="quickRoll()">ROLL</button>
-                            </div>
-                            <div id="q-res" class="gen-res" style="font-size:1.4rem; margin-top:20px;">-</div>
-                        </div>
+                       <div class="control-panel" style="grid-column: span 2;">
+    <label class="rit-label">QUICK DICE ROLLER</label>
+    
+    <div style="display:flex; gap:12px; margin-top:10px; justify-content: center; align-items: flex-end;">
+        
+        <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
+            <span class="rit-label" style="font-size:0.65rem; color:var(--text-muted); letter-spacing:0.5px;">DICE POOL</span>
+            <input type="number" id="q-pool" placeholder="#" value="6" class="gen-input" style="width:80px;">
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
+            <span class="rit-label" style="font-size:0.65rem; color:var(--text-muted); letter-spacing:0.5px;">DIFF</span>
+            <input type="number" id="q-diff" placeholder="#" value="6" class="gen-input" style="width:80px;">
+        </div>
+
+        <button class="gen-btn" style="width: auto; margin:0; height:46px; background:var(--primary); color:#fff; padding: 0 24px; border:1px solid var(--primary);" onclick="quickRoll()">ROLL</button>
+    </div>
+    
+    <div id="q-res" class="gen-res" style="font-size:1.4rem; margin-top:20px;">-</div>
+</div>
 
                         <div class="control-panel">
                             <label class="rit-label">INSTANT NPC</label>
