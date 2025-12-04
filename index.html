@@ -616,10 +616,10 @@
     </div>
 
 <script>
-    /**
+     /**
      * ==========================================
-     * MAGE ENGINE: MVC ARCHITECTURE
-     * Optimized for Performance, Security & Clarity
+     * MAGE ENGINE: MVC ARCHITECTURE (PATCHED v1.1)
+     * Fix: Specialty Button Logic Restored
      * ==========================================
      */
 
@@ -709,7 +709,9 @@
         document.getElementById('will').value = '5';
         
         document.querySelectorAll('.btn-tool, .btn-hb, .btn-safety').forEach(b => b.classList.remove('active'));
-        document.getElementById('chk-spec-vis').classList.remove('checked');
+        
+        // Fix: Spec button visual reset
+        document.getElementById('btn-spec').classList.remove('checked');
         
         document.getElementById('val-sphere').textContent = '3';
         document.getElementById('val-extra').textContent = '0';
@@ -772,9 +774,12 @@
         calc();
     }
 
+    // --- FIX: BUTTON TARGETING CORRECTED ---
     function togSpec() {
         s.spec = !s.spec;
-        let el = document.getElementById('chk-spec-vis');
+        // Previously targeted 'chk-spec-vis' which was wrong.
+        // Now targeting the parent container 'btn-spec' to trigger CSS.
+        let el = document.getElementById('btn-spec'); 
         if (s.spec) el.classList.add('checked'); else el.classList.remove('checked');
     }
 
@@ -861,8 +866,10 @@
             let val = d;
             let exploded = false;
 
+            // FIX: Ensure 'spec' is checked properly
             if (spec && d === 10) { 
                 let x = Math.floor(Math.random() * 10) + 1;
+                // Rule: Reroll also counts as a success if it hits diff
                 if (x >= diff) suc++; 
                 val = `10+${x}`;
                 exploded = true;
