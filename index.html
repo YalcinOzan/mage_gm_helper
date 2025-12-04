@@ -9,785 +9,140 @@
 
     <style>
         /* =========================================
-           1. CSS VARIABLES & THEME
+           UI KORUNDU - GÖRSEL DEĞİŞİKLİK YOK
            ========================================= */
         :root {
-            /* Theme Palette */
-            --bg-body: #050507;
-            --bg-panel: #0f0f12;
-            --bg-card: #18181b;
-            --bg-input: #09090b;
-            --border: #27272a;
-            --border-hover: #3f3f46;
-            
-            /* Brand Colors */
-            --primary: #8b5cf6;       /* Vivid Purple */
-            --primary-hover: #7c3aed;
-            --primary-dim: rgba(139, 92, 246, 0.15);
-            
-            /* Status Colors */
-            --accent: #06b6d4;        /* Cyan */
-            --success: #10b981;       /* Emerald */
-            --warning: #f59e0b;       /* Amber */
-            --danger: #ef4444;        /* Red */
-            
-            /* Typography */
-            --text-main: #fafafa;
-            --text-muted: #a1a1aa;
-            
-            /* UI Metrics */
-            --radius: 12px;
-            --header-height: 70px;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-            --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.1);
-            
-            /* Animation */
+            --bg-body: #050507; --bg-panel: #0f0f12; --bg-card: #18181b; --bg-input: #09090b;
+            --border: #27272a; --border-hover: #3f3f46;
+            --primary: #8b5cf6; --primary-hover: #7c3aed; --primary-dim: rgba(139, 92, 246, 0.15);
+            --accent: #06b6d4; --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --text-main: #fafafa; --text-muted: #a1a1aa;
+            --radius: 12px; --header-height: 70px; --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
-
-        /* =========================================
-           2. GLOBAL RESET & BASE STYLES
-           ========================================= */
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            margin: 0; 
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            letter-spacing: -0.015em;
-        }
-
-        /* =========================================
-           3. HEADER & SEARCH COMPONENT
-           ========================================= */
-        .app-header {
-            height: var(--header-height);
-            padding: 0 20px;
-            background: rgba(15, 15, 18, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            z-index: 50;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-        }
-
-        .search-bar {
-            width: 100%; 
-            max-width: 600px;
-            background: var(--bg-input); 
-            border: 1px solid var(--border);
-            padding: 12px 16px; 
-            border-radius: 10px; 
-            color: #fff;
-            font-family: inherit; 
-            font-size: 0.95rem; 
-            outline: none; 
-            transition: all 0.2s var(--ease);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .search-bar:focus { 
-            border-color: var(--primary); 
-            box-shadow: 0 0 0 3px var(--primary-dim);
-            background: #121215;
-        }
-
-        /* =========================================
-           4. NAVIGATION TABS
-           ========================================= */
-        .nav-tabs {
-            display: flex;
-            background: var(--bg-body);
-            border-bottom: 1px solid var(--border);
-            padding: 0 10px;
-            flex-shrink: 0;
-            overflow-x: auto;
-        }
-
-        .nav-btn {
-            flex: 1; 
-            min-width: 80px;
-            padding: 16px 12px; 
-            background: transparent; 
-            border: none;
-            color: var(--text-muted); 
-            font-weight: 600; 
-            font-size: 0.9rem;
-            cursor: pointer; 
-            position: relative;
-            transition: color 0.2s;
-            white-space: nowrap;
-        }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; letter-spacing: -0.015em; }
+        .app-header { height: var(--header-height); padding: 0 20px; background: rgba(15, 15, 18, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 50; display: flex; align-items: center; justify-content: center; }
+        .search-bar { width: 100%; max-width: 600px; background: var(--bg-input); border: 1px solid var(--border); padding: 12px 16px; border-radius: 10px; color: #fff; font-family: inherit; font-size: 0.95rem; outline: none; transition: all 0.2s var(--ease); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        .search-bar:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-dim); background: #121215; }
+        .nav-tabs { display: flex; background: var(--bg-body); border-bottom: 1px solid var(--border); padding: 0 10px; flex-shrink: 0; overflow-x: auto; }
+        .nav-btn { flex: 1; min-width: 80px; padding: 16px 12px; background: transparent; border: none; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; cursor: pointer; position: relative; transition: color 0.2s; white-space: nowrap; }
         .nav-btn:hover { color: #fff; }
         .nav-btn.active { color: var(--primary); }
-        
-        .nav-btn.active::after {
-            content: ''; 
-            position: absolute; 
-            bottom: 0; left: 0; 
-            width: 100%; height: 3px;
-            background: var(--primary);
-            border-radius: 3px 3px 0 0;
-            box-shadow: 0 -2px 8px var(--primary-dim);
-        }
-
-        /* =========================================
-           5. LAYOUT & CONTENT AREA
-           ========================================= */
-        .content-area {
-            flex: 1; 
-            overflow-y: auto; 
-            overflow-x: hidden;
-            padding: 24px 16px;
-            background: var(--bg-panel);
-            position: relative;
-        }
-        
-        .tab-page { 
-            display: none; 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding-bottom: 80px;
-            animation: slideUp 0.3s var(--ease); 
-        }
-
+        .nav-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; box-shadow: 0 -2px 8px var(--primary-dim); }
+        .content-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 24px 16px; background: var(--bg-panel); position: relative; }
+        .tab-page { display: none; max-width: 800px; margin: 0 auto; padding-bottom: 80px; animation: slideUp 0.3s var(--ease); }
         .tab-page.active { display: block; }
-        
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-
-        /* Sub-navigation (Ritualmatic) */
-        .sub-nav {
-            display: flex; 
-            gap: 6px; 
-            margin-bottom: 24px;
-            padding: 4px; 
-            background: var(--bg-input); 
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .sub-nav-btn {
-            flex: 1; 
-            padding: 10px; 
-            border: none; 
-            background: transparent;
-            color: var(--text-muted); 
-            font-weight: 700; 
-            font-size: 0.8rem;
-            border-radius: 8px; 
-            cursor: pointer; 
-            transition: all 0.2s;
-        }
-
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .sub-nav { display: flex; gap: 6px; margin-bottom: 24px; padding: 4px; background: var(--bg-input); border-radius: 12px; border: 1px solid var(--border); }
+        .sub-nav-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-weight: 700; font-size: 0.8rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
         .sub-nav-btn:hover { color: #fff; }
-        
-        .sub-nav-btn.active { 
-            background: var(--bg-card); 
-            color: #fff; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
-            border: 1px solid var(--border);
-        }
-        
+        .sub-nav-btn.active { background: var(--bg-card); color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 1px solid var(--border); }
         .sub-tab-content { display: none; }
         .sub-tab-content.active { display: block; animation: fadeIn 0.2s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* =========================================
-           6. COMPONENTS: CARDS & GRIDS
-           ========================================= */
-        .grid-3 { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-            gap: 16px; 
-        }
-
-        .card {
-            background: var(--bg-card); 
-            border: 1px solid var(--border);
-            border-radius: var(--radius); 
-            padding: 20px;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .card:hover { 
-            border-color: var(--primary); 
-            transform: translateY(-2px); 
-        }
-        
-        .card-title { 
-            font-weight: 800; 
-            color: var(--text-main); 
-            font-size: 1rem; 
-            margin-bottom: 12px; 
-            display: block; 
-            border-bottom: 1px solid var(--border); 
-            padding-bottom: 8px;
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
-        }
-
-        .card-list { 
-            list-style: none; 
-            padding: 0; 
-            margin: 0; 
-            font-size: 0.9rem; 
-            color: var(--text-muted); 
-        }
-
-        .card-list li { 
-            margin-bottom: 8px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-        }
-
-        .card-list span { 
-            color: var(--primary); 
-            font-weight: 700; 
-            background: var(--primary-dim); 
-            padding: 2px 6px; 
-            border-radius: 4px; 
-            font-size: 0.8em; 
-            min-width: 24px; 
-            text-align: center;
-        }
-
-        /* =========================================
-           7. COMPONENTS: ACCORDIONS
-           ========================================= */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: transform 0.2s, border-color 0.2s; }
+        .card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .card-title { font-weight: 800; color: var(--text-main); font-size: 1rem; margin-bottom: 12px; display: block; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-list { list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--text-muted); }
+        .card-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .card-list span { color: var(--primary); font-weight: 700; background: var(--primary-dim); padding: 2px 6px; border-radius: 4px; font-size: 0.8em; min-width: 24px; text-align: center; }
         .accordion { display: flex; flex-direction: column; gap: 12px; }
-        
-        .acc-item { 
-            border: 1px solid var(--border); 
-            border-radius: var(--radius); 
-            overflow: hidden; 
-            background: var(--bg-card); 
-            transition: border-color 0.2s;
-        }
-
-        .acc-header {
-            padding: 16px; 
-            background: transparent; 
-            font-weight: 600;
-            font-size: 0.95rem; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            user-select: none; 
-            color: var(--text-main);
-            transition: background 0.2s;
-        }
-
+        .acc-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--bg-card); transition: border-color 0.2s; }
+        .acc-header { padding: 16px; background: transparent; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; color: var(--text-main); transition: background 0.2s; }
         .acc-header:hover { background: rgba(255,255,255,0.03); }
         .acc-item.open { border-color: var(--border-hover); }
         .acc-item.open .acc-header { background: rgba(255,255,255,0.05); color: var(--primary); }
-        
-        .acc-content { 
-            display: none; 
-            border-top: 1px solid var(--border); 
-            background: rgba(0,0,0,0.15); 
-        }
+        .acc-content { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.15); }
         .acc-item.open .acc-content { display: block; }
-
-        /* =========================================
-           8. DATA TABLES & LISTS
-           ========================================= */
-        .data-row {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 12px 16px; 
-            border-bottom: 1px solid var(--border); 
-            font-size: 0.9rem;
-        }
-        
+        .data-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
         .data-row:last-child { border-bottom: none; }
         .data-name { font-weight: 600; color: #fff; display: block; margin-bottom: 2px; }
-        
-        .data-meta { 
-            font-family: 'Courier Prime', monospace; 
-            color: var(--primary); 
-            font-size: 0.85rem; 
-            text-align: right; 
-            background: rgba(0,0,0,0.2); 
-            padding: 2px 6px; 
-            border-radius: 4px; 
-        }
-        
+        .data-meta { font-family: 'Courier Prime', monospace; color: var(--primary); font-size: 0.85rem; text-align: right; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; }
         .data-desc { display: block; font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
-
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        
-        th { 
-            text-align: left; 
-            padding: 12px 16px; 
-            color: var(--text-muted); 
-            border-bottom: 1px solid var(--border); 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            font-size: 0.75rem; 
-            letter-spacing: 1px; 
-        }
-        
-        td { 
-            padding: 12px 16px; 
-            border-bottom: 1px solid var(--border); 
-            color: var(--text-main); 
-            vertical-align: top; 
-        }
-        
+        th { text-align: left; padding: 12px 16px; color: var(--text-muted); border-bottom: 1px solid var(--border); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+        td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-main); vertical-align: top; }
         .hl-red { color: var(--danger); font-weight: bold; } 
         .hl-green { color: var(--success); font-weight: bold; } 
         .hl-yellow { color: var(--warning); font-weight: bold; }
-
-        /* =========================================
-           9. RITUALMATIC UI (Specific Tools)
-           ========================================= */
-        .rit-container { 
-            font-family: 'Montserrat', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 24px; 
-        }
-        
-        .rit-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid var(--border); 
-            padding-bottom: 16px; 
-            margin-bottom: 8px; 
-        }
-        
+        .rit-container { font-family: 'Montserrat', sans-serif; display: flex; flex-direction: column; gap: 24px; }
+        .rit-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 8px; }
         .rit-title { font-size: 1.2rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
-
-        /* Mode Switcher */
-        .mode-switch { 
-            display: flex; 
-            background: var(--bg-input); 
-            padding: 4px; 
-            border-radius: 12px; 
-            border: 1px solid var(--border); 
-        }
-        
-        .mode-opt { 
-            flex: 1; 
-            text-align: center; 
-            padding: 12px; 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            border-radius: 8px; 
-            color: var(--text-muted); 
-            transition: all 0.2s; 
-        }
-        
-        .mode-opt.active { 
-            background: var(--bg-card); 
-            color: #fff; 
-            box-shadow: var(--shadow-sm); 
-            border: 1px solid var(--border); 
-        }
-
-        /* HUD Display */
+        .mode-switch { display: flex; background: var(--bg-input); padding: 4px; border-radius: 12px; border: 1px solid var(--border); }
+        .mode-opt { flex: 1; text-align: center; padding: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border-radius: 8px; color: var(--text-muted); transition: all 0.2s; }
+        .mode-opt.active { background: var(--bg-card); color: #fff; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
         .hud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
-        
-        .hud-box { 
-            background: linear-gradient(145deg, var(--bg-card), #1c1c22); 
-            border-radius: 16px; 
-            padding: 24px; 
-            text-align: center; 
-            border: 1px solid var(--border); 
-            position: relative; 
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); 
-        }
-        
-        .hud-lbl { 
-            font-size: 0.7rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            font-weight: 800; 
-            color: var(--text-muted); 
-            display: block; 
-            margin-bottom: 8px; 
-        }
-        
-        .hud-val { 
-            font-size: 2.8rem; 
-            font-weight: 900; 
-            color: #fff; 
-            background: transparent; 
-            border: none; 
-            width: 100%; 
-            text-align: center; 
-            font-family: 'Montserrat', sans-serif; 
-            text-shadow: 0 0 10px rgba(255,255,255,0.1); 
-        }
-        
-        .val-diff { color: #c4b5fd; } 
-        .val-goal { color: #6ee7b7; } 
-        .modified { color: var(--warning) !important; text-decoration: underline; text-decoration-style: dotted; }
-
-        /* Panels & Controls */
-        .panel, .control-panel { 
-            background: var(--bg-card); 
-            border: 1px solid var(--border); 
-            border-radius: 16px; 
-            padding: 24px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px; 
-        }
-        
-        .panel-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid var(--border); 
-            padding-bottom: 12px; 
-            margin-bottom: -8px; 
-        }
-        
-        .ph-title { 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            font-size: 0.8rem; 
-            color: var(--text-muted); 
-            letter-spacing: 1px; 
-        }
-
+        .hud-box { background: linear-gradient(145deg, var(--bg-card), #1c1c22); border-radius: 16px; padding: 24px; text-align: center; border: 1px solid var(--border); position: relative; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+        .hud-lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; color: var(--text-muted); display: block; margin-bottom: 8px; }
+        .hud-val { font-size: 2.8rem; font-weight: 900; color: #fff; background: transparent; border: none; width: 100%; text-align: center; font-family: 'Montserrat', sans-serif; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+        .val-diff { color: #c4b5fd; } .val-goal { color: #6ee7b7; } .modified { color: var(--warning) !important; text-decoration: underline; text-decoration-style: dotted; }
+        .panel, .control-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: -8px; }
+        .ph-title { font-weight: 800; text-transform: uppercase; font-size: 0.8rem; color: var(--text-muted); letter-spacing: 1px; }
         .input-group { display: flex; flex-direction: column; gap: 8px; }
-        
-        .rit-label { 
-            font-size: 0.75rem; 
-            font-weight: 700; 
-            color: var(--text-muted); 
-            text-transform: uppercase; 
-            cursor: help; 
-            letter-spacing: 0.5px; 
-        }
-        
+        .rit-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; cursor: help; letter-spacing: 0.5px; }
         .rit-label:hover { color: var(--primary); }
-
-        /* Custom Counter Input */
-        .counter { 
-            display: flex; 
-            background: var(--bg-input); 
-            border: 1px solid var(--border); 
-            border-radius: 10px; 
-            overflow: hidden; 
-            height: 48px; 
-        }
-        
-        .btn-cnt { 
-            width: 56px; 
-            border: none; 
-            background: transparent; 
-            color: var(--text-muted); 
-            font-size: 1.2rem; 
-            cursor: pointer; 
-            transition: 0.2s; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-        
+        .counter { display: flex; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; height: 48px; }
+        .btn-cnt { width: 56px; border: none; background: transparent; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .btn-cnt:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .btn-cnt:active { background: var(--primary-dim); }
-        
-        .cnt-display { 
-            flex: 1; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-weight: 700; 
-            font-size: 1.1rem; 
-            border-left: 1px solid var(--border); 
-            border-right: 1px solid var(--border); 
-        }
-
-        /* Select styling */
-        select, .rit-select { 
-            width: 100%; 
-            background: var(--bg-input); 
-            border: 1px solid var(--border); 
-            color: #fff; 
-            padding: 12px 16px; 
-            border-radius: 10px; 
-            outline: none; 
-            font-family: 'Montserrat', sans-serif; 
-            font-weight: 600; 
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat; 
-            background-position: right 1rem center; 
-            background-size: 1em;
-        }
+        .cnt-display { flex: 1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+        select, .rit-select { width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: #fff; padding: 12px 16px; border-radius: 10px; outline: none; font-family: 'Montserrat', sans-serif; font-weight: 600; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         select:focus { border-color: var(--primary); }
-
-        /* Tools Grid */
         .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        
-        .btn-tool { 
-            background: var(--bg-input); 
-            border: 1px solid var(--border); 
-            padding: 16px; 
-            border-radius: 12px; 
-            text-align: center; 
-            font-size: 0.75rem; 
-            font-weight: 700; 
-            color: var(--text-muted); 
-            cursor: pointer; 
-            transition: 0.2s; 
-        }
-        
+        .btn-tool { background: var(--bg-input); border: 1px solid var(--border); padding: 16px; border-radius: 12px; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
         .btn-tool:hover { border-color: var(--text-muted); color: #fff; }
         .btn-tool.active { background: var(--primary-dim); border-color: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary-dim); }
         .btn-tool.neg.active { background: rgba(239, 68, 68, 0.15); border-color: var(--danger); color: var(--danger); }
-
-        /* Slider & Checkboxes */
         .slider-card { background: var(--bg-input); padding: 16px; border-radius: 12px; border: 1px solid var(--border); }
         .slider-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; }
         .slider-val { font-size: 1.1rem; font-weight: 800; color: #fff; }
         .slider-cost { font-size: 0.8rem; font-weight: 600; color: var(--success); }
         input[type=range] { width: 100%; cursor: pointer; margin: 0; accent-color: var(--primary); height: 6px; border-radius: 3px; }
-        
-        .chk-row { 
-            height: 48px; 
-            padding: 0 16px; 
-            border-radius: 12px; 
-            background: var(--bg-input); 
-            border: 1px solid var(--border); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            color: var(--text-muted); 
-            font-weight: 700; 
-            font-size: 0.65rem; 
-            transition: 0.2s; 
-            gap: 4px; 
-        }
+        .chk-row { height: 48px; padding: 0 16px; border-radius: 12px; background: var(--bg-input); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); font-weight: 700; font-size: 0.65rem; transition: 0.2s; gap: 4px; }
         .chk-row.checked { background: var(--primary-dim); color: var(--primary); border: 1px solid var(--primary); }
         .chk-box { width: 16px; height: 16px; border: 2px solid var(--text-muted); border-radius: 4px; transition: 0.2s; }
         .chk-row.checked .chk-box { background: var(--primary); border-color: var(--primary); }
-
-        /* Action Buttons */
-        .btn-cast { 
-            width: 100%; 
-            padding: 24px; 
-            border: none; 
-            border-radius: 16px; 
-            font-family: inherit; 
-            font-size: 1.2rem; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            cursor: pointer; 
-            color: #fff; 
-            margin-top: 10px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
-            transition: transform 0.1s, filter 0.2s;
-        }
-        
+        .btn-cast { width: 100%; padding: 24px; border: none; border-radius: 16px; font-family: inherit; font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; color: #fff; margin-top: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); transition: transform 0.1s, filter 0.2s; }
         .btn-cast:hover { filter: brightness(1.1); }
         .btn-cast:active { transform: scale(0.98); }
-        
         .style-inst { background: linear-gradient(135deg, #f97316, #ea580c); }
         .style-rit { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
         .style-pause { background: linear-gradient(135deg, #f59e0b, #d97706); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
-
-        .btn-safety {
-            display: flex; align-items: center; gap: 12px; justify-content: center;
-            padding: 12px; border-radius: 10px;
-            background: rgba(249, 115, 22, 0.1);
-            border: 1px solid rgba(249, 115, 22, 0.3);
-            color: #f97316; cursor: pointer;
-            font-weight: 700; font-size: 0.8rem; text-transform: uppercase;
-            transition: 0.2s; margin-top: 8px;
-        }
+        .btn-safety { display: flex; align-items: center; gap: 12px; justify-content: center; padding: 12px; border-radius: 10px; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.3); color: #f97316; cursor: pointer; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; margin-top: 8px; }
         .btn-safety svg { width: 20px; height: 20px; fill: currentColor; }
         .btn-safety.active { background: #f97316; color: #000; border-color: #f97316; }
-
-        /* =========================================
-           10. LOGS & FEEDBACK
-           ========================================= */
-        #log-container { 
-            display: none; 
-            background: #000; 
-            padding: 20px; 
-            border-radius: 16px; 
-            margin-top: 24px; 
-            border: 1px solid var(--border); 
-        }
-        
-        .log-head { 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 0.8rem; 
-            font-weight: 800; 
-            color: var(--text-muted); 
-            margin-bottom: 16px; 
-            text-transform: uppercase; 
-        }
-        
-        .log-scroll { 
-            max-height: 300px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-            padding-right: 4px; 
-        }
-        
-        .entry { 
-            background: var(--bg-card); 
-            padding: 16px; 
-            border-radius: 10px; 
-            border-left: 4px solid #444; 
-            font-size: 0.9rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            animation: slideIn 0.3s ease-out; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
-        }
-        
+        #log-container { display: none; background: #000; padding: 20px; border-radius: 16px; margin-top: 24px; border: 1px solid var(--border); }
+        .log-head { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; }
+        .log-scroll { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
+        .entry { background: var(--bg-card); padding: 16px; border-radius: 10px; border-left: 4px solid #444; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; animation: slideIn 0.3s ease-out; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .entry.success { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
         .entry.fail { border-color: var(--warning); background: rgba(245, 158, 11, 0.05); }
         .entry.botch { border-color: var(--danger); background: rgba(239, 68, 68, 0.05); }
-        
-        .prog-bg { 
-            height: 10px; 
-            background: var(--bg-input); 
-            border-radius: 5px; 
-            overflow: hidden; 
-            margin-bottom: 16px; 
-            border: 1px solid var(--border); 
-        }
-        
-        .prog-fill { 
-            height: 100%; 
-            background: var(--success); 
-            width: 0%; 
-            transition: width 0.3s; 
-            box-shadow: 0 0 10px var(--success); 
-        }
-
-        /* =========================================
-           11. GM GENERATORS
-           ========================================= */
-        .gen-btn { 
-            width: 100%; 
-            padding: 16px; 
-            background: var(--bg-input); 
-            border: 1px solid var(--border); 
-            color: #fff; 
-            border-radius: 10px; 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            margin-bottom: 5px; 
-            transition: 0.2s;
-        }
+        .prog-bg { height: 10px; background: var(--bg-input); border-radius: 5px; overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border); }
+        .prog-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s; box-shadow: 0 0 10px var(--success); }
+        .gen-btn { width: 100%; padding: 16px; background: var(--bg-input); border: 1px solid var(--border); color: #fff; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-bottom: 5px; transition: 0.2s; }
         .gen-btn:hover { border-color: var(--accent); background: rgba(6, 182, 212, 0.1); color: var(--accent); }
-        
-        .gen-res { 
-            font-size: 1.1rem; 
-            font-weight: 700; 
-            color: var(--accent); 
-            min-height: 24px; 
-            text-align: center; 
-            margin-bottom: 15px; 
-            font-family: 'Courier Prime', monospace; 
-            margin-top: 10px; 
-        }
-        
-        .gen-input { 
-            width: 70px; 
-            text-align: center; 
-            background: var(--bg-input); 
-            border: 1px solid var(--border); 
-            color: #fff; 
-            border-radius: 8px; 
-            padding: 12px; 
-            font-weight: 700; 
-            font-family: 'Montserrat', sans-serif; 
-            outline: none; 
-        }
+        .gen-res { font-size: 1.1rem; font-weight: 700; color: var(--accent); min-height: 24px; text-align: center; margin-bottom: 15px; font-family: 'Courier Prime', monospace; margin-top: 10px; }
+        .gen-input { width: 70px; text-align: center; background: var(--bg-input); border: 1px solid var(--border); color: #fff; border-radius: 8px; padding: 12px; font-weight: 700; font-family: 'Montserrat', sans-serif; outline: none; }
         .gen-input:focus { border-color: var(--primary); }
-
-        .btn-reset { 
-            background: transparent; 
-            border: 1px solid var(--danger); 
-            color: var(--danger); 
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            transition: 0.2s; 
-        }
+        .btn-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 16px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
         .btn-reset:hover { background: rgba(239, 68, 68, 0.1); }
-
-        /* =========================================
-           12. UTILITIES & MODALS
-           ========================================= */
         .mini-sel { background: transparent; border: none; color: var(--text-muted); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; cursor: pointer; padding: 0; text-align: right; }
-        
-        #tooltip { 
-            position: fixed; 
-            display: none; 
-            pointer-events: none; 
-            z-index: 9999; 
-            background: rgba(24, 24, 27, 0.95); 
-            border: 1px solid var(--border); 
-            border-radius: 8px; 
-            padding: 12px; 
-            max-width: 280px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
-            font-family: 'Montserrat', sans-serif; 
-            backdrop-filter: blur(4px); 
-        }
+        #tooltip { position: fixed; display: none; pointer-events: none; z-index: 9999; background: rgba(24, 24, 27, 0.95); border: 1px solid var(--border); border-radius: 8px; padding: 12px; max-width: 280px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); font-family: 'Montserrat', sans-serif; backdrop-filter: blur(4px); }
         .tt-title { color: var(--primary); font-size: 0.7rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; display: block; }
         .tt-desc { color: #ddd; font-size: 0.75rem; line-height: 1.4; }
         .tt-ref { color: var(--text-muted); font-size: 0.65rem; font-style: italic; margin-top: 8px; display: block; border-top: 1px solid #444; padding-top: 4px; }
-
-        #error-modal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); 
-            z-index: 10000; display: none; 
-            justify-content: center; align-items: center; 
-            animation: fadeIn 0.2s; 
-        }
+        #error-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 10000; display: none; justify-content: center; align-items: center; animation: fadeIn 0.2s; }
         .modal-box { background: #1c1c24; border: 1px solid var(--danger); border-radius: 16px; padding: 32px; max-width: 350px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
         .modal-title { color: var(--danger); font-weight: 900; font-size: 1.4rem; margin-bottom: 12px; text-transform: uppercase; }
         .modal-text { color: #ccc; font-size: 1rem; margin-bottom: 24px; line-height: 1.5; }
         .modal-btn { background: var(--danger); border: none; color: #fff; padding: 14px 24px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
         .modal-btn:hover { background: #dc2626; }
-
     </style>
 </head>
 <body>
@@ -964,15 +319,15 @@
                 </div>
 
                 <div class="acc-item">
-                     <div class="acc-header" onclick="toggleAcc(this)">✨ Magickal Feats Difficulty</div>
-                     <div class="acc-content">
-                         <table>
-                             <tr><th>Feat Type</th><th>Difficulty</th></tr>
-                             <tr><td class="hl-green">Coincidental</td><td>Highest Sphere + 3</td></tr>
-                             <tr><td class="hl-yellow">Vulgar (No Witness)</td><td>Highest Sphere + 4</td></tr>
-                             <tr><td class="hl-red">Vulgar (Witnessed)</td><td>Highest Sphere + 5</td></tr>
-                         </table>
-                     </div>
+                      <div class="acc-header" onclick="toggleAcc(this)">✨ Magickal Feats Difficulty</div>
+                      <div class="acc-content">
+                          <table>
+                              <tr><th>Feat Type</th><th>Difficulty</th></tr>
+                              <tr><td class="hl-green">Coincidental</td><td>Highest Sphere + 3</td></tr>
+                              <tr><td class="hl-yellow">Vulgar (No Witness)</td><td>Highest Sphere + 4</td></tr>
+                              <tr><td class="hl-red">Vulgar (Witnessed)</td><td>Highest Sphere + 5</td></tr>
+                          </table>
+                      </div>
                 </div>
 
                 <div class="acc-item">
@@ -1263,15 +618,12 @@
 <script>
     /**
      * ==========================================
-     * UI & NAVIGATION UTILITIES
+     * MAGE ENGINE: MVC ARCHITECTURE
+     * Optimized for Performance, Security & Clarity
      * ==========================================
      */
 
-    /**
-     * Switches between main navigation tabs.
-     * @param {string} tabId - The ID of the tab to show.
-     * @param {HTMLElement} btn - The button element clicked.
-     */
+    // --- UTILITIES ---
     function switchTab(tabId, btn) {
         document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -1279,9 +631,6 @@
         btn.classList.add('active');
     }
 
-    /**
-     * Switches between sub-tabs (Ritualmatic vs Generators).
-     */
     function switchSubTab(tabId, btn) {
         document.querySelectorAll('.sub-tab-content').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
@@ -1289,74 +638,36 @@
         btn.classList.add('active');
     }
 
-    /**
-     * Toggles accordion items open/close.
-     */
-    function toggleAcc(header) {
-        header.parentElement.classList.toggle('open');
-    }
+    function toggleAcc(header) { header.parentElement.classList.toggle('open'); }
 
-    /**
-     * Filters Rote content based on search input.
-     */
     function filterContent() {
         let input = document.getElementById('searchBox').value.toLowerCase();
-        let items = document.querySelectorAll('.card, .data-row');
-        items.forEach(item => {
+        document.querySelectorAll('.card, .data-row').forEach(item => {
             let text = item.innerText.toLowerCase();
             if (item.getAttribute('data-search')) text += " " + item.getAttribute('data-search').toLowerCase();
-            
             if (text.includes(input)) {
                 item.style.display = "";
                 if (item.classList.contains('data-row')) item.closest('.acc-item').classList.add('open');
-            } else {
-                item.style.display = "none";
-            }
+            } else item.style.display = "none";
         });
     }
 
-    function clearSearch() {
-        document.getElementById('searchBox').value = '';
-        filterContent();
-    }
-
-    /**
-     * ==========================================
-     * RITUALMATIC CORE LOGIC
-     * ==========================================
-     */
-
-    // App State
-    let s = { 
-        mode: 'instant', 
-        sphere: 3, 
-        extra: 0, 
-        resist: 0, 
-        gmDiff: 0, 
-        gmGoal: 0, 
-        sanctum: false, 
-        inst: false, 
-        res: false, 
-        quint: false, 
-        team: false, 
-        syn: false, 
-        notool: false, 
-        discord: false, 
-        distract: 0, 
-        hb: false, 
-        pauseOnDiff: false, 
-        spec: false 
+    // --- STATE MANAGEMENT ---
+    const s = { 
+        mode: 'instant', sphere: 3, extra: 0, resist: 0, gmDiff: 0, gmGoal: 0, 
+        sanctum: false, inst: false, res: false, quint: false, team: false, 
+        syn: false, notool: false, discord: false, distract: 0, hb: false, 
+        pauseOnDiff: false, spec: false 
     };
 
     let activeTimer = null;
     let ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
 
-    // Error Modal Control
+    // --- ERROR & TOOLTIP ---
     const errorModal = document.getElementById('error-modal');
     function showError(msg) { errorModal.style.display = 'flex'; }
     function closeError() { errorModal.style.display = 'none'; }
 
-    // Tooltip Logic
     const tt = document.getElementById('tooltip');
     const ttT = tt.querySelector('.tt-title');
     const ttD = tt.querySelector('.tt-desc');
@@ -1377,20 +688,17 @@
         el.addEventListener('mouseleave', () => tt.style.display = 'none');
     });
 
-    /**
-     * Resets all Ritualmatic state to defaults.
-     */
+    // --- CORE LOGIC ---
     function resetAll() {
         if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
-        
-        s = { 
+        Object.assign(s, { 
             mode: 'instant', sphere: 3, extra: 0, resist: 0, gmDiff: 0, gmGoal: 0, 
             sanctum: false, inst: false, res: false, quint: false, team: false, 
             syn: false, notool: false, discord: false, distract: 0, hb: false, 
             pauseOnDiff: false, spec: false 
-        };
+        });
         
-        // Reset DOM Elements
+        // Reset Inputs
         document.getElementById('sel-reality').value = '3';
         document.getElementById('sel-speed').value = '0';
         document.getElementById('sel-dur').value = '0';
@@ -1403,10 +711,10 @@
         document.querySelectorAll('.btn-tool, .btn-hb, .btn-safety').forEach(b => b.classList.remove('active'));
         document.getElementById('chk-spec-vis').classList.remove('checked');
         
-        document.getElementById('val-sphere').innerText = '3';
-        document.getElementById('val-extra').innerText = '0';
-        document.getElementById('val-resist').innerText = '0';
-        document.getElementById('val-distract').innerText = '0';
+        document.getElementById('val-sphere').textContent = '3';
+        document.getElementById('val-extra').textContent = '0';
+        document.getElementById('val-resist').textContent = '0';
+        document.getElementById('val-distract').textContent = '0';
         document.getElementById('log-container').style.display = 'none';
         
         ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
@@ -1415,9 +723,6 @@
         lim();
     }
 
-    /**
-     * Switches between Instant and Ritual mode.
-     */
     function mode(modeName) {
         if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
         s.mode = modeName;
@@ -1426,66 +731,42 @@
         updateButtonState();
     }
 
-    /**
-     * Updates the main Cast button text/style based on state.
-     */
     function updateButtonState() {
         let btn = document.getElementById('btn-cast');
         if (s.mode === 'instant') {
-            btn.innerText = "CAST INSTANT SPELL"; 
+            btn.textContent = "CAST INSTANT SPELL"; 
             btn.className = "btn-cast style-inst";
         } else {
             if (ritState.isPaused) {
-                btn.innerText = "CONTINUE RITUAL";
+                btn.textContent = "CONTINUE RITUAL";
                 btn.className = "btn-cast style-pause";
             } else {
-                btn.innerText = "BEGIN RITUAL";
+                btn.textContent = "BEGIN RITUAL";
                 btn.className = "btn-cast style-rit";
             }
         }
     }
 
-    /**
-     * Modifies numerical state values.
-     * @param {string} key - State key.
-     * @param {number} value - Value to add.
-     */
     function mod(key, value) {
         s[key] += value;
-        // Boundary Checks
         if (key === 'sphere') { 
             if (s[key] < 1) s[key] = 1; 
             if (s[key] > 9) s[key] = 9; 
         }
-        if ((key === 'extra' || key === 'resist' || key === 'distract') && s[key] < 0) {
-            s[key] = 0;
-        }
+        if ((key === 'extra' || key === 'resist' || key === 'distract') && s[key] < 0) s[key] = 0;
         
-        if (document.getElementById('val-' + key)) {
-            document.getElementById('val-' + key).innerText = s[key];
-        }
+        const el = document.getElementById('val-' + key);
+        if (el) el.textContent = s[key];
         calc();
     }
 
-    /**
-     * Toggles boolean state options (Sanctum, Focus, etc).
-     */
     function tog(key) {
         s[key] = !s[key];
-        
-        // Determine ID based on key
         let id = key === 'hb' ? 'btn-hb' : (key === 'pauseOnDiff' ? 'toggle-safety' : 'btn-' + key);
         let el = document.getElementById(id);
         
-        // Logical exclusions
-        if (key === 'notool' && s[key]) { 
-            s.inst = false; 
-            document.getElementById('btn-inst').classList.remove('active'); 
-        }
-        if (key === 'inst' && s[key]) { 
-            s.notool = false; 
-            document.getElementById('btn-notool').classList.remove('active'); 
-        }
+        if (key === 'notool' && s[key]) { s.inst = false; document.getElementById('btn-inst').classList.remove('active'); }
+        if (key === 'inst' && s[key]) { s.notool = false; document.getElementById('btn-notool').classList.remove('active'); }
         
         if (s[key]) el.classList.add('active'); else el.classList.remove('active');
         calc();
@@ -1497,36 +778,26 @@
         if (s.spec) el.classList.add('checked'); else el.classList.remove('checked');
     }
 
-    /**
-     * Calculates the Roll Limit based on Arete + Willpower.
-     */
     function lim() {
         let a = parseInt(document.getElementById('arete').value);
         let w = parseInt(document.getElementById('will').value);
-        document.getElementById('val-limit').innerText = a + w;
+        document.getElementById('val-limit').textContent = a + w;
     }
 
-    /**
-     * Core Math: Calculates Base Difficulty and Goal.
-     */
     function getBaseValues() {
-        let sph = parseInt(document.getElementById('val-sphere').innerText);
+        let sph = parseInt(document.getElementById('val-sphere').textContent);
         let real = parseInt(document.getElementById('sel-reality').value);
         let spd = parseInt(document.getElementById('sel-speed').value);
         
         let bon = (s.sanctum ? 1 : 0) + (s.inst ? 1 : 0) + (s.res ? 1 : 0) + (s.quint ? 1 : 0) + (s.team ? 1 : 0) + (s.syn ? 1 : 0);
-        if (bon > 3) bon = 3; // Max bonus cap
+        if (bon > 3) bon = 3; 
 
         let pen = (s.notool ? 3 : 0) + (s.discord ? 1 : 0) + s.distract;
-
         let baseDiff = sph + real + spd - bon + pen;
-        let floor = sph < 3 ? 3 : sph; // Diff cannot drop below sphere level (roughly)
+        let floor = Math.max(3, sph);
         
-        if (baseDiff < floor) baseDiff = floor;
-        if (baseDiff > 10) baseDiff = 10; 
-        if (baseDiff < 3) baseDiff = 3;
+        baseDiff = Math.max(floor, Math.min(baseDiff, 10));
 
-        // Calculate Goal
         let durIdx = parseInt(document.getElementById('sel-dur').value);
         let durCosts = s.hb ? [1, 2, 4, 6, 10] : [1, 2, 3, 4, 6];
         let baseDur = durCosts[durIdx];
@@ -1535,15 +806,11 @@
         let dmg = parseInt(document.getElementById('rng-dmg').value);
         let dmgC = Math.ceil(dmg / 2);
         
-        let baseGoal = baseDur + targ + dmgC + s.extra + s.resist;
-        if (baseGoal < 1) baseGoal = 1;
+        let baseGoal = Math.max(1, baseDur + targ + dmgC + s.extra + s.resist);
 
         return { diff: baseDiff, goal: baseGoal };
     }
 
-    /**
-     * Updates the UI with calculated values.
-     */
     function calc() {
         let base = getBaseValues();
         
@@ -1552,9 +819,9 @@
         let dCol = dmgT === "Lethal" ? "var(--warning)" : (dmgT === "Aggravated" ? "var(--danger)" : "var(--accent)");
         let dTxt = document.getElementById('txt-dmg');
         
-        dTxt.innerText = `${dmg} ${dmgT}`; 
+        dTxt.textContent = `${dmg} ${dmgT}`; 
         dTxt.style.color = dCol;
-        document.getElementById('cost-dmg').innerText = `+${Math.ceil(dmg / 2)} Suc`;
+        document.getElementById('cost-dmg').textContent = `+${Math.ceil(dmg / 2)} Suc`;
 
         let elDiff = document.getElementById('disp-diff');
         let elGoal = document.getElementById('disp-goal');
@@ -1564,14 +831,10 @@
 
         if (!ritState.hasStarted) ritState.currentDiff = parseInt(elDiff.value);
 
-        // Highlight if modified by GM
         if (s.gmDiff !== 0) elDiff.classList.add('modified'); else elDiff.classList.remove('modified');
         if (s.gmGoal !== 0) elGoal.classList.add('modified'); else elGoal.classList.remove('modified');
     }
 
-    /**
-     * Handles manual overrides of Diff/Goal inputs.
-     */
     function manualOverride(type) {
         let inputEl = document.getElementById('disp-' + type);
         let rawVal = inputEl.value;
@@ -1587,34 +850,86 @@
         calc(); 
     }
 
-    // Helper: RNG
-    function roll(sides = 10) { return Math.floor(Math.random() * sides) + 1; }
+    // --- CASTING ENGINE (SECURE) ---
+    function doRoll(pool, diff, spec) {
+        let suc = 0, ones = 0, results = [];
+        for (let i = 0; i < pool; i++) {
+            let d = Math.floor(Math.random() * 10) + 1;
+            if (d >= diff) suc++; 
+            if (d === 1) ones++;
+            
+            let val = d;
+            let exploded = false;
 
-    /**
-     * THE CASTING ENGINE
-     * Handles both Instant and Ritual logic.
-     */
+            if (spec && d === 10) { 
+                let x = Math.floor(Math.random() * 10) + 1;
+                if (x >= diff) suc++; 
+                val = `10+${x}`;
+                exploded = true;
+            }
+            results.push({ val: val, raw: d, hit: d >= diff, botch: d === 1 });
+        }
+        return { suc, ones, results };
+    }
+
+    function addLogEntry(turn, diff, rollData, msg, type) {
+        const entry = document.createElement('div');
+        entry.className = `entry ${type}`;
+        
+        const info = document.createElement('div');
+        info.innerHTML = `<b>T${turn}</b> <span style="opacity:0.6">(${diff})</span>`;
+        
+        const diceSpan = document.createElement('span');
+        diceSpan.className = 'dice';
+        diceSpan.style.marginLeft = "10px";
+        
+        rollData.results.forEach(r => {
+            const s = document.createElement('span');
+            s.textContent = r.val;
+            if (r.botch) { s.className = 'd1 hl-red'; }
+            else if (r.hit && !r.botch) { s.className = 'suc hl-green'; }
+            else { s.style.color = 'var(--text-muted)'; }
+            s.style.marginRight = "4px";
+            diceSpan.appendChild(s);
+        });
+        
+        const msgDiv = document.createElement('b');
+        msgDiv.textContent = msg;
+        
+        info.appendChild(diceSpan);
+        entry.appendChild(info);
+        entry.appendChild(msgDiv);
+        
+        const logs = document.getElementById('logs');
+        logs.insertBefore(entry, logs.firstChild);
+    }
+
+    function addSystemMsg(txt, win) {
+        const div = document.createElement('div');
+        let c = win ? "var(--success)" : "var(--text-muted)";
+        div.style.cssText = `text-align:center; padding:10px; margin-bottom:10px; border:2px solid ${c}; color:${c}; border-radius:8px; font-weight:800;`;
+        div.textContent = txt;
+        const logs = document.getElementById('logs');
+        logs.insertBefore(div, logs.firstChild);
+    }
+
     function cast() {
-        let currentSphere = parseInt(document.getElementById('val-sphere').innerText);
+        let currentSphere = parseInt(document.getElementById('val-sphere').textContent);
         let currentArete = parseInt(document.getElementById('arete').value);
         
-        // Rule Check: Sphere > Arete
-        if (currentSphere > currentArete) {
-            showError("Invalid Cast");
-            return;
-        }
+        if (currentSphere > currentArete) { showError("Invalid Cast"); return; }
 
         if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
         document.getElementById('log-container').style.display = 'block';
         
         let arete = parseInt(document.getElementById('arete').value);
         let goal = parseInt(document.getElementById('disp-goal').value);
-        let limit = parseInt(document.getElementById('val-limit').innerText);
+        let limit = parseInt(document.getElementById('val-limit').textContent);
 
-        // --- MODE: INSTANT ---
+        // INSTANT MODE
         if (s.mode === 'instant') {
-            document.getElementById('log-title').innerText = "Instant Result";
-            document.getElementById('prog-txt').innerText = "";
+            document.getElementById('log-title').textContent = "Instant Result";
+            document.getElementById('prog-txt').textContent = "";
             document.getElementById('p-bar').style.width = "0%";
             document.getElementById('logs').innerHTML = ""; 
             
@@ -1623,23 +938,17 @@
             let net = res.suc - res.ones;
             let type = "fail", msg = "";
 
-            if (res.suc === 0 && res.ones > 0) { 
-                type = "botch"; 
-                msg = `BOTCH! (${res.ones} Pdx)`; 
-            } else if (net < 1) { 
-                msg = "FAILED"; 
-            } else if (net < goal) { 
-                msg = `WEAK (${net}/${goal} Suc)`; 
-            } else { 
-                type = "success"; 
-                msg = `SUCCESS! (${net} Suc)`; 
-            }
-            addLog(1, diff, res.html, msg, type);
+            if (res.suc === 0 && res.ones > 0) { type = "botch"; msg = `BOTCH! (${res.ones} Pdx)`; } 
+            else if (net < 1) { msg = "FAILED"; } 
+            else if (net < goal) { msg = `WEAK (${net}/${goal} Suc)`; } 
+            else { type = "success"; msg = `SUCCESS! (${net} Suc)`; }
+            
+            addLogEntry(1, diff, res, msg, type);
             return;
         }
 
-        // --- MODE: RITUAL ---
-        document.getElementById('log-title').innerText = "Ritual Progress";
+        // RITUAL MODE
+        document.getElementById('log-title').textContent = "Ritual Progress";
         if (!ritState.isPaused) {
             document.getElementById('logs').innerHTML = ""; 
             ritState.totalSuc = 0; 
@@ -1651,10 +960,9 @@
             updateButtonState();
         }
 
-        document.getElementById('prog-txt').innerText = `${ritState.totalSuc} / ${goal}`;
+        document.getElementById('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
         document.getElementById('p-bar').style.width = (ritState.totalSuc / goal * 100) + "%";
 
-        // Interval Loop
         activeTimer = setInterval(() => {
             ritState.turn++;
             let res = doRoll(arete, ritState.currentDiff, s.spec);
@@ -1662,32 +970,25 @@
             let type = "", msg = "";
             let diffIncreased = false;
 
-            // BOTCH CHECK
             if (res.suc === 0 && res.ones > 0) {
                 clearInterval(activeTimer); activeTimer = null;
                 let pdx = ritState.totalSuc + res.ones;
                 msg = `BOTCH! (${pdx} Pdx)`; 
-                end(false, "BACKLASH"); type = "botch";
+                addSystemMsg("BACKLASH - RITUAL FAILED", false);
+                type = "botch";
                 ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
                 updateButtonState();
             } else {
-                // SUCCESS/FAIL CHECK
                 if (net <= 0) {
                     type = "fail"; 
                     if (net < 0) { 
-                        // Negative successes eat accumulated ones
                         ritState.totalSuc += net; 
                         if (ritState.totalSuc < 0) ritState.totalSuc = 0; 
                         msg = `Fail (${net})`; 
                     } else { 
                         msg = "Fail (0). Diff +1"; 
                     }
-                    
-                    // Difficulty Increase on Fail
-                    if (ritState.currentDiff < 10) { 
-                        ritState.currentDiff++; 
-                        diffIncreased = true; 
-                    }
+                    if (ritState.currentDiff < 10) { ritState.currentDiff++; diffIncreased = true; }
                 } else {
                     type = "success"; 
                     ritState.totalSuc += net; 
@@ -1695,111 +996,69 @@
                 }
             }
             
-            // LOG & UPDATE UI
             if (type) { 
-                addLog(ritState.turn, diffIncreased ? ritState.currentDiff - 1 : ritState.currentDiff, res.html, msg, type);
+                addLogEntry(ritState.turn, diffIncreased ? ritState.currentDiff - 1 : ritState.currentDiff, res, msg, type);
                 
                 let pct = (ritState.totalSuc / goal) * 100; 
                 if (pct > 100) pct = 100;
                 document.getElementById('p-bar').style.width = pct + "%";
-                document.getElementById('prog-txt').innerText = `${ritState.totalSuc} / ${goal}`;
+                document.getElementById('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
 
-                // PAUSE ON DIFF FEATURE
+                // PAUSE
                 if (diffIncreased && s.pauseOnDiff && ritState.totalSuc < goal) {
                     clearInterval(activeTimer); activeTimer = null;
                     ritState.isPaused = true;
                     updateButtonState();
-                    let l = document.getElementById('logs');
-                    l.innerHTML = `<div class="entry pause"><div style="font-weight:bold; color:var(--warning)">PAUSED (Diff Increased to ${ritState.currentDiff})</div></div>` + l.innerHTML;
+                    addSystemMsg(`PAUSED (Diff Increased to ${ritState.currentDiff})`, false);
                     return;
                 }
 
-                // WIN CONDITION
+                // WIN
                 if (ritState.totalSuc >= goal) { 
                     clearInterval(activeTimer); activeTimer = null; 
-                    end(true, "COMPLETE"); 
+                    addSystemMsg("RITUAL COMPLETE", true);
                     ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false }; 
                     updateButtonState();
                 } 
-                // EXHAUSTION CONDITION
+                // EXHAUST
                 else if (ritState.turn >= limit) { 
                     clearInterval(activeTimer); activeTimer = null; 
-                    end(false, "EXHAUSTED"); 
+                    addSystemMsg("EXHAUSTED (Willpower Limit)", false);
                     ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false }; 
                     updateButtonState();
                 }
             }
-        }, 600); // Animation speed
+        }, 600);
     }
 
-    /**
-     * Performs the actual dice rolling logic.
-     * @returns {Object} {suc, ones, html}
-     */
-    function doRoll(pool, diff, spec) {
-        let suc = 0, ones = 0, html = [];
-        for (let i = 0; i < pool; i++) {
-            let d = roll();
-            if (d >= diff) suc++; 
-            if (d === 1) ones++;
-            
-            let cls = d === 1 ? "d1" : (d >= diff ? (d === 10 && spec ? "d10" : "suc") : "");
-            let txt = d;
-            
-            // Exploding 10s (Specialty)
-            if (spec && d === 10) { 
-                let x = roll(); 
-                if (x >= diff) suc++; 
-                txt = `10+${x}`; 
-            }
-            
-            let style = d >= diff && d != 1 
-                ? 'color:var(--success); font-weight:bold;' 
-                : (d === 1 ? 'color:var(--danger); font-weight:bold;' : 'color:var(--text-muted);');
-
-            html.push(`<span class="${cls}" style="${style}">${txt}</span>`);
-        }
-        return { suc, ones, html };
-    }
-
-    function addLog(turn, diff, dice, msg, type) {
-        let l = document.getElementById('logs');
-        l.innerHTML = `<div class="entry ${type}"><div><b>T${turn}</b> <span style="opacity:0.6">(${diff})</span> <span class="dice">[${dice.join(',')}]</span></div><b>${msg}</b></div>` + l.innerHTML;
-    }
-
-    function end(win, txt) {
-        let c = win ? "var(--success)" : "var(--text-muted)";
-        document.getElementById('logs').innerHTML = `<div style="text-align:center; padding:10px; margin-bottom:10px; border:2px solid ${c}; color:${c}; border-radius:8px; font-weight:800;">${txt}</div>` + document.getElementById('logs').innerHTML;
-    }
-
-    /* --- GENERATORS --- */
+    // --- GENERATORS ---
     const npcRoles = ["Techno-Hacker", "Hermit", "Corporate Mage", "Street Shaman", "Necromancer", "Hitman", "Cultist", "Detective", "Spirit Guide"];
     const npcTraits = ["Paranoid", "Arrogant", "Helpful", "Cryptic", "Aggressive", "Sleepy", "Fanatical", "Charming"];
-    function genNPC() { document.getElementById('res-npc').innerText = `${npcTraits[Math.floor(Math.random()*npcTraits.length)]} ${npcRoles[Math.floor(Math.random()*npcRoles.length)]}`; }
+    function genNPC() { document.getElementById('res-npc').textContent = `${npcTraits[Math.floor(Math.random()*npcTraits.length)]} ${npcRoles[Math.floor(Math.random()*npcRoles.length)]}`; }
     
     const resonances = ["Fiery (Dynamic)", "Cold (Stasis)", "Rotting (Entropic)", "Holy (Sacred)", "Industrial (Tech)", "Wild (Primal)", "Empty (Static)"];
-    function genRes() { document.getElementById('res-rez').innerText = resonances[Math.floor(Math.random()*resonances.length)]; }
+    function genRes() { document.getElementById('res-rez').textContent = resonances[Math.floor(Math.random()*resonances.length)]; }
 
     const flaws = ["Clocks run backwards", "Shadows detach", "Echoing voice", "Tech glitch", "Milk sours", "Temperature drop", "Sulfur smell", "Animals panic"];
-    function genFlaw() { document.getElementById('res-flaw').innerText = flaws[Math.floor(Math.random()*flaws.length)]; }
+    function genFlaw() { document.getElementById('res-flaw').textContent = flaws[Math.floor(Math.random()*flaws.length)]; }
 
     function quickRoll() {
         let p = parseInt(document.getElementById('q-pool').value) || 1;
         let d = parseInt(document.getElementById('q-diff').value) || 6;
         let suc = 0, ones = 0;
         for (let i = 0; i < p; i++) { 
-            let r = Math.ceil(Math.random() * 10); 
+            let r = Math.floor(Math.random() * 10) + 1; 
             if (r >= d) suc++; 
             if (r === 1) ones++; 
         }
         let net = suc - ones;
         let el = document.getElementById('q-res');
-        if (suc === 0 && ones > 0) { el.innerText = "BOTCH!"; el.style.color = "var(--danger)"; }
-        else if (net < 0) { el.innerText = "FAIL"; el.style.color = "var(--text-muted)"; }
-        else { el.innerText = `${net} SUCCESSES`; el.style.color = "var(--success)"; }
+        if (suc === 0 && ones > 0) { el.textContent = "BOTCH!"; el.style.color = "var(--danger)"; }
+        else if (net < 0) { el.textContent = "FAIL"; el.style.color = "var(--text-muted)"; }
+        else { el.textContent = `${net} SUCCESSES`; el.style.color = "var(--success)"; }
     }
 
-    // Initialize
+    // Init
     calc(); 
     lim();
 </script>
