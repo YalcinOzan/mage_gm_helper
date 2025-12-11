@@ -1,13 +1,14 @@
 ﻿/**
- * ==========================================
+ * ============================================================================
  * MAGE 20TH: SECRET LIBRARY - LOGIC CORE
- * Refactored Version: 2.3 (Clean Code Edition)
- * ==========================================
+ * Refactored Version: 2.4 (Clean Code Edition)
+ * Architect: Refactor Bey
+ * ============================================================================
  */
 
-/* ==========================================
+/* ============================================================================
    1. DATA LAYER: STATIC DATABASES
-   ========================================== */
+   ============================================================================ */
 
 const SPHERE_DB = [
     { name: "Correspondence", icon: "🌐", ranks: ["Immediate Spatial Perception", "Sense & Touch Space", "Pierce Space / Teleport", "Rend Space / Co-location", "Mutate Space / Distort"] },
@@ -409,17 +410,43 @@ const RULES_DB = [
     }
 ];
 
-/* ==========================================
+/* ============================================================================
    2. GLOBAL STATE & LOGIC
-   ========================================== */
+   ============================================================================ */
 
+/**
+ * Main application state object.
+ * Tracks current modifiers, modes, and toggle statuses.
+ */
 const appState = {
-    mode: 'instant', sphere: 3, extra: 0, resist: 0, distract: 0, gmDiff: 0, gmGoal: 0,
-    bonusDice: 0, autoSuc: 0, // <-- YENİ EKLENENLER
-    sanctum: false, inst: false, res: false, quint: 0, team: false, syn: false, notool: false, discord: false, hb: false, pauseOnDiff: false, spec: false
+    mode: 'instant',    // 'instant' or 'ritual'
+    sphere: 3,          // Highest sphere rating
+    extra: 0,           // Feat magnitude modifiers
+    resist: 0,          // Opposition/Resistance
+    distract: 0,        // Distraction penalties
+    gmDiff: 0,          // Manual GM override for Difficulty
+    gmGoal: 0,          // Manual GM override for Goal
+    bonusDice: 0,       // Extra dice added to pool
+    autoSuc: 0,         // Guaranteed successes (Willpower/Teamwork)
+
+    // Boolean Toggles
+    sanctum: false,     // Sanctum bonus (-1 Diff)
+    inst: false,        // Personalized Instrument (-1 Diff)
+    res: false,         // Research/Library (-1 Diff)
+    quint: 0,           // Quintessence spent (0-3 points)
+    team: false,        // Teamwork bonus (-1 Diff)
+    syn: false,         // Synergy bonus (-1 Diff)
+    notool: false,      // No Tool penalty (+3 Diff)
+    discord: false,     // Resonance Discord (+1 Diff)
+    hb: false,          // Homebrew Duration Scale
+    pauseOnDiff: false, // Safety: Pause ritual if Diff increases
+    spec: false         // Specialty (Exploding 10s)
 };
 
+// Global Timer for Ritual Mode
 let activeTimer = null;
+
+// Ritual Specific State
 let ritState = {
     totalSuc: 0,
     turn: 0,
@@ -428,10 +455,16 @@ let ritState = {
     hasStarted: false
 };
 
-/* --- DOM UTILITIES --- */
+/* --- DOM HELPER UTILITIES --- */
 const getEl = (id) => document.getElementById(id);
 
 /* --- NAVIGATION & UI LOGIC --- */
+
+/**
+ * Switches the main navigation tabs.
+ * @param {string} tabId - ID of the tab content to show
+ * @param {HTMLElement} btn - The button element clicked
+ */
 function switchTab(tabId, btn) {
     document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -439,6 +472,9 @@ function switchTab(tabId, btn) {
     btn.classList.add('active');
 }
 
+/**
+ * Switches the sub-navigation tabs (within Tools).
+ */
 function switchSubTab(tabId, btn) {
     document.querySelectorAll('.sub-tab-content').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
@@ -446,15 +482,23 @@ function switchSubTab(tabId, btn) {
     btn.classList.add('active');
 }
 
+/**
+ * Toggles accordion expansion.
+ */
 function toggleAcc(header) {
     header.parentElement.classList.toggle('open');
 }
 
+/**
+ * Filters content based on search input.
+ * Searches across text content and data-search attributes.
+ */
 function filterContent() {
     let input = getEl('searchBox').value.toLowerCase();
     document.querySelectorAll('.card, .data-row').forEach(item => {
         let text = item.innerText.toLowerCase();
-        // Append hidden search tags if available
+
+        // Append hidden search tags if available for better indexing
         if (item.getAttribute('data-search')) {
             text += " " + item.getAttribute('data-search').toLowerCase();
         }
@@ -471,8 +515,7 @@ function filterContent() {
     });
 }
 
-/* --- TOOLTIP SYSTEM (REFACTORED: EVENT DELEGATION) --- */
-// Fixes issue where dynamic content (Rotes, Spheres) didn't show tooltips.
+/* --- TOOLTIP SYSTEM (EVENT DELEGATION) --- */
 function initGlobalTooltips() {
     const tt = getEl('tooltip');
     const ttTitle = tt.querySelector('.tt-title');
@@ -490,7 +533,7 @@ function initGlobalTooltips() {
         }
     });
 
-    // 2. Mouse Move: Update Position
+    // 2. Mouse Move: Update Position (Follow Cursor)
     document.body.addEventListener('mousemove', (e) => {
         const target = e.target.closest('[data-title]');
         if (target) {
@@ -524,11 +567,13 @@ function closeError() {
     getEl('error-modal').style.setProperty('display', 'none', 'important');
 }
 
-
-/* ==========================================
+/* ============================================================================
    3. APP STATE & CALCULATOR
-   ========================================== */
+   ============================================================================ */
 
+/**
+ * Resets the application to its default state.
+ */
 function resetAll() {
     if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
 
@@ -572,13 +617,17 @@ function resetAll() {
     updateLimits();
 }
 
+/**
+ * Sets the casting mode.
+ * @param {string} modeName - 'instant' or 'ritual'
+ */
 function setMode(modeName) {
     if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
     appState.mode = modeName;
     getEl('btn-m-inst').className = modeName === 'instant' ? 'mode-opt active' : 'mode-opt';
     getEl('btn-m-rit').className = modeName === 'ritual' ? 'mode-opt active' : 'mode-opt';
 
-    // YENİ EKLENDİ: Mod değişince hesaplamayı yenile (Sanctum bonusu için şart)
+    // ADDED: Recalculate on mode change (Required for Sanctum bonus)
     recalculate();
 
     updateButtonState();
@@ -600,13 +649,18 @@ function updateButtonState() {
     }
 }
 
+/**
+ * Increments or Decrements a state counter.
+ */
 function modifyState(key, value) {
     appState[key] += value;
+
+    // Bounds Check: Sphere (1-9)
     if (key === 'sphere') {
         if (appState[key] < 1) appState[key] = 1;
         if (appState[key] > 9) appState[key] = 9;
     }
-    // Min 0 for all counters (Updated list)
+    // Bounds Check: Min 0 for other counters
     if (['extra', 'resist', 'distract', 'bonusDice', 'autoSuc'].includes(key) && appState[key] < 0) {
         appState[key] = 0;
     }
@@ -616,11 +670,13 @@ function modifyState(key, value) {
     recalculate();
 }
 
-/* --- STATE CONTROL (UPDATED FOR QUINT CYCLE) --- */
+/**
+ * Toggles a boolean state or cycles a multi-state value.
+ */
 function toggleState(key) {
-    // Özel Durum: Quintessence (0 -> 1 -> 2 -> 3 -> 0 Döngüsü)
+    // Special Case: Quintessence Cycle (0 -> 1 -> 2 -> 3 -> 0)
     if (key === 'quint') {
-        appState.quint = (appState.quint + 1) % 4; // 0, 1, 2, 3 döngüsü
+        appState.quint = (appState.quint + 1) % 4; // Cycle: 0, 1, 2, 3
 
         const el = getEl('btn-quint');
         const badge = getEl('badge-quint');
@@ -628,13 +684,13 @@ function toggleState(key) {
         if (appState.quint > 0) {
             el.classList.add('active');
             badge.style.display = 'inline-flex';
-            badge.textContent = appState.quint; // Sayıyı yaz
+            badge.textContent = appState.quint; // Display number
         } else {
             el.classList.remove('active');
-            badge.style.display = 'none'; // Gizle
+            badge.style.display = 'none'; // Hide
         }
     }
-    // Diğer tüm butonlar için standart aç/kapa (boolean)
+    // Standard toggle (boolean) for other buttons
     else {
         appState[key] = !appState[key];
 
@@ -645,7 +701,7 @@ function toggleState(key) {
 
         let el = getEl(id);
 
-        // Exclusive Logic (Focus vs No Tools)
+        // Exclusive Logic: Cannot have both Focus and No-Tools
         if (key === 'notool' && appState[key]) { appState.inst = false; getEl('btn-inst').classList.remove('active'); }
         if (key === 'inst' && appState[key]) { appState.notool = false; getEl('btn-notool').classList.remove('active'); }
 
@@ -667,17 +723,20 @@ function updateLimits() {
     getEl('val-limit').textContent = a + w;
 }
 
-/* --- Engine (M20 Cap Fix) --- */
+/**
+ * Core Engine: Calculates Base Difficulty and Goal Successes.
+ * Implements M20 Rule: Modifiers cannot exceed +/- 3.
+ */
 function getBaseValues() {
     let sph = parseInt(getEl('val-sphere').textContent);
     let real = parseInt(getEl('sel-reality').value);
     let spd = parseInt(getEl('sel-speed').value);
 
-    // 1. BONUSLARI TOPLA
-    // Sanctum (Sadece Ritüel), Focus, Library, Quintessence, Teamwork, Synergy
+    // 1. SUM BONUSES
+    // Sanctum (Ritual Only), Focus, Library, Quintessence, Teamwork, Synergy
     let sanctumBonus = (appState.sanctum && appState.mode === 'ritual') ? 1 : 0;
 
-    // Quintessence: Sayı ise direkt al, değilse (eski versiyon) 1 say.
+    // Quintessence: Take value if number, else 1 (legacy compatibility)
     let quintVal = typeof appState.quint === 'number' ? appState.quint : (appState.quint ? 1 : 0);
 
     let totalBonus = sanctumBonus +
@@ -687,29 +746,29 @@ function getBaseValues() {
         (appState.team ? 1 : 0) +
         (appState.syn ? 1 : 0);
 
-    // 2. CEZALARI TOPLA
-    // No Tool (+3), Discord (+1), Distraction (Sayaç)
+    // 2. SUM PENALTIES
+    // No Tool (+3), Discord (+1), Distraction (Counter)
     let totalPenalty = (appState.notool ? 3 : 0) +
         (appState.discord ? 1 : 0) +
         appState.distract;
 
-    // 3. NET ETKİYİ HESAPLA
-    // Formül: (Cezalar - Bonuslar + Hız)
-    // Hız (Speed): +1 (Fast) ceza gibi, -1 (Slow) bonus gibi çalışır.
+    // 3. CALCULATE NET EFFECT
+    // Formula: (Penalties - Bonuses + Speed)
+    // Speed: +1 (Fast) acts as penalty, -1 (Slow) acts as bonus
     let netMod = totalPenalty - totalBonus + spd;
 
-    // 4. KURAL UYGULA: MAKASLAMA (CAP +/- 3)
+    // 4. APPLY RULE: CAP (+/- 3)
     // M20 p.504: Situational modifiers cannot exceed -3 or +3.
     if (netMod > 3) netMod = 3;
     if (netMod < -3) netMod = -3;
 
-    // 5. NİHAİ ZORLUK
+    // 5. FINAL DIFFICULTY
     let baseDiff = sph + real + netMod;
-    let floor = Math.max(3, sph); // Zorluk en az Küre seviyesi veya 3 olmalı
+    let floor = Math.max(3, sph); // Difficulty must be at least Sphere level or 3
 
     baseDiff = Math.max(floor, Math.min(baseDiff, 10));
 
-    // --- HEDEF (GOAL) HESAPLAMA (Değişmedi) ---
+    // --- GOAL CALCULATION (Unchanged) ---
     let durIdx = parseInt(getEl('sel-dur').value);
     let durCosts = appState.hb ? [1, 2, 4, 6, 8, 15] : [1, 2, 3, 4, 5, 10];
     let baseDur = durCosts[durIdx];
@@ -765,9 +824,9 @@ function manualOverride(type) {
     recalculate();
 }
 
-/* ==========================================
+/* ============================================================================
    4. RENDER ENGINES (Dynamic Content)
-   ========================================== */
+   ============================================================================ */
 
 /* --- SPHERES RENDERER --- */
 function initSphereLibrary() {
@@ -912,24 +971,33 @@ function initRulesLibrary() {
     });
 }
 
-/* ==========================================
+/* ============================================================================
    5. DICE & CASTING ENGINE
-   ========================================== */
+   ============================================================================ */
 
+/**
+ * Rolls dice and calculates successes.
+ * @param {number} pool - Number of dice to roll.
+ * @param {number} diff - Difficulty target.
+ * @param {boolean} spec - Whether Specialty (Exploding 10s) is active.
+ */
 function doRoll(pool, diff, spec) {
     let suc = 0, ones = 0, results = [];
-    for (let i = 0; i < pool; i++) {
-        let d = Math.floor(Math.random() * 10) + 1;
-        if (d >= diff) suc++;
-        if (d === 1) ones++;
 
-        let val = d;
-        if (spec && d === 10) {
-            let x = Math.floor(Math.random() * 10) + 1;
-            if (x >= diff) suc++;
-            val = `10+${x}`;
+    for (let i = 0; i < pool; i++) {
+        let rollResult = Math.floor(Math.random() * 10) + 1;
+        if (rollResult >= diff) suc++;
+        if (rollResult === 1) ones++;
+
+        let displayVal = rollResult;
+
+        // Exploding 10s logic
+        if (spec && rollResult === 10) {
+            let explodeRoll = Math.floor(Math.random() * 10) + 1;
+            if (explodeRoll >= diff) suc++;
+            displayVal = `10+${explodeRoll}`;
         }
-        results.push({ val: val, raw: d, hit: d >= diff, botch: d === 1 });
+        results.push({ val: displayVal, raw: rollResult, hit: rollResult >= diff, botch: rollResult === 1 });
     }
     return { suc, ones, results };
 }
@@ -975,34 +1043,49 @@ function addSystemMsg(txt, win) {
     logs.insertBefore(div, logs.firstChild);
 }
 
+/**
+ * Main Casting Function.
+ * Handles both Instant and Ritual/Extended casting modes.
+ */
 function castSpell() {
-    // ... (Önceki kontroller aynı kalır: Sphere check, Timer clear vb.) ...
+    let currentSphere = parseInt(getEl('val-sphere').textContent);
+    let currentArete = parseInt(getEl('arete').value);
 
-    // Arete'ye Bonus Dice Ekle
+    // Rule Check: Sphere cannot exceed Arete
+    if (currentSphere > currentArete) { showError("Invalid Cast"); return; }
+
+    if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
+    getEl('log-container').style.display = 'block';
+
+    // 1. POOL CALCULATION: Base Arete + Bonus Dice
     let baseArete = parseInt(getEl('arete').value);
-    let totalPool = baseArete + appState.bonusDice; // <-- GÜNCELLEME 1
+    let totalPool = baseArete + appState.bonusDice;
 
     let goal = parseInt(getEl('disp-goal').value);
     let limit = parseInt(getEl('val-limit').textContent);
 
+    // --- INSTANT MODE ---
     if (appState.mode === 'instant') {
-        // ... (UI temizliği aynı) ...
+        getEl('log-title').textContent = "Instant Result";
+        getEl('prog-txt').textContent = "";
+        getEl('p-bar').style.width = "0%";
+        getEl('logs').innerHTML = "";
 
         let diff = parseInt(getEl('disp-diff').value);
 
-        // Zarları Bonuslu Pool ile at
-        let res = doRoll(totalPool, diff, appState.spec); // <-- GÜNCELLEME 2
+        // 2. ROLLING: Roll with updated pool
+        let res = doRoll(totalPool, diff, appState.spec);
 
-        // Net Başarıya Auto Success Ekle
-        let net = res.suc - res.ones + appState.autoSuc; // <-- GÜNCELLEME 3
+        // 3. RESULT CALCULATION: Net Success + Auto Success
+        let net = res.suc - res.ones + appState.autoSuc;
 
         let type = "fail", msg = "";
 
-        // Botch Kontrolü (Auto Success varsa Botch OLMAZ)
+        // 4. BOTCH PROTECTION: No Botch if Auto Success exists
         if (appState.autoSuc > 0 && net > 0) {
             type = "success"; msg = `SUCCESS! (${net} Suc)`;
         }
-        else if (res.suc === 0 && res.ones > 0 && appState.autoSuc === 0) { // <-- GÜNCELLEME 4
+        else if (res.suc === 0 && res.ones > 0 && appState.autoSuc === 0) {
             type = "botch"; msg = `BOTCH! (${res.ones} Pdx)`;
         }
         else if (net < 1) { msg = "FAILED"; }
@@ -1013,16 +1096,95 @@ function castSpell() {
         return;
     }
 
-    // ... (Ritual Mode için de aynı mantığı Loop içine uygula) ...
+    // --- RITUAL MODE ---
+    getEl('log-title').textContent = "Ritual Progress";
 
+    if (!ritState.isPaused) {
+        getEl('logs').innerHTML = "";
+        ritState.totalSuc = 0;
+        ritState.turn = 0;
+        ritState.currentDiff = parseInt(getEl('disp-diff').value);
+        ritState.hasStarted = true;
+    } else {
+        ritState.isPaused = false;
+        updateButtonState();
+    }
+
+    getEl('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
+    getEl('p-bar').style.width = (ritState.totalSuc / goal * 100) + "%";
+
+    // Interval for dramatic effect (ticks every 600ms)
     activeTimer = setInterval(() => {
         ritState.turn++;
-        // Ritual modunda da Bonus Dice ve Auto Suc her tur eklenir
+        // Bonus Dice and Auto Suc are added every turn in Ritual mode too
         let res = doRoll(totalPool, ritState.currentDiff, appState.spec);
         let net = res.suc - res.ones + appState.autoSuc;
 
-        // ... (Botch ve Success mantığını yukarıdaki gibi güncelle) ...
-        // ...
+        let type = "", msg = "";
+        let diffIncreased = false;
+
+        // Botch Logic (with Auto Suc protection)
+        if (res.suc === 0 && res.ones > 0 && appState.autoSuc === 0) {
+            clearInterval(activeTimer); activeTimer = null;
+            let pdx = ritState.totalSuc + res.ones;
+            msg = `BOTCH! (${pdx} Pdx)`;
+            addSystemMsg("BACKLASH - RITUAL FAILED", false);
+            type = "botch";
+            ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+            updateButtonState();
+        }
+        // Normal Logic
+        else {
+            if (net <= 0) {
+                type = "fail";
+                if (net < 0) {
+                    ritState.totalSuc += net; // Subtract failures
+                    if (ritState.totalSuc < 0) ritState.totalSuc = 0;
+                    msg = `Fail (${net})`;
+                } else {
+                    msg = "Fail (0). Diff +1";
+                }
+                // Increase diff on fail, up to 10
+                if (ritState.currentDiff < 10) { ritState.currentDiff++; diffIncreased = true; }
+            } else {
+                type = "success";
+                ritState.totalSuc += net;
+                msg = `+${net} Suc`;
+            }
+        }
+
+        if (type) {
+            addLogEntry(ritState.turn, diffIncreased ? ritState.currentDiff - 1 : ritState.currentDiff, res, msg, type);
+
+            let pct = (ritState.totalSuc / goal) * 100;
+            if (pct > 100) pct = 100;
+            getEl('p-bar').style.width = pct + "%";
+            getEl('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
+
+            // Safety Pause Check
+            if (diffIncreased && appState.pauseOnDiff && ritState.totalSuc < goal) {
+                clearInterval(activeTimer); activeTimer = null;
+                ritState.isPaused = true;
+                updateButtonState();
+                addSystemMsg(`PAUSED (Diff Increased to ${ritState.currentDiff})`, false);
+                return;
+            }
+
+            // Success Condition
+            if (ritState.totalSuc >= goal) {
+                clearInterval(activeTimer); activeTimer = null;
+                addSystemMsg("RITUAL COMPLETE", true);
+                ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+                updateButtonState();
+            }
+            // Failure Condition (Willpower/Turn Limit)
+            else if (ritState.turn >= limit) {
+                clearInterval(activeTimer); activeTimer = null;
+                addSystemMsg("EXHAUSTED (Willpower Limit)", false);
+                ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
+                updateButtonState();
+            }
+        }
     }, 600);
 }
 
@@ -1097,17 +1259,19 @@ window.onclick = function (event) {
     if (event.target == modal) { closeFeedback(); }
 }
 
-/* ==========================================
+/* ============================================================================
    6. INITIALIZATION
-   ========================================== */
+   ============================================================================ */
 window.onload = function () {
     recalculate();
     updateLimits();
+
     // Initialize Logic
     initSphereLibrary();
     initRoteLibrary();
     initMeritLibrary();
     initRulesLibrary();
+
     // Initialize Tooltips (After DBs are rendered)
     initGlobalTooltips();
 };

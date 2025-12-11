@@ -1,40 +1,54 @@
-﻿/* =========================================
+﻿/* ==========================================================================
    MAGE 20TH: SECRET LIBRARY - VISUAL CORE
    Theme: Paradox Dark Strategy
-   Refactored Version: 2.3
-   ========================================= */
+   Refactored Version: 2.3 (Clean Code Edition)
+   Architect: Refactor Bey
+   ========================================================================== */
 
-/* 1. THEME VARIABLES & ROOT */
+/* ==========================================================================
+   1. THEME VARIABLES & ROOT CONFIGURATION
+   ========================================================================== */
 :root {
-    /* Backgrounds: Solid & Dark (Paradox Style) */
+    /* --- Colors: Backgrounds (Paradox Dark) --- */
     --bg-body: #121212;
     --bg-panel: #1c1c1e;
     --bg-card: #252526;
     --bg-input: #0e0e0e;
-    /* Borders: Sharp & Subtle */
+    /* --- Colors: Borders & Structure --- */
     --border: #333333;
     --border-hover: #555555;
-    /* Mage Colors (Muted Strategy Tones) */
+    --radius: 3px;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+    /* --- Colors: Mage Spheres & Feedback --- */
     --primary: #9d70ff;
     --primary-hover: #b794f6;
     --primary-dim: rgba(157, 112, 255, 0.1);
     --primary-glow: 0 0 15px rgba(157, 112, 255, 0.2);
-    --accent: #29b6f6; /* Cyan */
-    --success: #66bb6a; /* Green */
-    --warning: #ffa726; /* Orange */
-    --danger: #ef5350; /* Red */
+    --accent: #29b6f6; /* Cyan - Mind/Spirit */
+    --success: #66bb6a; /* Green - Life/Matter */
+    --warning: #ffa726; /* Orange - Forces/Time */
+    --danger: #ef5350; /* Red - Entropy/Prime */
     --danger-glow: 0 0 15px rgba(239, 83, 80, 0.3);
-    /* Typography */
+    /* --- Typography --- */
     --text-main: #f0f0f0;
     --text-muted: #a0a0a0;
-    /* Structure */
-    --radius: 3px;
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
-    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --font-main: 'Inter', sans-serif;
+    --font-header: 'Montserrat', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    /* --- Layout Dimensions --- */
     --header-height: 60px;
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    /* --- Z-Index Layer Map --- */
+    --z-header: 50;
+    --z-footer: 100;
+    --z-modal: 10001;
+    --z-error: 11000;
+    --z-tooltip: 12000;
 }
 
-/* 2. GLOBAL RESET & BASE */
+/* ==========================================================================
+   2. GLOBAL RESET & BASE STYLES
+   ========================================================================== */
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -44,7 +58,7 @@ body {
     background-color: var(--bg-body);
     background-image: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
     color: var(--text-main);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-main);
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -54,7 +68,9 @@ body {
     letter-spacing: 0.01em;
 }
 
-/* 3. HERO HEADER */
+/* ==========================================================================
+   3. HERO HEADER COMPONENT
+   ========================================================================== */
 .hero-header {
     background: #181818;
     border-bottom: 1px solid var(--border);
@@ -63,7 +79,7 @@ body {
     align-items: center;
     padding: 0 20px;
     height: var(--header-height);
-    z-index: 50;
+    z-index: var(--z-header);
     position: relative;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -77,7 +93,7 @@ body {
 }
 
 .brand-title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 800;
     font-size: 1.1rem;
     letter-spacing: 0.5px;
@@ -89,7 +105,7 @@ body {
 
 .brand-subtitle {
     display: block;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-size: 0.6rem;
     color: var(--primary);
     font-weight: 700;
@@ -98,7 +114,7 @@ body {
     margin-top: 4px;
 }
 
-/* Search Bar */
+/* --- Search Bar --- */
 .search-container {
     width: 100vw;
     max-width: 400px;
@@ -112,7 +128,7 @@ body {
     padding: 8px 15px 8px 35px;
     border-radius: var(--radius);
     color: #fff;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-main);
     font-size: 0.85rem;
     height: 36px;
     outline: none;
@@ -134,7 +150,9 @@ body {
     font-size: 0.8rem;
 }
 
-/* 4. NAVIGATION TABS */
+/* ==========================================================================
+   4. NAVIGATION SYSTEM (Tabs)
+   ========================================================================== */
 .nav-tabs {
     display: flex;
     background: #1c1c1e;
@@ -151,7 +169,7 @@ body {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 700;
     font-size: 0.85rem;
     cursor: pointer;
@@ -181,7 +199,9 @@ body {
             background: var(--primary);
         }
 
-/* 5. CONTENT & LAYOUT */
+/* ==========================================================================
+   5. LAYOUT & CONTENT AREA
+   ========================================================================== */
 .content-area {
     flex: 1;
     overflow-y: auto;
@@ -213,7 +233,21 @@ body {
     }
 }
 
-/* Sub Navigation (Tools Tab) */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* --- Sub Navigation (Tools Tab) --- */
 .sub-nav {
     display: flex;
     gap: 1px;
@@ -230,7 +264,7 @@ body {
     border: none;
     background: var(--bg-panel);
     color: var(--text-muted);
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 700;
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -257,7 +291,9 @@ body {
         animation: fadeIn 0.2s;
     }
 
-/* 6. CARDS & GRIDS */
+/* ==========================================================================
+   6. CARDS, GRIDS & LISTS
+   ========================================================================== */
 .grid-3 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -279,7 +315,7 @@ body {
     }
 
 .card-title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 800;
     color: #fff;
     font-size: 0.95rem;
@@ -315,10 +351,12 @@ body {
         font-size: 0.8em;
         min-width: 24px;
         text-align: center;
-        font-family: 'JetBrains Mono', monospace;
+        font-family: var(--font-mono);
     }
 
-/* 7. ACCORDION & DATA TABLES */
+/* ==========================================================================
+   7. ACCORDION & DATA TABLES
+   ========================================================================== */
 .accordion {
     display: flex;
     flex-direction: column;
@@ -336,7 +374,7 @@ body {
 .acc-header {
     padding: 16px;
     background: var(--bg-panel);
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 700;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -371,7 +409,7 @@ body {
     display: block;
 }
 
-/* Data Rows */
+/* --- Data Rows (Rote/Merit Lists) --- */
 .data-row {
     display: flex;
     justify-content: space-between;
@@ -401,7 +439,7 @@ body {
 }
 
 .data-meta {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     color: var(--primary);
     font-size: 0.85rem;
     text-align: right;
@@ -426,7 +464,7 @@ body {
     margin-top: 2px;
 }
 
-/* Tables */
+/* --- Standard Tables --- */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -438,7 +476,7 @@ th {
     padding: 12px 16px;
     color: var(--text-muted);
     border-bottom: 1px solid var(--border);
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.75rem;
@@ -452,7 +490,7 @@ td {
     vertical-align: top;
 }
 
-/* Highlighting Utility Classes */
+/* --- Utility: Text Colors & Tags --- */
 .hl-red {
     color: var(--danger);
     font-weight: bold;
@@ -529,13 +567,16 @@ td {
             border-bottom: none;
         }
 
-/* 8. RITUALMATIC DASHBOARD (Logic Core) */
+/* ==========================================================================
+   8. RITUALMATIC DASHBOARD (Logic Core UI)
+   ========================================================================== */
 .rit-dashboard-v3 {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
+/* --- 8.1 Toolbar & Header --- */
 .rit-toolbar {
     display: flex;
     justify-content: space-between;
@@ -581,7 +622,7 @@ td {
         border: 1px solid var(--border);
     }
 
-/* Inputs & Forms */
+/* --- 8.2 Input Elements --- */
 .stat-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 0.5fr;
@@ -602,9 +643,10 @@ select, .rit-select {
     padding: 0 16px;
     border-radius: 10px;
     outline: none;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 600;
     appearance: none;
+    /* Custom SVG Arrow */
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 1rem center;
@@ -615,7 +657,7 @@ select, .rit-select {
         border-color: var(--primary);
     }
 
-/* Counter */
+/* Counter Component */
 .counter {
     width: 100%;
     justify-content: space-between;
@@ -652,7 +694,7 @@ select, .rit-select {
         color: #fff;
     }
 
-/* Square Button */
+/* Square Checkbox Button */
 .btn-square {
     width: 100%;
     background: var(--bg-input);
@@ -687,7 +729,7 @@ select, .rit-select {
     transform: scale(1.2);
 }
 
-/* Work Area */
+/* --- 8.3 Work Area Panels --- */
 .work-area {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -743,7 +785,7 @@ select, .rit-select {
     gap: 8px;
 }
 
-/* Tool Buttons */
+/* Tool Toggle Buttons */
 .btn-tool {
     background: var(--bg-input);
     border: 1px solid var(--border);
@@ -778,7 +820,30 @@ select, .rit-select {
         color: var(--danger);
     }
 
-/* Sliders */
+/* Tool Badge (Quintessence Counter) */
+.tool-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    margin-left: 6px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    min-width: 14px;
+    height: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn-tool.active .tool-badge {
+    background: #fff;
+    color: var(--primary);
+    border-color: #fff;
+}
+
+/* --- 8.4 Sliders & Mini Selectors --- */
 .slider-wrapper {
     background: var(--bg-input);
     padding: 10px;
@@ -799,7 +864,7 @@ select, .rit-select {
     font-size: 1.1rem;
     font-weight: 800;
     color: #fff;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     text-align: center;
     margin-bottom: 5px;
 }
@@ -810,7 +875,6 @@ select, .rit-select {
     color: var(--success);
 }
 
-/* Mini Selector (Tactical Dropdown) */
 .mini-sel {
     appearance: none;
     -webkit-appearance: none;
@@ -818,7 +882,7 @@ select, .rit-select {
     border: 1px solid var(--border);
     border-radius: 4px;
     color: var(--text-main);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     font-weight: 700;
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -862,7 +926,7 @@ input[type=range] {
     border-radius: 3px;
 }
 
-/* Result Bar */
+/* --- 8.5 Result Bar & Actions --- */
 .result-bar {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
@@ -900,7 +964,7 @@ input[type=range] {
     border: none;
     text-align: center;
     width: 100%;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
 }
 
 .val-diff {
@@ -917,7 +981,7 @@ input[type=range] {
     text-decoration-style: dotted;
 }
 
-/* Cast Button */
+/* Cast Button Variants */
 .btn-cast-compact {
     width: 100%;
     height: 100%;
@@ -931,7 +995,7 @@ input[type=range] {
     color: #fff;
     cursor: pointer;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
 }
 
     .btn-cast-compact:hover {
@@ -968,7 +1032,7 @@ input[type=range] {
     text-transform: uppercase;
     transition: 0.2s;
     margin-top: 8px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
 }
 
     .btn-safety.active {
@@ -977,7 +1041,9 @@ input[type=range] {
         border-color: #f97316;
     }
 
-/* 9. LOGS & GENERATORS */
+/* ==========================================================================
+   9. LOGS & GENERATORS
+   ========================================================================== */
 #log-container {
     display: none;
     background: #000;
@@ -995,7 +1061,7 @@ input[type=range] {
     color: var(--text-muted);
     margin-bottom: 16px;
     text-transform: uppercase;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
 }
 
 .log-scroll {
@@ -1050,7 +1116,7 @@ input[type=range] {
     transition: width 0.3s;
 }
 
-/* Generators */
+/* Generators Section */
 .gen-btn {
     width: 100%;
     padding: 16px;
@@ -1064,7 +1130,7 @@ input[type=range] {
     text-transform: uppercase;
     margin-bottom: 5px;
     transition: 0.2s;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     letter-spacing: 1px;
 }
 
@@ -1082,7 +1148,7 @@ input[type=range] {
     min-height: 24px;
     padding: 12px;
     margin-bottom: 15px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     margin-top: 10px;
     background: rgba(0, 0, 0, 0.3);
     border-left: 3px solid var(--accent);
@@ -1106,7 +1172,7 @@ input[type=range] {
     border-radius: var(--radius);
     padding: 12px;
     font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     outline: none;
     transition: all 0.2s;
 }
@@ -1115,11 +1181,13 @@ input[type=range] {
         border-color: var(--primary);
     }
 
-/* 10. MODALS & OVERLAYS */
+/* ==========================================================================
+   10. MODALS, TOOLTIPS & OVERLAYS
+   ========================================================================== */
 .modal-overlay {
     display: none;
     position: fixed;
-    z-index: 10001;
+    z-index: var(--z-modal);
     left: 0;
     top: 0;
     width: 100%;
@@ -1139,7 +1207,7 @@ input[type=range] {
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(8px);
-    z-index: 11000;
+    z-index: var(--z-error);
     display: none !important;
     justify-content: center;
     align-items: center;
@@ -1182,7 +1250,7 @@ input[type=range] {
     font-size: 1.4rem;
     margin-bottom: 12px;
     text-transform: uppercase;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
 }
 
 .modal-text {
@@ -1203,7 +1271,7 @@ input[type=range] {
     width: 100%;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
 }
 
     .modal-btn:hover {
@@ -1222,16 +1290,16 @@ input[type=range] {
         color: var(--danger);
     }
 
-/* 11. TOOLTIP (Added for Fix) */
+/* Tooltip */
 #tooltip {
     display: none;
-    position: fixed; /* Body üzerinde serbest dolaşım için fixed */
+    position: fixed;
     background: rgba(18, 18, 18, 0.95);
     border: 1px solid var(--primary);
     padding: 12px;
     border-radius: 4px;
-    z-index: 12000; /* Her şeyin üstünde olmalı */
-    pointer-events: none; /* Mouse hover'ı engellememesi için kritik */
+    z-index: var(--z-tooltip);
+    pointer-events: none;
     color: #fff;
     font-size: 0.8rem;
     max-width: 280px;
@@ -1241,7 +1309,7 @@ input[type=range] {
 
 .tt-title {
     display: block;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-header);
     font-weight: 800;
     color: var(--primary);
     margin-bottom: 4px;
@@ -1262,12 +1330,14 @@ input[type=range] {
     font-size: 0.7rem;
     color: var(--text-muted);
     font-style: italic;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     border-top: 1px dashed #333;
     padding-top: 4px;
 }
 
-/* 12. FOOTER */
+/* ==========================================================================
+   11. SITE FOOTER
+   ========================================================================== */
 .site-footer {
     display: flex;
     flex-direction: row;
@@ -1279,7 +1349,7 @@ input[type=range] {
     color: var(--text-muted);
     border-top: 1px solid var(--border);
     background: #111;
-    z-index: 100;
+    z-index: var(--z-footer);
     flex-wrap: wrap;
 }
 
@@ -1308,7 +1378,7 @@ input[type=range] {
     margin: 0;
     line-height: 1.2;
     text-align: left;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-main);
 }
 
     .legal-text a {
@@ -1352,7 +1422,9 @@ input[type=range] {
         background: rgba(239, 68, 68, 0.1);
     }
 
-/* 13. RESPONSIVE */
+/* ==========================================================================
+   12. RESPONSIVE DESIGN (Media Queries)
+   ========================================================================== */
 @media (max-width: 768px) {
     .site-footer {
         flex-direction: column;
@@ -1386,27 +1458,4 @@ input[type=range] {
         height: 50px;
         margin-top: 5px;
     }
-}
-
-/* --- TOOL BUTTON BADGE (Quint Counter) --- */
-.tool-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.4);
-    color: #fff;
-    font-size: 0.6rem;
-    font-weight: 800;
-    margin-left: 6px;
-    padding: 1px 5px;
-    border-radius: 4px;
-    min-width: 14px;
-    height: 14px;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-/* Buton aktif olduğunda badgenin rengi */
-.btn-tool.active .tool-badge {
-    background: #fff;
-    color: var(--primary);
-    border-color: #fff;
 }
