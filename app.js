@@ -199,6 +199,20 @@ const RULES_DB = [
         ]
     },
     {
+        title: "🔥 Magickal Feats (Base Costs)",
+        ref: "M20 Core p.502",
+        type: "table",
+        headers: ["Successes", "Feat Difficulty", "Example"],
+        rows: [
+            ["1 Success", "Simple", "Flash of light, seeing through a wall."],
+            ["2 Successes", "Standard", "Healing self, minor telekinesis."],
+            ["3 Successes", "Difficult", "Teleporting, throwing a fireball."],
+            ["4 Successes", "Impressive", "Shapeshifting others, complex illusion."],
+            ["5 Successes", "Mighty", "Major storms, turning human to stone."],
+            ["10+ Successes", "Godlike", "Rewriting memories, moving buildings."]
+        ]
+    },
+    {
         title: "🎚️ Sphere Magnitude (What Rank?)",
         ref: "M20 Core p.511",
         type: "table",
@@ -411,7 +425,7 @@ const appState = {
     sanctum: false,
     inst: false,
     res: false,
-    quint: false,
+    quint: 0,
     team: false,
     syn: false,
     notool: false,
@@ -556,6 +570,8 @@ function resetAll() {
     document.querySelectorAll('.btn-tool, .btn-hb, .btn-safety, .btn-square')
         .forEach(b => b.classList.remove('active', 'checked'));
 
+    getEl('badge-quint').style.display = 'none';
+
     // Update Text Displays
     getEl('val-sphere').textContent = '3';
     getEl('val-extra').textContent = '0';
@@ -575,6 +591,10 @@ function setMode(modeName) {
     appState.mode = modeName;
     getEl('btn-m-inst').className = modeName === 'instant' ? 'mode-opt active' : 'mode-opt';
     getEl('btn-m-rit').className = modeName === 'ritual' ? 'mode-opt active' : 'mode-opt';
+
+    // YENİ EKLENDİ: Mod değişince hesaplamayı yenile (Sanctum bonusu için şart)
+    recalculate();
+
     updateButtonState();
 }
 
@@ -611,28 +631,42 @@ function modifyState(key, value) {
     recalculate();
 }
 
+/* --- STATE CONTROL (UPDATED FOR QUINT CYCLE) --- */
 function toggleState(key) {
-    appState[key] = !appState[key];
+    // Özel Durum: Quintessence (0 -> 1 -> 2 -> 3 -> 0 Döngüsü)
+    if (key === 'quint') {
+        appState.quint = (appState.quint + 1) % 4; // 0, 1, 2, 3 döngüsü
 
-    // Map keys to specific IDs if they differ from standard pattern
-    let id;
-    if (key === 'hb') id = 'btn-hb';
-    else if (key === 'pauseOnDiff') id = 'toggle-safety';
-    else id = 'btn-' + key;
+        const el = getEl('btn-quint');
+        const badge = getEl('badge-quint');
 
-    let el = getEl(id);
-
-    // Exclusive Logic (Focus vs No Tools)
-    if (key === 'notool' && appState[key]) {
-        appState.inst = false;
-        getEl('btn-inst').classList.remove('active');
+        if (appState.quint > 0) {
+            el.classList.add('active');
+            badge.style.display = 'inline-flex';
+            badge.textContent = appState.quint; // Sayıyı yaz
+        } else {
+            el.classList.remove('active');
+            badge.style.display = 'none'; // Gizle
+        }
     }
-    if (key === 'inst' && appState[key]) {
-        appState.notool = false;
-        getEl('btn-notool').classList.remove('active');
+    // Diğer tüm butonlar için standart aç/kapa (boolean)
+    else {
+        appState[key] = !appState[key];
+
+        let id;
+        if (key === 'hb') id = 'btn-hb';
+        else if (key === 'pauseOnDiff') id = 'toggle-safety';
+        else id = 'btn-' + key;
+
+        let el = getEl(id);
+
+        // Exclusive Logic (Focus vs No Tools)
+        if (key === 'notool' && appState[key]) { appState.inst = false; getEl('btn-inst').classList.remove('active'); }
+        if (key === 'inst' && appState[key]) { appState.notool = false; getEl('btn-notool').classList.remove('active'); }
+
+        if (appState[key]) el.classList.add('active'); else el.classList.remove('active');
     }
 
-    if (appState[key]) el.classList.add('active'); else el.classList.remove('active');
     recalculate();
 }
 
@@ -648,33 +682,51 @@ function updateLimits() {
     getEl('val-limit').textContent = a + w;
 }
 
+/* --- Engine (M20 Cap Fix) --- */
 function getBaseValues() {
     let sph = parseInt(getEl('val-sphere').textContent);
     let real = parseInt(getEl('sel-reality').value);
     let spd = parseInt(getEl('sel-speed').value);
 
-    // Calculate Bonuses (Capped at -3)
-    let bon = (appState.sanctum ? 1 : 0) +
+    // 1. BONUSLARI TOPLA
+    // Sanctum (Sadece Ritüel), Focus, Library, Quintessence, Teamwork, Synergy
+    let sanctumBonus = (appState.sanctum && appState.mode === 'ritual') ? 1 : 0;
+
+    // Quintessence: Sayı ise direkt al, değilse (eski versiyon) 1 say.
+    let quintVal = typeof appState.quint === 'number' ? appState.quint : (appState.quint ? 1 : 0);
+
+    let totalBonus = sanctumBonus +
         (appState.inst ? 1 : 0) +
         (appState.res ? 1 : 0) +
-        (appState.quint ? 1 : 0) +
+        quintVal +
         (appState.team ? 1 : 0) +
         (appState.syn ? 1 : 0);
-    if (bon > 3) bon = 3;
 
-    // Calculate Penalties
-    let pen = (appState.notool ? 3 : 0) +
+    // 2. CEZALARI TOPLA
+    // No Tool (+3), Discord (+1), Distraction (Sayaç)
+    let totalPenalty = (appState.notool ? 3 : 0) +
         (appState.discord ? 1 : 0) +
         appState.distract;
 
-    let baseDiff = sph + real + spd - bon + pen;
-    let floor = Math.max(3, sph); // Min diff is sphere rating or 3
+    // 3. NET ETKİYİ HESAPLA
+    // Formül: (Cezalar - Bonuslar + Hız)
+    // Hız (Speed): +1 (Fast) ceza gibi, -1 (Slow) bonus gibi çalışır.
+    let netMod = totalPenalty - totalBonus + spd;
 
-    baseDiff = Math.max(floor, Math.min(baseDiff, 10)); // Clamp between floor and 10
+    // 4. KURAL UYGULA: MAKASLAMA (CAP +/- 3)
+    // M20 p.504: Situational modifiers cannot exceed -3 or +3.
+    if (netMod > 3) netMod = 3;
+    if (netMod < -3) netMod = -3;
 
-    // Goal Calculation
+    // 5. NİHAİ ZORLUK
+    let baseDiff = sph + real + netMod;
+    let floor = Math.max(3, sph); // Zorluk en az Küre seviyesi veya 3 olmalı
+
+    baseDiff = Math.max(floor, Math.min(baseDiff, 10));
+
+    // --- HEDEF (GOAL) HESAPLAMA (Değişmedi) ---
     let durIdx = parseInt(getEl('sel-dur').value);
-    let durCosts = appState.hb ? [1, 2, 4, 6, 10] : [1, 2, 3, 4, 6]; // Homebrew vs Standard
+    let durCosts = appState.hb ? [1, 2, 4, 6, 8, 15] : [1, 2, 3, 4, 5, 10];
     let baseDur = durCosts[durIdx];
 
     let targ = parseInt(getEl('sel-targ').value);

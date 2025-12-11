@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -10,6 +11,7 @@
 
     <link rel="stylesheet" href="style.css?v=2.3">
 </head>
+
 <body>
 
     <div class="hero-header">
@@ -21,7 +23,10 @@
         </div>
 
         <div class="search-container">
-            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
             <input type="text" id="searchBox" class="search-bar" placeholder="Search Rotes, Rules, Spheres..." onkeyup="filterContent()">
         </div>
 
@@ -37,12 +42,6 @@
     </div>
 
     <div class="content-area">
-
-        <div id="tooltip">
-            <span class="tt-title"></span>
-            <span class="tt-desc"></span>
-            <span class="tt-ref"></span>
-        </div>
 
         <div id="tab-spheres" class="tab-page">
             <div class="grid-3" id="sphere-container">
@@ -75,7 +74,8 @@
         </div>
 
         <div id="tab-rules" class="tab-page">
-            <div class="accordion" id="rules-container"></div>
+            <div class="accordion" id="rules-container">
+            </div>
         </div>
 
         <div id="tab-merits" class="tab-page">
@@ -108,6 +108,7 @@
         </div>
 
         <div id="tab-tools" class="tab-page active">
+
             <div class="sub-nav">
                 <button class="sub-nav-btn active" onclick="switchSubTab('sub-ritual', this)">🎴 Ritualmatic</button>
                 <button class="sub-nav-btn" onclick="switchSubTab('sub-gens', this)">⚡ GM Generators</button>
@@ -132,6 +133,7 @@
                                 RESET
                             </button>
                         </div>
+
                         <div class="mode-switch" style="width:140px;">
                             <div class="mode-opt active" id="btn-m-inst" onclick="setMode('instant')"
                                  data-title="Instant Casting"
@@ -148,21 +150,38 @@
                         <div class="input-group">
                             <label class="rit-label"
                                    data-title="Arete"
-                                   [cite_start]data-desc="Magical enlightenment & Dice Pool. [cite: 7, 10]"
+                                   data-desc="Magical enlightenment & Dice Pool."
                                    data-ref="M20 Quickstart p.7">Arete</label>
-                            <select id="arete" class="rit-select" onchange="updateLimits()"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+                            <select id="arete" class="rit-select" onchange="updateLimits()">
+                                <option>2</option>
+                                <option>3</option>
+                                <option selected>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                            </select>
                         </div>
                         <div class="input-group">
                             <label class="rit-label"
                                    data-title="Willpower"
-                                   [cite_start]data-desc="Spend to get auto-success. [cite: 240]"
+                                   data-desc="Spend to get auto-success."
                                    data-ref="M20 Quickstart p.10">Willpower</label>
-                            <select id="will" class="rit-select" onchange="updateLimits()"><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+                            <select id="will" class="rit-select" onchange="updateLimits()">
+                                <option>3</option>
+                                <option>4</option>
+                                <option selected>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                            </select>
                         </div>
                         <div class="input-group">
                             <label class="rit-label"
                                    data-title="Highest Sphere"
-                                   [cite_start]data-desc="Determines Base Difficulty for Coincidental/Vulgar. [cite: 452, 453, 454]"
+                                   data-desc="Determines Base Difficulty for Coincidental/Vulgar."
                                    data-ref="M20 Quickstart p.18">Sphere</label>
                             <div class="counter">
                                 <button class="btn-cnt" onclick="modifyState('sphere', -1)">-</button>
@@ -190,7 +209,7 @@
                                 <div class="input-group">
                                     <label class="rit-label"
                                            data-title="Reality Effect"
-                                           [cite_start]data-desc="Coincidental (+0), Vulgar (+1), Witnessed (+2) to Diff. [cite: 452, 453, 454]"
+                                           data-desc="Coincidental (+0), Vulgar (+1), Witnessed (+2) to Diff."
                                            data-ref="M20 Quickstart p.18">Reality</label>
                                     <select id="sel-reality" class="rit-select" onchange="recalculate()">
                                         <option value="3">Coincidental</option>
@@ -217,26 +236,47 @@
                                    data-ref="M20 Core">Bonuses</label>
                             <div class="grid-3-tool">
                                 <div class="btn-tool" id="btn-sanctum" onclick="toggleState('sanctum')"
-                                     data-title="Sanctum / Node" data-desc="-1 Diff within your own Sanctum." data-ref="M20 Core">🏰 Sanct</div>
+                                     data-title="Sanctum / Node"
+                                     data-desc="-1 Diff within Sanctum (Ritual Only)."
+                                     data-ref="M20 p.323">🏰 Sanct</div>
+
                                 <div class="btn-tool" id="btn-inst" onclick="toggleState('inst')"
-                                     data-title="Personal Instrument" data-desc="-1 Diff for personalized Focus/Tool." data-ref="M20 Quickstart p.8">🔮 Focus</div>
+                                     data-title="Personal Instrument"
+                                     data-desc="-1 Diff for personalized Focus/Tool."
+                                     data-ref="M20 Quickstart p.8">🔮 Focus</div>
+
                                 <div class="btn-tool" id="btn-res" onclick="toggleState('res')"
-                                     data-title="Research / Library" data-desc="-1 Diff for studying beforehand." data-ref="M20 Core">📚 Lib</div>
+                                     data-title="Research / Library"
+                                     data-desc="-1 Diff for studying beforehand."
+                                     data-ref="M20 Core">📚 Lib</div>
+
                                 <div class="btn-tool" id="btn-quint" onclick="toggleState('quint')"
-                                     [cite_start]data-title="Quintessence" data-desc="-1 Diff per point spent. [cite: 5462, 5464]" data-ref="M20 HDYDT p.109">✨ Quint</div>
+                                     data-title="Quintessence"
+                                     data-desc="Click to cycle: 1, 2, or 3 points (-1 Diff per point)."
+                                     data-ref="M20 p.537">
+                                    ✨ Quint <span id="badge-quint" class="tool-badge" style="display:none;">0</span>
+                                </div>
+
                                 <div class="btn-tool" id="btn-team" onclick="toggleState('team')"
-                                     data-title="Teamwork" data-desc="-1 Diff for Assistants." data-ref="M20 Core">🤝 Team</div>
+                                     data-title="Teamwork"
+                                     data-desc="-1 Diff for Assistants."
+                                     data-ref="M20 Core">🤝 Team</div>
+
                                 <div class="btn-tool" id="btn-syn" onclick="toggleState('syn')"
-                                     data-title="Synergy" data-desc="-1 Diff for Resonant Synergy." data-ref="M20 Core">☯️ Syn</div>
+                                     data-title="Synergy"
+                                     data-desc="-1 Diff for Resonant Synergy."
+                                     data-ref="M20 Core">☯️ Syn</div>
                             </div>
 
-                            <label class="rit-label" style="margin-top:5px; color:var(--danger);"
-                                   data-title="Penalties"
-                                   data-desc="Increases Difficulty (Uncapped)."
-                                   data-ref="M20 Core">Penalties</label>
+                            <label class="rit-label"
+                                   style="color:var(--danger)"
+                                   data-title="Net Modifier Cap"
+                                   data-desc="Total situational modifiers (Bonuses vs Penalties) are capped at +/- 3."
+                                   data-ref="M20 p.504">Penalties (Max +3 Net)</label>
+
                             <div class="grid-2">
                                 <div class="btn-tool neg" id="btn-notool" onclick="toggleState('notool')"
-                                     [cite_start]data-title="No Instrument" data-desc="+3 Diff for working without Focus. [cite: 141]" data-ref="M20 Quickstart p.7">🚫 No Tool</div>
+                                     data-title="No Instrument" data-desc="+3 Diff for working without Focus." data-ref="M20 Quickstart p.7">🚫 No Tool</div>
                                 <div class="btn-tool neg" id="btn-discord" onclick="toggleState('discord')"
                                      data-title="Discord" data-desc="+1 Diff for Resonant Discord." data-ref="M20 Core">⚡ Discord</div>
                             </div>
@@ -244,7 +284,7 @@
                             <div class="input-group">
                                 <label class="rit-label" style="color:var(--danger)"
                                        data-title="Distraction"
-                                       [cite_start]data-desc="+1 Diff per level of distraction (Pain, Noise, etc). [cite: 247, 248]"
+                                       data-desc="+1 Diff per level of distraction (Pain, Noise, etc)."
                                        data-ref="M20 Quickstart p.10">Distraction</label>
                                 <div class="counter" style="border-color:rgba(239,68,68,0.3);">
                                     <button class="btn-cnt" onclick="modifyState('distract', -1)">-</button>
@@ -266,20 +306,22 @@
                                 <div class="input-group">
                                     <label class="rit-label"
                                            data-title="Duration"
-                                           [cite_start]data-desc="Base success cost for time (Scene, Day, Story). [cite: 529]"
-                                           data-ref="M20 Quickstart p.21">Duration</label>
+                                           [cite_start]data-desc="Base success cost for time (Turn, Scene, Day...). [cite: 529]"
+                                           data-ref="M20 Core p.504">Duration</label>
                                     <select id="sel-dur" class="rit-select" onchange="recalculate()">
-                                        <option value="0">Scene (1h)</option>
-                                        <option value="1">Day (24h)</option>
-                                        <option value="2">Story</option>
-                                        <option value="3">6 Months</option>
-                                        <option value="4">Perm.</option>
+                                        <option value="0">One Turn</option>
+                                        <option value="1">One Scene</option>
+                                        <option value="2">One Day</option>
+                                        <option value="3">One Story</option>
+                                        <option value="4">Six Months</option>
+                                        <option value="5">Permanent (10+)</option>
                                     </select>
                                 </div>
+
                                 <div class="input-group">
                                     <label class="rit-label"
                                            data-title="Targets / Area"
-                                           [cite_start]data-desc="Cost for affecting multiple targets/area. [cite: 2018]"
+                                           data-desc="Cost for affecting multiple targets/area."
                                            data-ref="M20 HDYDT p.18">Target/Area</label>
                                     <select id="sel-targ" class="rit-select" onchange="recalculate()">
                                         <option value="0">Self / 1</option>
@@ -292,7 +334,7 @@
 
                             <div class="slider-wrapper"
                                  data-title="Damage / Effect"
-                                 [cite_start]data-desc="1 Success buys 2 Levels of Damage (or Healing). [cite: 529]"
+                                 data-desc="1 Success buys 2 Levels of Damage (or Healing)."
                                  data-ref="M20 Quickstart p.21">
                                 <div class="slider-top">
                                     <select id="sel-dmg-type" onchange="recalculate()" class="mini-sel">
@@ -309,9 +351,9 @@
                             <div class="grid-2">
                                 <div class="input-group">
                                     <label class="rit-label"
-                                           data-title="Complexity"
-                                           [cite_start]data-desc="Add +1 Success per extra Sphere or Feat. [cite: 2067]"
-                                           data-ref="M20 HDYDT p.19">Extra Feats</label>
+                                           data-title="Magickal Feats"
+                                           data-desc="Base successes needed for the feat (Standard=2, Difficult=3...). Check Rules tab."
+                                           data-ref="M20 p.502, 504-505">Feat Magnitude</label>
                                     <div class="counter">
                                         <button class="btn-cnt" onclick="modifyState('extra', -1)">-</button>
                                         <div class="cnt-display" id="val-extra">0</div>
@@ -321,7 +363,7 @@
                                 <div class="input-group">
                                     <label class="rit-label" style="color:var(--danger)"
                                            data-title="Opposition"
-                                           [cite_start]data-desc="+1 Goal per opposing success (Countermagick). [cite: 288, 5304, 5307]"
+                                           data-desc="+1 Goal per opposing success (Countermagick)."
                                            data-ref="M20 Quickstart p.12">Opposition</label>
                                     <div class="counter" style="border-color:rgba(239,68,68,0.3);">
                                         <button class="btn-cnt" onclick="modifyState('resist', -1)">-</button>
@@ -338,20 +380,19 @@
                                 <span style="font-size:0.65rem;">SAFETY: Pause on Diff Increase</span>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="result-bar">
                         <div class="result-box"
                              data-title="Final Difficulty"
-                             data-desc="Base (Sphere+3) +/- Mods. [cite_start]Click to edit. [cite: 452]"
+                             data-desc="Base (Sphere+3) +/- Mods. Click to edit."
                              data-ref="M20 Quickstart p.18">
                             <span class="res-lbl">DIFFICULTY</span>
                             <input type="number" id="disp-diff" class="res-val val-diff" value="6" onchange="manualOverride('diff')">
                         </div>
                         <div class="result-box"
                              data-title="Goal Successes"
-                             data-desc="Total accumulated cost. [cite_start]Click to edit. [cite: 2026]"
+                             data-desc="Total accumulated cost. Click to edit."
                              data-ref="M20 HDYDT p.18">
                             <span class="res-lbl">GOAL SUC</span>
                             <input type="number" id="disp-goal" class="res-val val-goal" value="1" onchange="manualOverride('goal')">
@@ -378,7 +419,6 @@
                     <div class="tools-grid">
                         <div class="control-panel" style="grid-column: span 2;">
                             <label class="rit-label">QUICK DICE ROLLER</label>
-
                             <div style="display:flex; gap:12px; margin-top:10px; justify-content: center; align-items: flex-end;">
                                 <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
                                     <span class="rit-label" style="font-size:0.65rem; color:var(--text-muted); letter-spacing:0.5px;">DICE POOL</span>
@@ -390,7 +430,6 @@
                                 </div>
                                 <button class="gen-btn" style="width: auto; margin:0; height:46px; background:var(--primary); color:#fff; padding: 0 24px; border:1px solid var(--primary);" onclick="quickRoll()">ROLL</button>
                             </div>
-
                             <div id="q-res" class="gen-res" style="font-size:1.4rem; margin-top:20px;">-</div>
                         </div>
 
@@ -415,7 +454,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <footer class="site-footer">
@@ -438,10 +476,16 @@
         </button>
     </footer>
 
+    <div id="tooltip">
+        <span class="tt-title"></span>
+        <span class="tt-desc"></span>
+        <span class="tt-ref"></span>
+    </div>
+
     <div id="error-modal">
         <div class="modal-box">
             <div class="modal-title">⚠ Rule Violation</div>
-            [cite_start]<div class="modal-text">Your Sphere rating cannot exceed your Arete rating. [cite: 1655, 1656]</div>
+            <div class="modal-text">Your Sphere rating cannot exceed your Arete rating.</div>
             <div class="tt-ref" style="margin-bottom:15px;">Reference: M20 Core Rulebook, p.251</div>
             <button class="modal-btn" onclick="closeError()">UNDERSTOOD</button>
         </div>
@@ -473,7 +517,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=2.3"></script>
+    <script src="app.js?v=2.4"></script>
 </body>
-
 </html>
