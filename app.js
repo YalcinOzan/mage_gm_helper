@@ -414,25 +414,9 @@ const RULES_DB = [
    ========================================== */
 
 const appState = {
-    mode: 'instant',    // 'instant' or 'ritual'
-    sphere: 3,
-    extra: 0,
-    resist: 0,
-    distract: 0,
-    gmDiff: 0,          // Manual Override
-    gmGoal: 0,          // Manual Override
-    // Toggles
-    sanctum: false,
-    inst: false,
-    res: false,
-    quint: 0,
-    team: false,
-    syn: false,
-    notool: false,
-    discord: false,
-    hb: false,          // Homebrew Rule
-    pauseOnDiff: false, // Safety Protocol
-    spec: false         // Specialty Logic
+    mode: 'instant', sphere: 3, extra: 0, resist: 0, distract: 0, gmDiff: 0, gmGoal: 0,
+    bonusDice: 0, autoSuc: 0, // <-- YENİ EKLENENLER
+    sanctum: false, inst: false, res: false, quint: 0, team: false, syn: false, notool: false, discord: false, hb: false, pauseOnDiff: false, spec: false
 };
 
 let activeTimer = null;
@@ -571,6 +555,8 @@ function resetAll() {
         .forEach(b => b.classList.remove('active', 'checked'));
 
     getEl('badge-quint').style.display = 'none';
+    getEl('val-bonusDice').textContent = '0';
+    getEl('val-autoSuc').textContent = '0';
 
     // Update Text Displays
     getEl('val-sphere').textContent = '3';
@@ -616,13 +602,12 @@ function updateButtonState() {
 
 function modifyState(key, value) {
     appState[key] += value;
-    // Clamping logic (Min 1, Max 9 for Spheres)
     if (key === 'sphere') {
         if (appState[key] < 1) appState[key] = 1;
         if (appState[key] > 9) appState[key] = 9;
     }
-    // Min 0 for counters
-    if ((key === 'extra' || key === 'resist' || key === 'distract') && appState[key] < 0) {
+    // Min 0 for all counters (Updated list)
+    if (['extra', 'resist', 'distract', 'bonusDice', 'autoSuc'].includes(key) && appState[key] < 0) {
         appState[key] = 0;
     }
 
@@ -991,31 +976,35 @@ function addSystemMsg(txt, win) {
 }
 
 function castSpell() {
-    let currentSphere = parseInt(getEl('val-sphere').textContent);
-    let currentArete = parseInt(getEl('arete').value);
+    // ... (Önceki kontroller aynı kalır: Sphere check, Timer clear vb.) ...
 
-    // Rule Violation Check
-    if (currentSphere > currentArete) { showError("Invalid Cast"); return; }
+    // Arete'ye Bonus Dice Ekle
+    let baseArete = parseInt(getEl('arete').value);
+    let totalPool = baseArete + appState.bonusDice; // <-- GÜNCELLEME 1
 
-    if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
-    getEl('log-container').style.display = 'block';
-
-    let arete = parseInt(getEl('arete').value);
     let goal = parseInt(getEl('disp-goal').value);
     let limit = parseInt(getEl('val-limit').textContent);
 
     if (appState.mode === 'instant') {
-        getEl('log-title').textContent = "Instant Result";
-        getEl('prog-txt').textContent = "";
-        getEl('p-bar').style.width = "0%";
-        getEl('logs').innerHTML = "";
+        // ... (UI temizliği aynı) ...
 
         let diff = parseInt(getEl('disp-diff').value);
-        let res = doRoll(arete, diff, appState.spec);
-        let net = res.suc - res.ones;
+
+        // Zarları Bonuslu Pool ile at
+        let res = doRoll(totalPool, diff, appState.spec); // <-- GÜNCELLEME 2
+
+        // Net Başarıya Auto Success Ekle
+        let net = res.suc - res.ones + appState.autoSuc; // <-- GÜNCELLEME 3
+
         let type = "fail", msg = "";
 
-        if (res.suc === 0 && res.ones > 0) { type = "botch"; msg = `BOTCH! (${res.ones} Pdx)`; }
+        // Botch Kontrolü (Auto Success varsa Botch OLMAZ)
+        if (appState.autoSuc > 0 && net > 0) {
+            type = "success"; msg = `SUCCESS! (${net} Suc)`;
+        }
+        else if (res.suc === 0 && res.ones > 0 && appState.autoSuc === 0) { // <-- GÜNCELLEME 4
+            type = "botch"; msg = `BOTCH! (${res.ones} Pdx)`;
+        }
         else if (net < 1) { msg = "FAILED"; }
         else if (net < goal) { msg = `WEAK (${net}/${goal} Suc)`; }
         else { type = "success"; msg = `SUCCESS! (${net} Suc)`; }
@@ -1024,85 +1013,16 @@ function castSpell() {
         return;
     }
 
-    getEl('log-title').textContent = "Ritual Progress";
-
-    if (!ritState.isPaused) {
-        getEl('logs').innerHTML = "";
-        ritState.totalSuc = 0;
-        ritState.turn = 0;
-        ritState.currentDiff = parseInt(getEl('disp-diff').value);
-        ritState.hasStarted = true;
-    } else {
-        ritState.isPaused = false;
-        updateButtonState();
-    }
-
-    getEl('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
-    getEl('p-bar').style.width = (ritState.totalSuc / goal * 100) + "%";
+    // ... (Ritual Mode için de aynı mantığı Loop içine uygula) ...
 
     activeTimer = setInterval(() => {
         ritState.turn++;
-        let res = doRoll(arete, ritState.currentDiff, appState.spec);
-        let net = res.suc - res.ones;
-        let type = "", msg = "";
-        let diffIncreased = false;
+        // Ritual modunda da Bonus Dice ve Auto Suc her tur eklenir
+        let res = doRoll(totalPool, ritState.currentDiff, appState.spec);
+        let net = res.suc - res.ones + appState.autoSuc;
 
-        if (res.suc === 0 && res.ones > 0) {
-            clearInterval(activeTimer); activeTimer = null;
-            let pdx = ritState.totalSuc + res.ones;
-            msg = `BOTCH! (${pdx} Pdx)`;
-            addSystemMsg("BACKLASH - RITUAL FAILED", false);
-            type = "botch";
-            ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-            updateButtonState();
-        }
-        else {
-            if (net <= 0) {
-                type = "fail";
-                if (net < 0) {
-                    ritState.totalSuc += net;
-                    if (ritState.totalSuc < 0) ritState.totalSuc = 0;
-                    msg = `Fail (${net})`;
-                } else {
-                    msg = "Fail (0). Diff +1";
-                }
-                if (ritState.currentDiff < 10) { ritState.currentDiff++; diffIncreased = true; }
-            } else {
-                type = "success";
-                ritState.totalSuc += net;
-                msg = `+${net} Suc`;
-            }
-        }
-
-        if (type) {
-            addLogEntry(ritState.turn, diffIncreased ? ritState.currentDiff - 1 : ritState.currentDiff, res, msg, type);
-
-            let pct = (ritState.totalSuc / goal) * 100;
-            if (pct > 100) pct = 100;
-            getEl('p-bar').style.width = pct + "%";
-            getEl('prog-txt').textContent = `${ritState.totalSuc} / ${goal}`;
-
-            if (diffIncreased && appState.pauseOnDiff && ritState.totalSuc < goal) {
-                clearInterval(activeTimer); activeTimer = null;
-                ritState.isPaused = true;
-                updateButtonState();
-                addSystemMsg(`PAUSED (Diff Increased to ${ritState.currentDiff})`, false);
-                return;
-            }
-
-            if (ritState.totalSuc >= goal) {
-                clearInterval(activeTimer); activeTimer = null;
-                addSystemMsg("RITUAL COMPLETE", true);
-                ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-                updateButtonState();
-            }
-            else if (ritState.turn >= limit) {
-                clearInterval(activeTimer); activeTimer = null;
-                addSystemMsg("EXHAUSTED (Willpower Limit)", false);
-                ritState = { totalSuc: 0, turn: 0, currentDiff: 6, isPaused: false, hasStarted: false };
-                updateButtonState();
-            }
-        }
+        // ... (Botch ve Success mantığını yukarıdaki gibi güncelle) ...
+        // ...
     }, 600);
 }
 

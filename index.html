@@ -274,6 +274,32 @@
                                    data-desc="Total situational modifiers (Bonuses vs Penalties) are capped at +/- 3."
                                    data-ref="M20 p.504">Penalties (Max +3 Net)</label>
 
+                            <div class="grid-2" style="margin-top:8px;">
+                                <div class="input-group">
+                                    <label class="rit-label"
+                                           data-title="Bonus Dice / Arete"
+                                           data-desc="Adds dice to your pool (Cult, Allies, Channeling)."
+                                           data-ref="M20 Core">Bonus Dice</label>
+                                    <div class="counter" style="border-color:var(--primary);">
+                                        <button class="btn-cnt" onclick="modifyState('bonusDice', -1)">-</button>
+                                        <div class="cnt-display" id="val-bonusDice" style="color:var(--primary);">0</div>
+                                        <button class="btn-cnt" onclick="modifyState('bonusDice', 1)">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="rit-label"
+                                           data-title="Auto Successes"
+                                           data-desc="Guaranteed successes (Willpower, Teamwork). Prevents Botch."
+                                           data-ref="M20 Core">Auto Suc</label>
+                                    <div class="counter" style="border-color:var(--success);">
+                                        <button class="btn-cnt" onclick="modifyState('autoSuc', -1)">-</button>
+                                        <div class="cnt-display" id="val-autoSuc" style="color:var(--success);">0</div>
+                                        <button class="btn-cnt" onclick="modifyState('autoSuc', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="grid-2">
                                 <div class="btn-tool neg" id="btn-notool" onclick="toggleState('notool')"
                                      data-title="No Instrument" data-desc="+3 Diff for working without Focus." data-ref="M20 Quickstart p.7">🚫 No Tool</div>
