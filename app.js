@@ -732,11 +732,11 @@ function getBaseValues() {
     let real = parseInt(getEl('sel-reality').value);
     let spd = parseInt(getEl('sel-speed').value);
 
-    // 1. SUM BONUSES
-    // Sanctum (Ritual Only), Focus, Library, Quintessence, Teamwork, Synergy
+    // 1. BONUSLARI TOPLA
+    // Sanctum (Sadece Ritüel), Focus, Library, Quintessence, Teamwork, Synergy
     let sanctumBonus = (appState.sanctum && appState.mode === 'ritual') ? 1 : 0;
 
-    // Quintessence: Take value if number, else 1 (legacy compatibility)
+    // Quintessence: Sayı ise direkt al, değilse 1 say.
     let quintVal = typeof appState.quint === 'number' ? appState.quint : (appState.quint ? 1 : 0);
 
     let totalBonus = sanctumBonus +
@@ -746,29 +746,35 @@ function getBaseValues() {
         (appState.team ? 1 : 0) +
         (appState.syn ? 1 : 0);
 
-    // 2. SUM PENALTIES
-    // No Tool (+3), Discord (+1), Distraction (Counter)
+    // 2. CEZALARI TOPLA
+    // No Tool (+3), Discord (+1), Distraction (Sayaç)
     let totalPenalty = (appState.notool ? 3 : 0) +
         (appState.discord ? 1 : 0) +
         appState.distract;
 
-    // 3. CALCULATE NET EFFECT
-    // Formula: (Penalties - Bonuses + Speed)
-    // Speed: +1 (Fast) acts as penalty, -1 (Slow) acts as bonus
+    // 3. NET ETKİYİ HESAPLA (Cap +/- 3 Kuralı)
     let netMod = totalPenalty - totalBonus + spd;
-
-    // 4. APPLY RULE: CAP (+/- 3)
-    // M20 p.504: Situational modifiers cannot exceed -3 or +3.
     if (netMod > 3) netMod = 3;
     if (netMod < -3) netMod = -3;
 
-    // 5. FINAL DIFFICULTY
-    let baseDiff = sph + real + netMod;
-    let floor = Math.max(3, sph); // Difficulty must be at least Sphere level or 3
+    // 4. HAM ZORLUK HESABI
+    let rawDiff = sph + real + netMod;
+    let floor = Math.max(3, sph); // Minimum zorluk (Küre seviyesi veya 3)
 
-    baseDiff = Math.max(floor, Math.min(baseDiff, 10));
+    // --- THRESHOLD KURALI (M20 p.536) ---
+    // Zorluk 9'u geçerse, 9'da sabitle ve artan kısmı başarı ihtiyacına ekle.
+    let thresholdAdd = 0;
+    let finalDiff = rawDiff;
 
-    // --- GOAL CALCULATION (Unchanged) ---
+    if (rawDiff > 9) {
+        thresholdAdd = rawDiff - 9; // Örneğin Diff 11 ise -> +2 Success ekle
+        finalDiff = 9;              // Zorluğu 9'a çek
+    }
+
+    // Alt limit kontrolü
+    finalDiff = Math.max(floor, finalDiff);
+
+    // --- HEDEF (GOAL) HESAPLAMA ---
     let durIdx = parseInt(getEl('sel-dur').value);
     let durCosts = appState.hb ? [1, 2, 4, 6, 8, 15] : [1, 2, 3, 4, 5, 10];
     let baseDur = durCosts[durIdx];
@@ -777,15 +783,17 @@ function getBaseValues() {
     let dmg = parseInt(getEl('rng-dmg').value);
     let dmgC = Math.ceil(dmg / 2);
 
-    let baseGoal = Math.max(1, baseDur + targ + dmgC + appState.extra + appState.resist);
+    // thresholdAdd (Zorluktan artan puanlar) buraya ekleniyor
+    let baseGoal = Math.max(1, baseDur + targ + dmgC + appState.extra + appState.resist + thresholdAdd);
 
-    return { diff: baseDiff, goal: baseGoal };
+    return { diff: finalDiff, goal: baseGoal };
 }
 
+/* --- UI UPDATE ENGINE (Display Limits) --- */
 function recalculate() {
     let base = getBaseValues();
 
-    // Damage Text Update
+    // Hasar Metni Güncelleme
     let dmg = parseInt(getEl('rng-dmg').value);
     let dmgT = getEl('sel-dmg-type').value;
     let dCol = dmgT === "Lethal" ? "var(--warning)" : (dmgT === "Aggravated" ? "var(--danger)" : "var(--accent)");
@@ -795,20 +803,30 @@ function recalculate() {
     dTxt.style.color = dCol;
     getEl('cost-dmg').textContent = `+${Math.ceil(dmg / 2)} Suc`;
 
-    // Display Values
+    // Değerleri Ekrana Bas
     let elDiff = getEl('disp-diff');
     let elGoal = getEl('disp-goal');
 
-    elDiff.value = base.diff + appState.gmDiff;
-    elGoal.value = base.goal + appState.gmGoal;
+    // Final Zorluk Hesabı ve Güvenlik Sınırı (3-9)
+    let finalDiff = base.diff + appState.gmDiff;
+    if (finalDiff > 9) finalDiff = 9;
+    if (finalDiff < 3) finalDiff = 3;
 
-    if (!ritState.hasStarted) ritState.currentDiff = parseInt(elDiff.value);
+    elDiff.value = finalDiff;
 
-    // Visual indicator if modified by GM
+    // Hedef (Goal) en az 1 olmalı
+    let finalGoal = Math.max(1, base.goal + appState.gmGoal);
+    elGoal.value = finalGoal;
+
+    // Ritüel başlamadıysa zorluğu güncelle
+    if (!ritState.hasStarted) ritState.currentDiff = finalDiff;
+
+    // Görsel Uyarılar (GM müdahalesi varsa altı çizili olsun)
     if (appState.gmDiff !== 0) elDiff.classList.add('modified'); else elDiff.classList.remove('modified');
     if (appState.gmGoal !== 0) elGoal.classList.add('modified'); else elGoal.classList.remove('modified');
 }
 
+/* --- MANUAL INPUT HANDLER (Strict Limits) --- */
 function manualOverride(type) {
     let inputEl = getEl('disp-' + type);
     let rawVal = inputEl.value;
@@ -818,8 +836,27 @@ function manualOverride(type) {
         if (type === 'diff') appState.gmDiff = 0; else appState.gmGoal = 0;
     } else {
         let userVal = parseInt(rawVal);
-        if (type === 'diff') appState.gmDiff = userVal - base.diff;
-        else appState.gmGoal = userVal - base.goal;
+
+        if (type === 'diff') {
+            // ZORLUK SINIRI: 3 ile 9 arası
+            if (userVal > 9) {
+                userVal = 9;
+                inputEl.value = 9; // Kutucuğu hemen düzelt
+            }
+            if (userVal < 3) {
+                userVal = 3;
+                inputEl.value = 3; // Kutucuğu hemen düzelt
+            }
+            // GM Farkını Hesapla
+            appState.gmDiff = userVal - base.diff;
+        } else {
+            // Hedef Başarı (Goal) için alt sınır 1
+            if (userVal < 1) {
+                userVal = 1;
+                inputEl.value = 1;
+            }
+            appState.gmGoal = userVal - base.goal;
+        }
     }
     recalculate();
 }
